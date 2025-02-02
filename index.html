@@ -32,69 +32,87 @@
     <h2>Glioma Clinical Trial Enrollment Predictor</h2>
     <form id="predictionForm">
     <!-- Age input field (number) -->
-    <label for="Age.at.Initial.Diagnosis">Age at Initial Diagnosis:</label>
+    <label for="Age.at.Initial.Diagnosis">Age at Initial Diagnosis (years):</label>
     <input type="number" id="Age.at.Initial.Diagnosis" required><br>
 
     <!-- Employment status (string, using select for options) -->
-    <label for="Employed(Y=1, N=2, Retired=3) 2">Employment Status (Y=1, N=2, Retired=3):</label>
+    <label for="Employed(Y=1, N=2, Retired=3) 2">Employment Status:</label>
     <select id="Employed(Y=1, N=2, Retired=3) 2" required>
-        <option value="1">Y</option>
-        <option value="2">N</option>
+        <option value="1">Employed</option>
+        <option value="2">Unemployed</option>
         <option value="3">Retired</option>
+        <option value="Unknown">Unknown</option>
     </select><br>
 
     <!-- Ethnicity input (string, using select for options) -->
-    <label for="Ethnicity Hispanic/Latino (Yes=1, No=2) 2">Ethnicity (Yes=1, No=2):</label>
+    <label for="Ethnicity Hispanic/Latino (Yes=1, No=2) 2">Ethnicity:</label>
     <select id="Ethnicity Hispanic/Latino (Yes=1, No=2) 2" required>
-        <option value="1">Yes</option>
-        <option value="2">No</option>
+        <option value="1">Hispanic/Latino</option>
+        <option value="2">Non-Hispanic/Latino</option>
+        <option value="Unknown">Unknown</option>
     </select><br>
 
     <!-- KPS post-op (string, using select for options) -->
     <label for="KPS.post.op 3">KPS Post-op:</label>
     <select id="KPS.post.op 3" required>
-        <option value="1">Good</option>
-        <option value="2">Fair</option>
-        <option value="3">Poor</option>
+        <option value="100">100</option>
+        <option value="90">90</option>
+        <option value="80">80</option>
+        <option value="<80">Less than 80</option>
+        <option value="NA">Unknown</option>
     </select><br>
 
     <!-- Minority status (string, using select for options) -->
-    <label for="Minority (Yes=1, No=2) 2">Minority Status (Yes=1, No=2):</label>
+    <label for="Minority (Yes=1, No=2) 2">Minority Status:</label>
     <select id="Minority (Yes=1, No=2) 2" required>
-        <option value="1">Yes</option>
-        <option value="2">No</option>
+        <option value="1">Minority</option>
+        <option value="2">Non-minority</option>
+        <option value="Unknown">Unknown</option>
     </select><br>
 
     <!-- New Tumor Lobe (string, using select for options) -->
-    <label for="New Tumor Lobe (updated chart review) 2 2 2">New Tumor Lobe:</label>
+    <label for="New Tumor Lobe (updated chart review) 2 2 2">Tumor Lobe:</label>
     <select id="New Tumor Lobe (updated chart review) 2 2 2" required>
-        <option value="1">Yes</option>
-        <option value="2">No</option>
+        <option value="Frontal">Frontal</option>
+        <option value="Temporal">Temporal</option>
+        <option value="Brainstem, insular, basal ganglia, or thalamus">Brainstem, insular, basal ganglia, or thalamus</option>
+        <option value="Multifocal">Multifocal</option>
+        <option value="Occipital">Occipital</option>
+        <option value="Cerebellum">Cerebellum</option>
+        <option value="Unknown">Unknown</option>
     </select><br>
 
     <!-- Insurance at diagnosis (string, using select for options) -->
-    <label for="Reordered insurance at diagnosis 2 2">Reordered Insurance at Diagnosis:</label>
+    <label for="Reordered insurance at diagnosis 2 2">Insurance Status at Diagnosis:</label>
     <select id="Reordered insurance at diagnosis 2 2" required>
-        <option value="1">Yes</option>
-        <option value="2">No</option>
+        <option value="1">Private</option>
+        <option value="2">Medi-cal/Medicaid</option>
+        <option value="3">Medicare</option>
+        <option value="4">Unknown</option>
+        <option value="5">Self-pay</option>
     </select><br>
 
     <!-- Seizure pre-op (string, using select for options) -->
     <label for="Seizure.preop 2">Seizure Pre-op:</label>
     <select id="Seizure.preop 2" required>
-        <option value="1">Yes</option>
-        <option value="2">No</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="NA">Unknown</option>
     </select><br>
 
-    <!-- Sex input (number) -->
-    <label for="Sex (M=1, F=2)">Sex (M=1, F=2):</label>
-    <input type="number" id="Sex (M=1, F=2)" required><br>
+    <!-- Sex (string, using select for options) -->
+    <label for="Sex (M=1, F=2)">Sex:</label>
+    <select id="Sex (M=1, F=2)" required>
+        <option value="1">Male</option>
+        <option value="2">Female</option>
+    </select><br>
 
     <!-- TMZ anytime (string, using select for options) -->
-    <label for="TMZ anytime 2 2">TMZ Anytime:</label>
+    <label for="TMZ anytime 2 2">Received treatment with chemotherapy?</label>
     <select id="TMZ anytime 2 2" required>
         <option value="1">Yes</option>
         <option value="2">No</option>
+        <option value="Unknown">Unknown</option>
     </select><br>
 
     <!-- Race input (string, using select for options) -->
@@ -103,15 +121,17 @@
         <option value="White">White</option>
         <option value="Black/African American">Black/African American</option>
         <option value="Hispanic/Latino">Hispanic/Latino</option>
-        <option value="Asian/Pacific Islander">Asian/Pacific Islander</option>
-        <option value="American Indian/Alaska Native">American Indian/Alaska Native</option>
+        <option value="Asian">Asian</option>
+        <option value="Native Hawaiians and other Pacific Islanders">Native Hawaiians and other Pacific Islanders</option>
+        <option value="Other">Other</option>
+        <option value="Unknown">Unknown</option>
     </select><br>
 
     <!-- WHO Grade (string, using select for options) -->
     <label for="WHO Grade 2 2">WHO Grade:</label>
     <select id="WHO Grade 2 2" required>
-        <option value="1">Low Grade</option>
-        <option value="2">High Grade</option>
+        <option value="Grade 2-3">Grade 2-3</option>
+        <option value="Grade 4">Grade 4</option>
     </select><br>
 
     <!-- Submit button to calculate the probability -->
@@ -120,8 +140,7 @@
 
 <h3 id="result"></h3>
 </script> 
-    <script src="model.js"></script>
-    
+     
     function calculateProbability() {
         // Collect input values from the form
         let indata = {
