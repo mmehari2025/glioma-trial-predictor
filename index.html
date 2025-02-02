@@ -74,6 +74,7 @@
     <label for="New Tumor Lobe (updated chart review) 2 2 2">Tumor Lobe:</label>
     <select id="New Tumor Lobe (updated chart review) 2 2 2" required>
         <option value="Frontal">Frontal</option>
+        <option value="Parietal">Parietal</option>
         <option value="Temporal">Temporal</option>
         <option value="Brainstem, insular, basal ganglia, or thalamus">Brainstem, insular, basal ganglia, or thalamus</option>
         <option value="Multifocal">Multifocal</option>
@@ -140,7 +141,7 @@
 
 <h3 id="result"></h3>
 </script> 
-     
+    <script src="model.js"></script>
     function calculateProbability() {
         // Collect input values from the form
         let indata = {
