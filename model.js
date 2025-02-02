@@ -71,8 +71,8 @@ var getInputMetadata = function() {
        "id": "TMZ anytime 2 2",
        "type": "string"
      },
-     "Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": {
-       "id": "Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
+     "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": {
+       "id": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
        "type": "string"
      },
      "WHO Grade 2 2": {
@@ -108,7 +108,7 @@ var getOutputMetadata = function() {
 var score = function(indata, outdata) {
     // Original name was: 'WHO Grade 2 2_asCode'
     var WHO_Grade_2_2_asCode;
-    // Original name was: 'Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2_asCode'
+    // Original name was: 'Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2_asCode'
     var Updated_Race_White_Black_African_American_Hispanic_Latino_Asian_Pacific_Islander_American_Indian_Alaska_Native_3_2_asCode;
     // Original name was: 'TMZ anytime 2 2_asCode'
     var TMZ_anytime_2_2_asCode;
@@ -166,22 +166,22 @@ var score = function(indata, outdata) {
     }
     WHO_Grade_2_2_asCode = _temp_0;
 
-    if (indata["Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Asian")  {
+    if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Asian")  {
         _temp_0 = 0;
     }
-    else if (indata["Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Black/African American")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Black/African American")  {
         _temp_0 = 1;
     }
-    else if (indata["Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Native Hawaiians and other Pacific Islanders")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Native Hawaiians and other Pacific Islanders")  {
         _temp_0 = 2;
     }
-    else if (indata["Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Other")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Other")  {
         _temp_0 = 3;
     }
-    else if (indata["Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Unknown")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Unknown")  {
         _temp_0 = 4;
     }
-    else if (indata["Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "White")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "White")  {
         _temp_0 = 5;
     }
     Updated_Race_White_Black_African_American_Hispanic_Latino_Asian_Pacific_Islander_American_Indian_Alaska_Native_3_2_asCode = _temp_0;
