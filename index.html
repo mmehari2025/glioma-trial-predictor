@@ -27,29 +27,30 @@
         }
     </style>
 </head>
+    
 <body>
     <h2>Glioma Clinical Trial Enrollment Predictor</h2>
     <form id="predictionForm">
-        <label for="Age">Age at Initial Diagnosis (years):</label>
-        <input type="number" id="Age" required><br>
+        <label for="AI">Age at Initial Diagnosis (years):</label>
+        <input type="number" id="AI" required><br>
 
-        <label for="Employed">Employment Status:</label>
-        <select id="Employed" required>
+        <label for="EM">Employment Status:</label>
+        <select id="EM" required>
             <option value="1">Employed</option>
             <option value="2">Unemployed</option>
             <option value="3">Retired</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="Ethnicity">Ethnicity:</label>
-        <select id="Ethnicity" required>
+        <label for="EH">Ethnicity:</label>
+        <select id="EH" required>
             <option value="1">Hispanic/Latino</option>
             <option value="2">Non-Hispanic/Latino</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="KPS">KPS Post-op:</label>
-        <select id="KPS" required>
+        <label for="KP">KPS Post-op:</label>
+        <select id="KP" required>
             <option value="100">100</option>
             <option value="90">90</option>
             <option value="80">80</option>
@@ -57,15 +58,15 @@
             <option value="NA">Unknown</option>
         </select><br>
 
-        <label for="Minority">Minority Status:</label>
-        <select id="Minority" required>
+        <label for="MI">Minority Status:</label>
+        <select id="MI" required>
             <option value="1">Minority</option>
             <option value="2">Non-minority</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="TumorLobe">Tumor Lobe:</label>
-        <select id="TumorLobe" required>
+        <label for="NT">Tumor Lobe:</label>
+        <select id="NT" required>
             <option value="Frontal">Frontal</option>
             <option value="Parietal">Parietal</option>
             <option value="Temporal">Temporal</option>
@@ -76,8 +77,8 @@
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="Insurance">Insurance Status at Diagnosis:</label>
-        <select id="Insurance" required>
+        <label for="IN">Insurance Status at Diagnosis:</label>
+        <select id="IN" required>
             <option value="1">Private</option>
             <option value="2">Medi-cal/Medicaid</option>
             <option value="3">Medicare</option>
@@ -85,28 +86,28 @@
             <option value="5">Self-pay</option>
         </select><br>
 
-        <label for="Seizure">Seizure Pre-op:</label>
-        <select id="Seizure" required>
+        <label for="SE">Seizure Pre-op:</label>
+        <select id="SE" required>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
             <option value="NA">Unknown</option>
         </select><br>
 
-        <label for="Sex">Sex:</label>
-        <select id="Sex" required>
+        <label for="SX">Sex:</label>
+        <select id="SX" required>
             <option value="1">Male</option>
             <option value="2">Female</option>
         </select><br>
 
-        <label for="TMZ">Received Chemotherapy?</label>
-        <select id="TMZ" required>
+        <label for="TM">Received Chemotherapy?</label>
+        <select id="TM" required>
             <option value="1">Yes</option>
             <option value="2">No</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="Race">Race:</label>
-        <select id="Race" required>
+        <label for="RA">Race:</label>
+        <select id="RA" required>
             <option value="White">White</option>
             <option value="Black">Black/African American</option>
             <option value="Hispanic">Hispanic/Latino</option>
@@ -116,8 +117,8 @@
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="WHO_Grade">WHO Grade:</label>
-        <select id="WHO_Grade" required>
+        <label for="WG">WHO Grade:</label>
+        <select id="WG" required>
             <option value="2-3">Grade 2-3</option>
             <option value="4">Grade 4</option>
         </select><br>
@@ -129,28 +130,39 @@
 
     <script src="model.js"></script>
     <script>
+        const variableMap = {
+            "AI": "Age.at.Initial.Diagnosis",
+            "EM": "Employed(Y=1, N=2, Retired=3) 2",
+            "EH": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
+            "KP": "KPS.post.op 3",
+            "MI": "Minority (Yes=1, No=2) 2",
+            "NT": "New Tumor Lobe (updated chart review) 2 2 2",
+            "IN": "Reordered insurance at diagnosis 2 2",
+            "SE": "Seizure.preop 2",
+            "SX": "Sex (M=1, F=2)",
+            "TM": "TMZ anytime 2 2",
+            "RA": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
+            "WG": "WHO Grade 2 2"
+        };
+
         function calculateProbability() {
-            let indata = {
-                "Age.at.Initial.Diagnosis": parseFloat(document.getElementById("Age").value),
-                "Employed": document.getElementById("Employed").value,
-                "Ethnicity": document.getElementById("Ethnicity").value,
-                "KPS.post.op": document.getElementById("KPS").value,
-                "Minority": document.getElementById("Minority").value,
-                "New Tumor Lobe": document.getElementById("TumorLobe").value,
-                "Insurance": document.getElementById("Insurance").value,
-                "Seizure.preop": document.getElementById("Seizure").value,
-                "Sex": parseFloat(document.getElementById("Sex").value),
-                "TMZ": document.getElementById("TMZ").value,
-                "Race": document.getElementById("Race").value,
-                "WHO_Grade": document.getElementById("WHO_Grade").value,
-            };
+            let indata = {};
+
+            for (let shortName in variableMap) {
+                let fullName = variableMap[shortName];
+                let inputElement = document.getElementById(shortName);
+                if (inputElement) {
+                    let value = inputElement.value;
+                    indata[fullName] = isNaN(value) ? value : parseFloat(value);
+                }
+            }
 
             if (typeof score === "function") {
-                let outdata = {}; 
+                let outdata = {};
                 score(indata, outdata);
 
-                document.getElementById("result").innerText = 
-                    `Estimated Probability: ${(outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"] * 100).toFixed(2)}%`;
+                document.getElementById("result").innerText =
+                    `Estimated Probability: ${(outdata["Probability_Clinical_Trial_Enrollment"] * 100).toFixed(2)}%`;
             } else {
                 console.error("score function is not defined. Make sure model.js is properly loaded.");
             }
