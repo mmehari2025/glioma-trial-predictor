@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="model.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glioma Trial Enrollment Predictor</title>
@@ -30,26 +31,121 @@
 <body>
     <h2>Glioma Clinical Trial Enrollment Predictor</h2>
     <form id="predictionForm">
-        <!-- Example input fields; replace with actual predictor variables -->
-        <label>Predictor 1: <input type="number" id="predictor1"></label>
-        <label>Predictor 2: <input type="number" id="predictor2"></label>
-        <!-- Add all 17 predictor inputs here -->
-        <button type="button" onclick="calculateProbability()">Calculate Probability</button>
-    </form>
-    <h3 id="result"></h3>
+    <!-- Age input field (number) -->
+    <label for="Age.at.Initial.Diagnosis">Age at Initial Diagnosis:</label>
+    <input type="number" id="Age.at.Initial.Diagnosis" required><br>
+
+    <!-- Employment status (string, using select for options) -->
+    <label for="Employed(Y=1, N=2, Retired=3) 2">Employment Status (Y=1, N=2, Retired=3):</label>
+    <select id="Employed(Y=1, N=2, Retired=3) 2" required>
+        <option value="1">Y</option>
+        <option value="2">N</option>
+        <option value="3">Retired</option>
+    </select><br>
+
+    <!-- Ethnicity input (string, using select for options) -->
+    <label for="Ethnicity Hispanic/Latino (Yes=1, No=2) 2">Ethnicity (Yes=1, No=2):</label>
+    <select id="Ethnicity Hispanic/Latino (Yes=1, No=2) 2" required>
+        <option value="1">Yes</option>
+        <option value="2">No</option>
+    </select><br>
+
+    <!-- KPS post-op (string, using select for options) -->
+    <label for="KPS.post.op 3">KPS Post-op:</label>
+    <select id="KPS.post.op 3" required>
+        <option value="1">Good</option>
+        <option value="2">Fair</option>
+        <option value="3">Poor</option>
+    </select><br>
+
+    <!-- Minority status (string, using select for options) -->
+    <label for="Minority (Yes=1, No=2) 2">Minority Status (Yes=1, No=2):</label>
+    <select id="Minority (Yes=1, No=2) 2" required>
+        <option value="1">Yes</option>
+        <option value="2">No</option>
+    </select><br>
+
+    <!-- New Tumor Lobe (string, using select for options) -->
+    <label for="New Tumor Lobe (updated chart review) 2 2 2">New Tumor Lobe:</label>
+    <select id="New Tumor Lobe (updated chart review) 2 2 2" required>
+        <option value="1">Yes</option>
+        <option value="2">No</option>
+    </select><br>
+
+    <!-- Insurance at diagnosis (string, using select for options) -->
+    <label for="Reordered insurance at diagnosis 2 2">Reordered Insurance at Diagnosis:</label>
+    <select id="Reordered insurance at diagnosis 2 2" required>
+        <option value="1">Yes</option>
+        <option value="2">No</option>
+    </select><br>
+
+    <!-- Seizure pre-op (string, using select for options) -->
+    <label for="Seizure.preop 2">Seizure Pre-op:</label>
+    <select id="Seizure.preop 2" required>
+        <option value="1">Yes</option>
+        <option value="2">No</option>
+    </select><br>
+
+    <!-- Sex input (number) -->
+    <label for="Sex (M=1, F=2)">Sex (M=1, F=2):</label>
+    <input type="number" id="Sex (M=1, F=2)" required><br>
+
+    <!-- TMZ anytime (string, using select for options) -->
+    <label for="TMZ anytime 2 2">TMZ Anytime:</label>
+    <select id="TMZ anytime 2 2" required>
+        <option value="1">Yes</option>
+        <option value="2">No</option>
+    </select><br>
+
+    <!-- Race input (string, using select for options) -->
+    <label for="Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2">Race:</label>
+    <select id="Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2" required>
+        <option value="White">White</option>
+        <option value="Black/African American">Black/African American</option>
+        <option value="Hispanic/Latino">Hispanic/Latino</option>
+        <option value="Asian/Pacific Islander">Asian/Pacific Islander</option>
+        <option value="American Indian/Alaska Native">American Indian/Alaska Native</option>
+    </select><br>
+
+    <!-- WHO Grade (string, using select for options) -->
+    <label for="WHO Grade 2 2">WHO Grade:</label>
+    <select id="WHO Grade 2 2" required>
+        <option value="1">Low Grade</option>
+        <option value="2">High Grade</option>
+    </select><br>
+
+    <!-- Submit button to calculate the probability -->
+    <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+</form>
+
+<h3 id="result"></h3>
+</script> 
+    <script src="model.js"></script>
     
-    <script>
-        // Placeholder function: Replace this with JMP-exported JavaScript formula
-        function calculateProbability() {
-            let predictor1 = parseFloat(document.getElementById("predictor1").value);
-            let predictor2 = parseFloat(document.getElementById("predictor2").value);
-            // Add remaining predictors
-            
-            // Sample calculation; replace with actual exported model function
-            let probability = (predictor1 + predictor2) / 100; 
-            
-            document.getElementById("result").innerText = `Estimated Probability: ${(probability * 100).toFixed(2)}%`;
-        }
-    </script>
+    function calculateProbability() {
+        // Collect input values from the form
+        let indata = {
+            "Age.at.Initial.Diagnosis": parseFloat(document.getElementById("Age.at.Initial.Diagnosis").value),
+            "Employed(Y=1, N=2, Retired=3) 2": document.getElementById("Employed").value,
+            "Ethnicity Hispanic/Latino (Yes=1, No=2) 2": document.getElementById("Ethnicity").value,
+            "KPS.post.op 3": document.getElementById("KPS").value,
+            "Minority (Yes=1, No=2) 2": document.getElementById("Minority").value,
+            "New Tumor Lobe (updated chart review) 2 2 2": document.getElementById("New_Tumor_Lobe").value,
+            "Reordered insurance at diagnosis 2 2": document.getElementById("Insurance").value,
+            "Seizure.preop 2": document.getElementById("Seizure").value,
+            "Sex (M=1, F=2)": parseFloat(document.getElementById("Sex").value),
+            "TMZ anytime 2 2": document.getElementById("TMZ").value,
+            "Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": document.getElementById("Race").value,
+            "WHO Grade 2 2": document.getElementById("WHO_Grade").value,
+        };
+        
+        // Call the score function from the model to calculate probabilities
+        let outdata = {}; // To store the output data (probabilities, most likely trial enrollment)
+        let result = score(indata, outdata); // Get the result from the model
+
+        // Output the result in the HTML
+        document.getElementById("result").innerText = `Estimated Probability: ${(outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"] * 100).toFixed(2)}%`;
+    }
+</script>
 </body>
 </html>
