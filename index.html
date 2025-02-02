@@ -117,8 +117,8 @@
     </select><br>
 
     <!-- Race input (string, using select for options) -->
-    <label for="Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2">Race:</label>
-    <select id="Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2" required>
+    <label for="Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2">Race:</label>
+    <select id="Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2" required>
         <option value="White">White</option>
         <option value="Black/African American">Black/African American</option>
         <option value="Hispanic/Latino">Hispanic/Latino</option>
@@ -154,16 +154,20 @@
             "Seizure.preop 2": document.getElementById("Seizure").value,
             "Sex (M=1, F=2)": parseFloat(document.getElementById("Sex").value),
             "TMZ anytime 2 2": document.getElementById("TMZ").value,
-            "Updated Race (White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": document.getElementById("Race").value,
+            "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": document.getElementById("Race").value,
             "WHO Grade 2 2": document.getElementById("WHO_Grade").value,
         };
         
-        // Call the score function from the model to calculate probabilities
-        let outdata = {}; // To store the output data (probabilities, most likely trial enrollment)
-        let result = score(indata, outdata); // Get the result from the model
+        if (typeof score === "function") {
+            let outdata = {}; // To store the output data (probabilities, most likely trial enrollment)
+            let result = score(indata, outdata); // Get the result from the model
 
-        // Output the result in the HTML
-        document.getElementById("result").innerText = `Estimated Probability: ${(outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"] * 100).toFixed(2)}%`;
+            // Output the result in the HTML
+            document.getElementById("result").innerText = 
+                `Estimated Probability: ${(outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"] * 100).toFixed(2)}%`;
+        } else {
+            console.error("score function is not defined. Make sure model.js is properly loaded.");
+        }
     }
 </script>
 </body>
