@@ -138,73 +138,73 @@
     <script src="model.js"></script>
     <script>
         const variableMap = {
-            "AI": "Age.at.Initial.Diagnosis",
-            "EM": "Employed(Y=1, N=2, Retired=3) 2",
-            "EH": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
-            "KP": "KPS.post.op 3",
-            "MI": "Minority (Yes=1, No=2) 2",
-            "NT": "New Tumor Lobe (updated chart review) 2 2 2",
-            "IN": "Reordered insurance at diagnosis 2 2",
-            "SE": "Seizure.preop 2",
-            "SX": "Sex (M=1, F=2)",
-            "TM": "TMZ anytime 2 2",
-            "RA": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
-            "WG": "WHO Grade 2 2"
-        };
+    "AI": "Age.at.Initial.Diagnosis",
+    "EM": "Employed(Y=1, N=2, Retired=3) 2",
+    "EH": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
+    "KP": "KPS.post.op 3",
+    "MI": "Minority (Yes=1, No=2) 2",
+    "NT": "New Tumor Lobe (updated chart review) 2 2 2",
+    "IN": "Reordered insurance at diagnosis 2 2",
+    "SE": "Seizure.preop 2",
+    "SX": "Sex (M=1, F=2)",
+    "TM": "TMZ anytime 2 2",
+    "RA": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
+    "WG": "WHO Grade 2 2"
+};
 
-        function calculateProbability() {
-        let indata = {};
+       function calculateProbability() {
+    let indata = {};
 
-        // Map categorical values correctly
-        const categoricalMappings = {
-            "WG": { "2-3": 0, "4": 1 }, // WHO Grade mapping
-            "RA": { "White": 1, "Black": 2, "Hispanic": 3, "Asian": 4, "Pacific": 5, "Other": 6, "Unknown": 7 }, // Race mapping
-            "TM": { "1": 1, "2": 0, "Unknown": -1 }, // TMZ Chemotherapy mapping
-            "SE": { "Yes": 1, "No": 0, "NA": -1 }, // Seizure mapping
-            "IN": { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5 }, // Insurance mapping
-            "NT": { "Frontal": 1, "Parietal": 2, "Temporal": 3, "Brainstem": 4, "Multifocal": 5, "Occipital": 6, "Cerebellum": 7, "Unknown": 8 }, // Tumor Lobe mapping
-            "MI": { "1": 1, "2": 0, "Unknown": -1 }, // Minority mapping
-            "KP": { "100": 100, "90": 90, "80": 80, "<80": 70, "NA": -1 }, // KPS Post-op mapping
-            "EH": { "1": 1, "2": 0, "Unknown": -1 }, // Ethnicity mapping
-            "EM": { "1": 1, "2": 2, "3": 3, "Unknown": -1 } // Employment mapping
-        };
+    // Correct categorical values before sending to model
+    const categoricalMappings = {
+        "WG": { "2-3": 0, "4": 1 }, // WHO Grade mapping
+        "RA": { "White": 5, "Black/African American": 1, "Hispanic/Latino": 3, "Asian": 0, "Pacific": 2, "Other": 3, "Unknown": 4 }, // Race mapping
+        "TM": { "1": 2, "2": 0, "Unknown": 1 }, // TMZ Chemotherapy mapping
+        "SE": { "Yes": 2, "No": 1, "NA": 0 }, // Seizure mapping
+        "IN": { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4 }, // Insurance mapping
+        "NT": { "Brainstem": 0, "Cerebellum": 1, "Frontal": 2, "Multifocal": 3, "Occipital": 4, "Parietal": 5, "Temporal": 6, "Unknown": 7 }, // Tumor Lobe mapping
+        "MI": { "1": 0, "2": 1, "Unknown": 2 }, // Minority mapping
+        "KP": { "100": 3, "90": 2, "80": 1, "<80": 0, "NA": 4 }, // KPS Post-op mapping
+        "EH": { "1": 0, "2": 1, "Unknown": 2 }, // Ethnicity mapping
+        "EM": { "1": 0, "2": 1, "3": 2, "Unknown": 3 } // Employment mapping
+    };
 
-        for (let shortName in variableMap) {
-            let fullName = variableMap[shortName];
-            let inputElement = document.getElementById(shortName);
-            if (inputElement) {
-                let value = inputElement.value.trim();
-                // If the value is in the categorical mappings, convert it
-                if (categoricalMappings[shortName]) {
-                    indata[fullName] = categoricalMappings[shortName][value] ?? -1;
-                } else {
-                    indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
-                }
-            }
-        }
-
-        console.log("Input Data:", indata); // Debugging - Check if inputs are correct
-
-        if (typeof score === "function") {
-            let outdata = {};
-            score(indata, outdata);
-
-            console.log("Output Data:", outdata); // Debugging - Check output values
-
-            let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
-            let probabilityNo = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=2 )_1"];
-
-            if (!isNaN(probabilityYes)) {
-                document.getElementById("result").innerText =
-                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+    for (let shortName in variableMap) {
+        let fullName = variableMap[shortName];
+        let inputElement = document.getElementById(shortName);
+        if (inputElement) {
+            let value = inputElement.value.trim();
+            // Convert categorical values
+            if (categoricalMappings[shortName]) {
+                indata[fullName] = categoricalMappings[shortName][value] ?? -1; 
             } else {
-                document.getElementById("result").innerText =
-                    "Error: Probability could not be calculated.";
+                // Convert numbers correctly
+                indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
             }
-        } else {
-            console.error("score function is not defined. Make sure model.js is properly loaded.");
         }
     }
+
+    console.log("🚀 Input Data:", indata); // Debugging - Check inputs
+
+    if (typeof score === "function") {
+        let outdata = {};
+        score(indata, outdata);
+
+        console.log("📊 Output Data:", outdata); // Debugging - Check outputs
+
+        let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
+
+        if (!isNaN(probabilityYes)) {
+            document.getElementById("result").innerText =
+                `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+        } else {
+            document.getElementById("result").innerText =
+                "Error: Probability could not be calculated.";
+        }
+    } else {
+        console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
+    }
+}
     </script>
 </body>
 </html>
