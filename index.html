@@ -155,25 +155,42 @@
         function calculateProbability() {
         let indata = {};
 
-        // Collect input values and map them to their corresponding variable names
+        // Map categorical values correctly
+        const categoricalMappings = {
+            "WG": { "2-3": 0, "4": 1 }, // WHO Grade mapping
+            "RA": { "White": 1, "Black": 2, "Hispanic": 3, "Asian": 4, "Pacific": 5, "Other": 6, "Unknown": 7 }, // Race mapping
+            "TM": { "1": 1, "2": 0, "Unknown": -1 }, // TMZ Chemotherapy mapping
+            "SE": { "Yes": 1, "No": 0, "NA": -1 }, // Seizure mapping
+            "IN": { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5 }, // Insurance mapping
+            "NT": { "Frontal": 1, "Parietal": 2, "Temporal": 3, "Brainstem": 4, "Multifocal": 5, "Occipital": 6, "Cerebellum": 7, "Unknown": 8 }, // Tumor Lobe mapping
+            "MI": { "1": 1, "2": 0, "Unknown": -1 }, // Minority mapping
+            "KP": { "100": 100, "90": 90, "80": 80, "<80": 70, "NA": -1 }, // KPS Post-op mapping
+            "EH": { "1": 1, "2": 0, "Unknown": -1 }, // Ethnicity mapping
+            "EM": { "1": 1, "2": 2, "3": 3, "Unknown": -1 } // Employment mapping
+        };
+
         for (let shortName in variableMap) {
             let fullName = variableMap[shortName];
             let inputElement = document.getElementById(shortName);
             if (inputElement) {
-                let value = inputElement.value.trim(); // Remove unnecessary spaces
-                indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
+                let value = inputElement.value.trim();
+                // If the value is in the categorical mappings, convert it
+                if (categoricalMappings[shortName]) {
+                    indata[fullName] = categoricalMappings[shortName][value] ?? -1;
+                } else {
+                    indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
+                }
             }
         }
 
-        console.log("Input Data:", indata);  // Debugging - check if inputs are correct
+        console.log("Input Data:", indata); // Debugging - Check if inputs are correct
 
         if (typeof score === "function") {
             let outdata = {};
             score(indata, outdata);
 
-            console.log("Output Data:", outdata);  // Debugging - check output values
+            console.log("Output Data:", outdata); // Debugging - Check output values
 
-            // Correctly extract and display probability
             let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
             let probabilityNo = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=2 )_1"];
 
