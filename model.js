@@ -1,7 +1,5 @@
 "use strict";
 
-var jmp = require('./jmp_score.js');
-
 
 /* ====================================================================
  Copyright (C) 2022 JMP Statistical Discovery LLC. All rights reserved.
