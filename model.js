@@ -1,3 +1,5 @@
+console.log("model.js is loaded!");
+
 "use strict";
 
 
@@ -2738,7 +2740,7 @@ var score = function(indata, outdata) {
 
     return outdata["Most Likely Clinical Trial enrollment: (Yes=1, No =2)_1"];
 };
-
+console.log(typeof score);
 
 module.exports = {
   getInputMetadata: getInputMetadata,
