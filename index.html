@@ -146,27 +146,37 @@
         };
 
         function calculateProbability() {
-            let indata = {};
+    let indata = {};
 
-            for (let shortName in variableMap) {
-                let fullName = variableMap[shortName];
-                let inputElement = document.getElementById(shortName);
-                if (inputElement) {
-                    let value = inputElement.value;
-                    indata[fullName] = isNaN(value) ? value : parseFloat(value);
-                }
-            }
-
-            if (typeof score === "function") {
-                let outdata = {};
-                score(indata, outdata);
-
-                document.getElementById("result").innerText =
-                    `Estimated Probability: ${(outdata["Probability_Clinical_Trial_Enrollment"] * 100).toFixed(2)}%`;
-            } else {
-                console.error("score function is not defined. Make sure model.js is properly loaded.");
-            }
+    // Collect input values and map them to their model.js variable names
+    for (let shortName in variableMap) {
+        let fullName = variableMap[shortName];
+        let inputElement = document.getElementById(shortName);
+        if (inputElement) {
+            let value = inputElement.value;
+            indata[fullName] = isNaN(value) ? value : parseFloat(value);
         }
+    }
+
+    if (typeof score === "function") {
+        let outdata = {};
+        score(indata, outdata);
+
+        // Correctly extract and display probability
+        let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
+        let probabilityNo = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=2 )_1"];
+
+        if (probabilityYes !== undefined) {
+            document.getElementById("result").innerText =
+                `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+        } else {
+            document.getElementById("result").innerText =
+                "Error: Probability could not be calculated.";
+        }
+    } else {
+        console.error("score function is not defined. Make sure model.js is properly loaded.");
+    }
+}
     </script>
 </body>
 </html>
