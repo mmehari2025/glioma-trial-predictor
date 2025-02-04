@@ -160,8 +160,8 @@
             "Minority": { "1": 0, "2": 1, "Unknown": 2 }, // Minority mapping
             "KPSPostOp": { "100": 3, "90": 2, "80": 1, "<80": 0, "NA": 4 }, // KPS Post-op mapping
             "Ethnicity": { "1": 0, "2": 1, "Unknown": 2 }, // Ethnicity mapping
-            "Employment": { "1": 0, "2": 1, "3": 2, "Unknown": 3 } // Employment mapping
-            "Sex": { "1": 1, "2": 2 }, // Sex mapping
+            "Employment": { "1": 0, "2": 1, "3": 2, "Unknown": 3 }, // Employment mapping
+            "Sex": { "1": 1, "2": 2 } // Sex mapping
         };
 
         // Map input values to the correct model variable names
@@ -195,7 +195,7 @@
             }
         }
 
-        console.log("🚀 Input Data Sent to Model:", indata);
+        console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
 
         if (typeof score === "function") {
             let outdata = {};
