@@ -7,129 +7,211 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: auto;
             padding: 20px;
             text-align: center;
+            background-color: #f5f5f5;
         }
+
+        h2 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0056b3;
+            margin-top: 20px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #0056b3;
+            text-align: left;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            align-items: center;
+            margin: 10px 0;
+        }
+
         input, select {
-            display: block;
-            margin: 10px auto;
             padding: 8px;
-            width: 80%;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #fafafa;
         }
+
         button {
-            padding: 10px 20px;
-            background-color: blue;
+            padding: 12px;
+            width: 100%;
+            background-color: #007bff;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h3 {
+            color: #333;
+            margin-top: 15px;
         }
     </style>
 </head>
 
 <body>
     <h2>Glioma Clinical Trial Enrollment Predictor</h2>
-    <form id="predictionForm">
-        <label for="AgeDiagnosis">Age at Initial Diagnosis (years):</label>
-        <input type="number" id="AgeDiagnosis" required><br>
+    <div class="container">
+        <form id="predictionForm">
+            
+            <!-- 📌 DEMOGRAPHIC VARIABLES -->
+            <div class="section-title">📌 Demographic Variables</div>
+            <div class="form-group">
+                <label for="AgeDiagnosis">Age at Initial Diagnosis (years):</label>
+                <input type="number" id="AgeDiagnosis" required>
+            </div>
 
-        <label for="Employment">Employment Status:</label>
-        <select id="Employment" required>
-            <option value="1">Employed</option>
-            <option value="2">Unemployed</option>
-            <option value="3">Retired</option>
-            <option value="Unknown">Unknown</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Sex">Sex:</label>
+                <select id="Sex" required>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                </select>
+            </div>
 
-        <label for="Ethnicity">Ethnicity:</label>
-        <select id="Ethnicity" required>
-            <option value="1">Hispanic/Latino</option>
-            <option value="2">Non-Hispanic/Latino</option>
-            <option value="Unknown">Unknown</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Race">Race:</label>
+                <select id="Race" required>
+                    <option value="White">White</option>
+                    <option value="Black">Black/African American</option>
+                    <option value="Hispanic">Hispanic/Latino</option>
+                    <option value="Asian">Asian</option>
+                    <option value="Pacific">Pacific Islander</option>
+                    <option value="Other">Other</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
 
-        <label for="KPSPostOp">KPS Post-op:</label>
-        <select id="KPSPostOp" required>
-            <option value="100">100</option>
-            <option value="90">90</option>
-            <option value="80">80</option>
-            <option value="<80">Less than 80</option>
-            <option value="NA">Unknown</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Ethnicity">Ethnicity:</label>
+                <select id="Ethnicity" required>
+                    <option value="1">Hispanic/Latino</option>
+                    <option value="2">Non-Hispanic/Latino</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
 
-        <label for="Minority">Minority Status:</label>
-        <select id="Minority" required>
-            <option value="1">Minority</option>
-            <option value="2">Non-minority</option>
-            <option value="Unknown">Unknown</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Minority">Minority Status:</label>
+                <select id="Minority" required>
+                    <option value="1">Minority</option>
+                    <option value="2">Non-minority</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
 
-        <label for="TumorLobe">Tumor Lobe:</label>
-        <select id="TumorLobe" required>
-            <option value="Frontal">Frontal</option>
-            <option value="Parietal">Parietal</option>
-            <option value="Temporal">Temporal</option>
-            <option value="Brainstem">Brainstem, Insular, Basal Ganglia, or Thalamus</option>
-            <option value="Multifocal">Multifocal</option>
-            <option value="Occipital">Occipital</option>
-            <option value="Cerebellum">Cerebellum</option>
-            <option value="Unknown">Unknown</option>
-        </select><br>
+            <!-- 📌 SOCIOECONOMIC VARIABLES -->
+            <div class="section-title">📌 Socioeconomic Variables</div>
+            <div class="form-group">
+                <label for="Insurance">Insurance Status at Diagnosis:</label>
+                <select id="Insurance" required>
+                    <option value="1">Private</option>
+                    <option value="2">Medi-cal/Medicaid</option>
+                    <option value="3">Medicare</option>
+                    <option value="4">Unknown</option>
+                    <option value="5">Self-pay</option>
+                </select>
+            </div>
 
-        <label for="Insurance">Insurance Status at Diagnosis:</label>
-        <select id="Insurance" required>
-            <option value="1">Private</option>
-            <option value="2">Medi-cal/Medicaid</option>
-            <option value="3">Medicare</option>
-            <option value="4">Unknown</option>
-            <option value="5">Self-pay</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Employment">Employment Status:</label>
+                <select id="Employment" required>
+                    <option value="1">Employed</option>
+                    <option value="2">Unemployed</option>
+                    <option value="3">Retired</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
 
-        <label for="Seizure">Seizure Pre-op:</label>
-        <select id="Seizure" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-            <option value="NA">Unknown</option>
-        </select><br>
+            <!-- 📌 ONCOLOGIC VARIABLES -->
+            <div class="section-title">📌 Oncologic Variables</div>
+            <div class="form-group">
+                <label for="WHOGrade">WHO Grade:</label>
+                <select id="WHOGrade" required>
+                    <option value="2-3">Grade 2-3</option>
+                    <option value="4">Grade 4</option>
+                </select>
+            </div>
 
-        <label for="Sex">Sex:</label>
-        <select id="Sex" required>
-            <option value="1">Male</option>
-            <option value="2">Female</option>
-        </select><br>
+            <div class="form-group">
+                <label for="TumorLobe">Tumor Lobe:</label>
+                <select id="TumorLobe" required>
+                    <option value="Frontal">Frontal</option>
+                    <option value="Parietal">Parietal</option>
+                    <option value="Temporal">Temporal</option>
+                    <option value="Brainstem">Brainstem, Insular, Basal Ganglia, or Thalamus</option>
+                    <option value="Multifocal">Multifocal</option>
+                    <option value="Occipital">Occipital</option>
+                    <option value="Cerebellum">Cerebellum</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
 
-        <label for="Chemotherapy">Received Chemotherapy?</label>
-        <select id="Chemotherapy" required>
-            <option value="1">Yes</option>
-            <option value="2">No</option>
-            <option value="Unknown">Unknown</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Seizure">Seizure Pre-op:</label>
+                <select id="Seizure" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="NA">Unknown</option>
+                </select>
+            </div>
 
-        <label for="Race">Race:</label>
-        <select id="Race" required>
-            <option value="White">White</option>
-            <option value="Black">Black/African American</option>
-            <option value="Hispanic">Hispanic/Latino</option>
-            <option value="Asian">Asian</option>
-            <option value="Pacific">Pacific Islander</option>
-            <option value="Other">Other</option>
-            <option value="Unknown">Unknown</option>
-        </select><br>
+            <div class="form-group">
+                <label for="KPSPostOp">KPS Post-op:</label>
+                <select id="KPSPostOp" required>
+                    <option value="100">100</option>
+                    <option value="90">90</option>
+                    <option value="80">80</option>
+                    <option value="<80">Less than 80</option>
+                    <option value="NA">Unknown</option>
+                </select>
+            </div>
 
-        <label for="WHOGrade">WHO Grade:</label>
-        <select id="WHOGrade" required>
-            <option value="2-3">Grade 2-3</option>
-            <option value="4">Grade 4</option>
-        </select><br>
+            <div class="form-group">
+                <label for="Chemotherapy">Received Chemotherapy?</label>
+                <select id="Chemotherapy" required>
+                    <option value="1">Yes</option>
+                    <option value="2">No</option>
+                    <option value="Unknown">Unknown</option>
+                </select>
+            </div>
 
-        <button type="button" onclick="calculateProbability()">Calculate Probability</button>
-    </form>
+            <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+        </form>
 
-    <h3 id="result"></h3>
+        <h3 id="result"></h3>
+    </div>
 
     <script src="jmp_score.js"></script>
     <script src="model.js"></script>
+    
     <script>
         const variableMap = {
             "AgeDiagnosis": "Age.at.Initial.Diagnosis",
