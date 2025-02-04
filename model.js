@@ -105,7 +105,8 @@ var getOutputMetadata = function() {
 };
 
 var score = function(indata, outdata) {
-    // Original name was: 'WHO Grade 2 2_asCode'
+   console.log("✅ model.js received input:", indata); 
+ // Original name was: 'WHO Grade 2 2_asCode'
     var WHO_Grade_2_2_asCode;
     // Original name was: 'Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2_asCode'
     var Updated_Race_White_Black_African_American_Hispanic_Latino_Asian_Pacific_Islander_American_Indian_Alaska_Native_3_2_asCode;
