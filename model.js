@@ -36,31 +36,31 @@ var getInputMetadata = function() {
      },
      "Employed(Y=1, N=2, Retired=3) 2": {
        "id": "Employed(Y=1, N=2, Retired=3) 2",
-       "type": "string"
+       "type": "number"
      },
      "Ethnicity Hispanic/Latino (Yes=1, No=2) 2": {
        "id": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
-       "type": "string"
+       "type": "number"
      },
      "KPS.post.op 3": {
        "id": "KPS.post.op 3",
-       "type": "string"
+       "type": "number"
      },
      "Minority (Yes=1, No=2) 2": {
        "id": "Minority (Yes=1, No=2) 2",
-       "type": "string"
+       "type": "number"
      },
      "New Tumor Lobe (updated chart review) 2 2 2": {
        "id": "New Tumor Lobe (updated chart review) 2 2 2",
-       "type": "string"
+       "type": "number"
      },
      "Reordered insurance at diagnosis 2 2": {
        "id": "Reordered insurance at diagnosis 2 2",
-       "type": "string"
+       "type": "number"
      },
      "Seizure.preop 2": {
        "id": "Seizure.preop 2",
-       "type": "string"
+       "type": "number"
      },
      "Sex (M=1, F=2)": {
        "id": "Sex (M=1, F=2)",
@@ -68,15 +68,15 @@ var getInputMetadata = function() {
      },
      "TMZ anytime 2 2": {
        "id": "TMZ anytime 2 2",
-       "type": "string"
+       "type": "number"
      },
      "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": {
        "id": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
-       "type": "string"
+       "type": "number"
      },
      "WHO Grade 2 2": {
        "id": "WHO Grade 2 2",
-       "type": "string"
+       "type": "number"
      }   },
    "additionalProperties": false,
   };
@@ -158,148 +158,148 @@ var score = function(indata, outdata) {
     var _temp_11;
     var _temp_12 = [];
 
-    if (indata["WHO Grade 2 2"] === "Grade 2-3")  {
+    if (indata["WHO Grade 2 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["WHO Grade 2 2"] === "Grade 4")  {
+    else if (indata["WHO Grade 2 2"] === 1)  {
         _temp_0 = 1;
     }
     WHO_Grade_2_2_asCode = _temp_0;
 
-    if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Asian")  {
+    if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Black/African American")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Native Hawaiians and other Pacific Islanders")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === 2)  {
         _temp_0 = 2;
     }
-    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Other")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === 3)  {
         _temp_0 = 3;
     }
-    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "Unknown")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === 4)  {
         _temp_0 = 4;
     }
-    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === "White")  {
+    else if (indata["Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2"] === 5)  {
         _temp_0 = 5;
     }
     Updated_Race_White_Black_African_American_Hispanic_Latino_Asian_Pacific_Islander_American_Indian_Alaska_Native_3_2_asCode = _temp_0;
 
-    if (indata["TMZ anytime 2 2"] === "No")  {
+    if (indata["TMZ anytime 2 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["TMZ anytime 2 2"] === "Unknown")  {
+    else if (indata["TMZ anytime 2 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["TMZ anytime 2 2"] === "Yes")  {
+    else if (indata["TMZ anytime 2 2"] === 2)  {
         _temp_0 = 2;
     }
     TMZ_anytime_2_2_asCode = _temp_0;
 
-    if (indata["Seizure.preop 2"] === "NA")  {
+    if (indata["Seizure.preop 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["Seizure.preop 2"] === "No")  {
+    else if (indata["Seizure.preop 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["Seizure.preop 2"] === "Yes")  {
+    else if (indata["Seizure.preop 2"] === 2)  {
         _temp_0 = 2;
     }
     Seizure_preop_2_asCode = _temp_0;
 
-    if (indata["Reordered insurance at diagnosis 2 2"] === "1")  {
+    if (indata["Reordered insurance at diagnosis 2 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["Reordered insurance at diagnosis 2 2"] === "2")  {
+    else if (indata["Reordered insurance at diagnosis 2 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["Reordered insurance at diagnosis 2 2"] === "3")  {
+    else if (indata["Reordered insurance at diagnosis 2 2"] === 2)  {
         _temp_0 = 2;
     }
-    else if (indata["Reordered insurance at diagnosis 2 2"] === "4")  {
+    else if (indata["Reordered insurance at diagnosis 2 2"] === 3)  {
         _temp_0 = 3;
     }
-    else if (indata["Reordered insurance at diagnosis 2 2"] === "5")  {
+    else if (indata["Reordered insurance at diagnosis 2 2"] === 4)  {
         _temp_0 = 4;
     }
     Reordered_insurance_at_diagnosis_2_2_asCode = _temp_0;
 
-    if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Brainstem, insular, basal ganglia, or thalamus")  {
+    if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Cerebellum")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Frontal")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 2)  {
         _temp_0 = 2;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Multifocal")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 3)  {
         _temp_0 = 3;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Occipital")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 4)  {
         _temp_0 = 4;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Parietal")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 5)  {
         _temp_0 = 5;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Temporal")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 6)  {
         _temp_0 = 6;
     }
-    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === "Unknown")  {
+    else if (indata["New Tumor Lobe (updated chart review) 2 2 2"] === 7)  {
         _temp_0 = 7;
     }
     New_Tumor_Lobe_updated_chart_review_2_2_2_asCode = _temp_0;
 
-    if (indata["Minority (Yes=1, No=2) 2"] === "1")  {
+    if (indata["Minority (Yes=1, No=2) 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["Minority (Yes=1, No=2) 2"] === "2")  {
+    else if (indata["Minority (Yes=1, No=2) 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["Minority (Yes=1, No=2) 2"] === "Unknown")  {
+    else if (indata["Minority (Yes=1, No=2) 2"] === 2)  {
         _temp_0 = 2;
     }
     Minority_Yes_1_No_2_2_asCode = _temp_0;
 
-    if (indata["KPS.post.op 3"] === "<80")  {
+    if (indata["KPS.post.op 3"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["KPS.post.op 3"] === "80")  {
+    else if (indata["KPS.post.op 3"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["KPS.post.op 3"] === "90")  {
+    else if (indata["KPS.post.op 3"] === 2)  {
         _temp_0 = 2;
     }
-    else if (indata["KPS.post.op 3"] === "100")  {
+    else if (indata["KPS.post.op 3"] === 3)  {
         _temp_0 = 3;
     }
-    else if (indata["KPS.post.op 3"] === "NA")  {
+    else if (indata["KPS.post.op 3"] === 4)  {
         _temp_0 = 4;
     }
     KPS_post_op_3_asCode = _temp_0;
 
-    if (indata["Ethnicity Hispanic/Latino (Yes=1, No=2) 2"] === "1")  {
+    if (indata["Ethnicity Hispanic/Latino (Yes=1, No=2) 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["Ethnicity Hispanic/Latino (Yes=1, No=2) 2"] === "2")  {
+    else if (indata["Ethnicity Hispanic/Latino (Yes=1, No=2) 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["Ethnicity Hispanic/Latino (Yes=1, No=2) 2"] === "Unknown")  {
+    else if (indata["Ethnicity Hispanic/Latino (Yes=1, No=2) 2"] === 2)  {
         _temp_0 = 2;
     }
     Ethnicity_Hispanic_Latino_Yes_1_No_2_2_asCode = _temp_0;
 
-    if (indata["Employed(Y=1, N=2, Retired=3) 2"] === "1")  {
+    if (indata["Employed(Y=1, N=2, Retired=3) 2"] === 0)  {
         _temp_0 = 0;
     }
-    else if (indata["Employed(Y=1, N=2, Retired=3) 2"] === "2")  {
+    else if (indata["Employed(Y=1, N=2, Retired=3) 2"] === 1)  {
         _temp_0 = 1;
     }
-    else if (indata["Employed(Y=1, N=2, Retired=3) 2"] === "3")  {
+    else if (indata["Employed(Y=1, N=2, Retired=3) 2"] === 2)  {
         _temp_0 = 2;
     }
-    else if (indata["Employed(Y=1, N=2, Retired=3) 2"] === "Unknown")  {
+    else if (indata["Employed(Y=1, N=2, Retired=3) 2"] === 3)  {
         _temp_0 = 3;
     }
     Employed_Y_1_N_2_Retired_3_2_asCode = _temp_0;
