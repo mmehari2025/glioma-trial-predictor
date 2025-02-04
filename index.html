@@ -203,8 +203,8 @@
             console.log("📊 Output Data from Model:", outdata);
 
             // Retrieve probability values
-            let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
-            let probabilityNo = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=2 )_1"];
+            let probabilityYes = outdata["ProbabilityEnroll"];
+            let probabilityNo = outdata["ProbabilityNotEnroll"];
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
                 document.getElementById("result").innerText =
