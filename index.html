@@ -31,26 +31,26 @@
 <body>
     <h2>Glioma Clinical Trial Enrollment Predictor</h2>
     <form id="predictionForm">
-        <label for="Age.at.Initial.Diagnosis">Age at Initial Diagnosis (years):</label>
-        <input type="number" id="Age.at.Initial.Diagnosis" required><br>
+        <label for="AgeDiagnosis">Age at Initial Diagnosis (years):</label>
+        <input type="number" id="AgeDiagnosis" required><br>
 
-        <label for="Employed(Y=1, N=2, Retired=3) 2">Employment Status:</label>
-        <select id="Employed(Y=1, N=2, Retired=3) 2" required>
+        <label for="Employment">Employment Status:</label>
+        <select id="Employment" required>
             <option value="1">Employed</option>
             <option value="2">Unemployed</option>
             <option value="3">Retired</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="Ethnicity Hispanic/Latino (Yes=1, No=2) 2">Ethnicity:</label>
-        <select id="Ethnicity Hispanic/Latino (Yes=1, No=2) 2" required>
+        <label for="Ethnicity">Ethnicity:</label>
+        <select id="Ethnicity" required>
             <option value="1">Hispanic/Latino</option>
             <option value="2">Non-Hispanic/Latino</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="KPS.post.op 3">KPS Post-op:</label>
-        <select id="KPS.post.op 3" required>
+        <label for="KPSPostOp">KPS Post-op:</label>
+        <select id="KPSPostOp" required>
             <option value="100">100</option>
             <option value="90">90</option>
             <option value="80">80</option>
@@ -58,27 +58,27 @@
             <option value="NA">Unknown</option>
         </select><br>
 
-        <label for="Minority (Yes=1, No=2) 2">Minority Status:</label>
-        <select id="Minority (Yes=1, No=2) 2" required>
+        <label for="Minority">Minority Status:</label>
+        <select id="Minority" required>
             <option value="1">Minority</option>
             <option value="2">Non-minority</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="New Tumor Lobe (updated chart review) 2 2 2">Tumor Lobe:</label>
-        <select id="New Tumor Lobe (updated chart review) 2 2 2" required>
+        <label for="TumorLobe">Tumor Lobe:</label>
+        <select id="TumorLobe" required>
             <option value="Frontal">Frontal</option>
             <option value="Parietal">Parietal</option>
             <option value="Temporal">Temporal</option>
-            <option value="Brainstem, insular, basal ganglia, or thalamus">Brainstem, insular, basal ganglia, or thalamus</option>
+            <option value="Brainstem">Brainstem, Insular, Basal Ganglia, or Thalamus</option>
             <option value="Multifocal">Multifocal</option>
             <option value="Occipital">Occipital</option>
             <option value="Cerebellum">Cerebellum</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="Reordered insurance at diagnosis 2 2">Insurance Status at Diagnosis:</label>
-        <select id="Reordered insurance at diagnosis 2 2" required>
+        <label for="Insurance">Insurance Status at Diagnosis:</label>
+        <select id="Insurance" required>
             <option value="1">Private</option>
             <option value="2">Medi-cal/Medicaid</option>
             <option value="3">Medicare</option>
@@ -86,41 +86,41 @@
             <option value="5">Self-pay</option>
         </select><br>
 
-        <label for="Seizure.preop 2">Seizure Pre-op:</label>
-        <select id="Seizure.preop 2" required>
+        <label for="Seizure">Seizure Pre-op:</label>
+        <select id="Seizure" required>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
             <option value="NA">Unknown</option>
         </select><br>
 
-        <label for="Sex (M=1, F=2)">Sex:</label>
-        <select id="Sex (M=1, F=2)" required>
+        <label for="Sex">Sex:</label>
+        <select id="Sex" required>
             <option value="1">Male</option>
             <option value="2">Female</option>
         </select><br>
 
-        <label for="TMZ anytime 2 2">Received Chemotherapy?</label>
-        <select id="TMZ anytime 2 2" required>
+        <label for="Chemotherapy">Received Chemotherapy?</label>
+        <select id="Chemotherapy" required>
             <option value="1">Yes</option>
             <option value="2">No</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2">Race:</label>
-        <select id="Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2" required>
+        <label for="Race">Race:</label>
+        <select id="Race" required>
             <option value="White">White</option>
-            <option value="Black/African American">Black/African American</option>
-            <option value="Hispanic/Latino">Hispanic/Latino</option>
+            <option value="Black">Black/African American</option>
+            <option value="Hispanic">Hispanic/Latino</option>
             <option value="Asian">Asian</option>
             <option value="Pacific">Pacific Islander</option>
             <option value="Other">Other</option>
             <option value="Unknown">Unknown</option>
         </select><br>
 
-        <label for="WHO Grade 2 2">WHO Grade:</label>
-        <select id="WHO Grade 2 2" required>
-            <option value="Grade 2-3">Grade 2-3</option>
-            <option value="Grade 4">Grade 4</option>
+        <label for="WHOGrade">WHO Grade:</label>
+        <select id="WHOGrade" required>
+            <option value="2-3">Grade 2-3</option>
+            <option value="4">Grade 4</option>
         </select><br>
 
         <button type="button" onclick="calculateProbability()">Calculate Probability</button>
@@ -131,14 +131,33 @@
     <script src="jmp_score.js"></script>
     <script src="model.js"></script>
     <script>
+        const variableMap = {
+            "AgeDiagnosis": "Age.at.Initial.Diagnosis",
+            "Employment": "Employed(Y=1, N=2, Retired=3) 2",
+            "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
+            "KPSPostOp": "KPS.post.op 3",
+            "Minority": "Minority (Yes=1, No=2) 2",
+            "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
+            "Insurance": "Reordered insurance at diagnosis 2 2",
+            "Seizure": "Seizure.preop 2",
+            "Sex": "Sex (M=1, F=2)",
+            "Chemotherapy": "TMZ anytime 2 2",
+            "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
+            "WHOGrade": "WHO Grade 2 2"
+        };
+
         function calculateProbability() {
             let indata = {};
 
-            // Collect input values directly with correct names
-            document.querySelectorAll("#predictionForm select, #predictionForm input").forEach(input => {
-                let value = input.value.trim();
-                indata[input.id] = isNaN(value) || value === "" ? value : parseFloat(value);
-            });
+            // Map form values to correct names for model.js
+            for (let shortName in variableMap) {
+                let fullName = variableMap[shortName];
+                let inputElement = document.getElementById(shortName);
+                if (inputElement) {
+                    let value = inputElement.value.trim();
+                    indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
+                }
+            }
 
             console.log("🚀 Input Data:", indata);
 
