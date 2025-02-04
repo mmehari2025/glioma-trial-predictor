@@ -147,38 +147,41 @@
         };
 
         function calculateProbability() {
-            let indata = {};
+        let indata = {};
 
-            // Map form values to correct names for model.js
-            for (let shortName in variableMap) {
-                let fullName = variableMap[shortName];
-                let inputElement = document.getElementById(shortName);
-                if (inputElement) {
-                    let value = inputElement.value.trim();
-                    indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
-                }
-            }
-
-            console.log("🚀 Input Data:", indata);
-
-            if (typeof score === "function") {
-                let outdata = {};
-                score(indata, outdata);
-                console.log("📊 Output Data:", outdata);
-
-                let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
-
-                if (!isNaN(probabilityYes)) {
-                    document.getElementById("result").innerText =
-                        `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
-                } else {
-                    document.getElementById("result").innerText =
-                        "Error: Probability could not be calculated.";
-                }
-            } else {
-                console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
+        // Map form values to correct names for model.js
+        for (let shortName in variableMap) {
+            let fullName = variableMap[shortName];
+            let inputElement = document.getElementById(shortName);
+            if (inputElement) {
+                let value = inputElement.value.trim();
+                indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
             }
         }
+
+        console.log("🚀 Input Data:", indata);
+
+        if (typeof score === "function") {
+            let outdata = {};
+            score(indata, outdata);
+            console.log("📊 Output Data:", outdata);
+
+            // Explicitly reference the output keys as strings to avoid issues with special characters
+            let probabilityYes = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=1 )_1"];
+            let probabilityNo = outdata["Probability( Clinical Trial enrollment: (Yes=1, No =2)=2 )_1"];
+
+            if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
+                document.getElementById("result").innerText =
+                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+            } else {
+                document.getElementById("result").innerText =
+                    "Error: Probability could not be calculated.";
+                console.error("⚠️ Probability is NaN or undefined. Check input processing.");
+            }
+        } else {
+            console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
+        }
+    }
     </script>
 </body>
 </html>
