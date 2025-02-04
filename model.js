@@ -64,7 +64,7 @@ var getInputMetadata = function() {
      },
      "Sex (M=1, F=2)": {
        "id": "Sex (M=1, F=2)",
-       "type": "string"
+       "type": "number"
      },
      "TMZ anytime 2 2": {
        "id": "TMZ anytime 2 2",
