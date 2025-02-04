@@ -82,7 +82,7 @@
         <form id="predictionForm">
             
             <!-- DEMOGRAPHIC VARIABLES -->
-            <div class="section-title"> Demographic Variables</div>
+            <div class="section-title">Demographic Variables</div>
             <div class="form-group">
                 <label for="AgeDiagnosis">Age at Initial Diagnosis (years):</label>
                 <input type="number" id="AgeDiagnosis" required>
@@ -128,7 +128,7 @@
             </div>
 
             <!-- SOCIOECONOMIC VARIABLES -->
-            <div class="section-title"> Socioeconomic Variables</div>
+            <div class="section-title">Socioeconomic Variables</div>
             <div class="form-group">
                 <label for="Insurance">Insurance Status at Diagnosis:</label>
                 <select id="Insurance" required>
@@ -150,8 +150,8 @@
                 </select>
             </div>
 
-            <!--  ONCOLOGIC VARIABLES -->
-            <div class="section-title"> Oncologic Variables</div>
+            <!-- ONCOLOGIC VARIABLES -->
+            <div class="section-title">Oncologic Variables</div>
             <div class="form-group">
                 <label for="WHOGrade">WHO Grade:</label>
                 <select id="WHOGrade" required>
@@ -211,95 +211,6 @@
 
     <script src="jmp_score.js"></script>
     <script src="model.js"></script>
-    
-    <script>
-        const variableMap = {
-            "AgeDiagnosis": "Age.at.Initial.Diagnosis",
-            "Employment": "Employed(Y=1, N=2, Retired=3) 2",
-            "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
-            "KPSPostOp": "KPS.post.op 3",
-            "Minority": "Minority (Yes=1, No=2) 2",
-            "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
-            "Insurance": "Reordered insurance at diagnosis 2 2",
-            "Seizure": "Seizure.preop 2",
-            "Sex": "Sex (M=1, F=2)",
-            "Chemotherapy": "TMZ anytime 2 2",
-            "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
-            "WHOGrade": "WHO Grade 2 2"
-        };
 
-        function calculateProbability() {
-        let indata = {};
-
-        // Correct categorical mappings
-        const categoricalMappings = {
-            "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
-            "Race": { "White": 5, "Black": 1, "Hispanic": 3, "Asian": 0, "Pacific": 2, "Other": 3, "Unknown": 4 }, // Race mapping
-            "Chemotherapy": { "1": 2, "2": 0, "Unknown": 1 }, // TMZ Chemotherapy mapping
-            "Seizure": { "Yes": 2, "No": 1, "NA": 0 }, // Seizure mapping
-            "Insurance": { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4 }, // Insurance mapping
-            "TumorLobe": { "Brainstem": 0, "Cerebellum": 1, "Frontal": 2, "Multifocal": 3, "Occipital": 4, "Parietal": 5, "Temporal": 6, "Unknown": 7 }, // Tumor Lobe mapping
-            "Minority": { "1": 0, "2": 1, "Unknown": 2 }, // Minority mapping
-            "KPSPostOp": { "100": 3, "90": 2, "80": 1, "<80": 0, "NA": 4 }, // KPS Post-op mapping
-            "Ethnicity": { "1": 0, "2": 1, "Unknown": 2 }, // Ethnicity mapping
-            "Employment": { "1": 0, "2": 1, "3": 2, "Unknown": 3 }, // Employment mapping
-            "Sex": { "1": 1, "2": 2 } // Sex mapping
-        };
-
-        // Map input values to the correct model variable names
-        const variableMap = {
-            "AgeDiagnosis": "Age.at.Initial.Diagnosis",
-            "Employment": "Employed(Y=1, N=2, Retired=3) 2",
-            "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
-            "KPSPostOp": "KPS.post.op 3",
-            "Minority": "Minority (Yes=1, No=2) 2",
-            "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
-            "Insurance": "Reordered insurance at diagnosis 2 2",
-            "Seizure": "Seizure.preop 2",
-            "Sex": "Sex (M=1, F=2)",
-            "Chemotherapy": "TMZ anytime 2 2",
-            "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
-            "WHOGrade": "WHO Grade 2 2"
-        };
-
-        for (let shortName in variableMap) {
-            let fullName = variableMap[shortName];
-            let inputElement = document.getElementById(shortName);
-            if (inputElement) {
-                let value = inputElement.value.trim();
-
-                // Convert categorical variables before sending them to model.js
-                if (categoricalMappings[shortName]) {
-                    indata[fullName] = categoricalMappings[shortName][value] ?? -1;
-                } else {
-                    indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
-                }
-            }
-        }
-
-        console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
-
-        if (typeof score === "function") {
-            let outdata = {};
-            score(indata, outdata);
-            console.log("📊 Output Data from Model:", outdata);
-
-            // Retrieve probability values
-            let probabilityYes = outdata["ProbabilityEnroll"];
-            let probabilityNo = outdata["ProbabilityNotEnroll"];
-
-            if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
-                document.getElementById("result").innerText =
-                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
-            } else {
-                document.getElementById("result").innerText =
-                    "Error: Probability could not be calculated.";
-                console.error("⚠️ Probability is NaN or undefined. Check input processing.");
-            }
-        } else {
-            console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
-        }
-    }
-    </script>
 </body>
 </html>
