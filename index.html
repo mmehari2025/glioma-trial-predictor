@@ -262,8 +262,6 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
-        let ageInput = document.getElementById("AgeDiagnosis").value;
-        let age = parseFloat(ageInput);
             
         // Correct categorical mappings
         const categoricalMappings = {
@@ -334,6 +332,9 @@
             console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
         }
 
+        let ageInput = document.getElementById("AgeDiagnosis").value;
+        let age = parseFloat(ageInput);
+            
         if (!isNaN(age)) {
                 shapImpact.push({ feature: "Age", impact: shapValues["AgeDiagnosis"](age) });
         }
