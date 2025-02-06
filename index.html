@@ -389,82 +389,10 @@ const readableLabels = {
                 .sort((a, b) => a.impact - b.impact) // Corrected sorting
                 .slice(0, 2);
 
-            let impactText = "";
-
-            // Ensure increasing factors are only positive
-            if (positiveImpact.length === 0) {
-                impactText += "No significant increasing factors.\n";
-            } else {
-                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
-            }
-
-            // Ensure decreasing factors are only negative
-            if (negativeImpact.length === 0) {
-                impactText += "No significant decreasing factors.";
-            } else {
-                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
-            }
-
-            document.getElementById("shapImpact").innerText = impactText;
-        }
-<style>
-    .impact-container {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
+            // ✅ Call `updateImpactDisplay` AFTER defining `positiveImpact` and `negativeImpact`
+        updateImpactDisplay(positiveImpact, negativeImpact);
     }
-
-    .impact-box {
-        width: 48%;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        font-size: 1em;
-    }
-
-    .positive-impact {
-        background-color: #d4edda;
-        color: #155724;
-        border: 2px solid #c3e6cb;
-    }
-
-    .negative-impact {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 2px solid #f5c6cb;
-    }
-
-    .impact-title {
-        font-size: 1.2em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .impact-list {
-        list-style: none;
-        padding: 0;
-    }
-
-    .impact-list li {
-        margin-bottom: 5px;
-    }
-</style>
-
-<div class="impact-container">
-    <div class="impact-box positive-impact">
-        <div class="impact-title">Most Increasing Factors</div>
-        <ul id="increasingFactors" class="impact-list"></ul>
-    </div>
-
-    <div class="impact-box negative-impact">
-        <div class="impact-title">Most Decreasing Factors</div>
-        <ul id="decreasingFactors" class="impact-list"></ul>
-    </div>
-</div>
-
-<script>
-    function updateImpactDisplay(positiveImpact, negativeImpact) {
+function updateImpactDisplay(positiveImpact, negativeImpact) {
         let increasingList = document.getElementById("increasingFactors");
         let decreasingList = document.getElementById("decreasingFactors");
 
@@ -491,11 +419,24 @@ const readableLabels = {
             });
         }
     }
+            // Ensure increasing factors are only positive
+            if (positiveImpact.length === 0) {
+                impactText += "No significant increasing factors.\n";
+            } else {
+                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
+            }
 
-    // Call this function inside your `calculateProbability()` function after sorting shapImpact
-    updateImpactDisplay(positiveImpact, negativeImpact);
+            // Ensure decreasing factors are only negative
+            if (negativeImpact.length === 0) {
+                impactText += "No significant decreasing factors.";
+            } else {
+                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
+            }
 
-    
+            document.getElementById("shapImpact").innerText = impactText;
+        }
+
+
     </script>
 
 </body>
