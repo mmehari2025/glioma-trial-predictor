@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -262,7 +263,7 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
-        
+            
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
@@ -322,7 +323,7 @@
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
                 document.getElementById("result").innerText =
-                    Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%;
+                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
             } else {
                 document.getElementById("result").innerText =
                     "Error: Probability could not be calculated.";
@@ -347,10 +348,6 @@
                     shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
             });
-let selectedValues = {};
-    document.querySelectorAll("select, input").forEach(el => {
-        selectedValues[el.id] = el.value;
-    });
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
@@ -370,14 +367,14 @@ let selectedValues = {};
             if (positiveImpact.length === 0) {
                 impactText += "No significant increasing factors.\n";
             } else {
-                impactText += Most increasing factors: ${positiveImpact.map(d => ${d.feature} (${(d.impact * 100).toFixed(2)}%)).join(", ")}.\n;
+                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
             }
 
             // Ensure decreasing factors are only negative
             if (negativeImpact.length === 0) {
                 impactText += "No significant decreasing factors.";
             } else {
-                impactText += Most decreasing factors: ${negativeImpact.map(d => ${d.feature} (${(d.impact * 100).toFixed(2)}%)).join(", ")}.;
+                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
             }
 
             document.getElementById("shapImpact").innerText = impactText;
