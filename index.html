@@ -342,7 +342,24 @@
         impact: shapValues["AgeDiagnosis"](age) 
     });
         }
-            
+        // Define readable labels for easier interpretation
+const readableLabels = {
+    "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
+    "Sex": { "1": "Male", "2": "Female" },
+    "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
+    "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
+    "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
+    "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
+    "TumorLobe": { 
+        "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
+        "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
+        "Multifocal": "Multifocal", "Occipital": "Occipital",
+        "Cerebellum": "Cerebellum", "Unknown": "Unknown"
+    },
+    "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
+    "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
+    "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
+};    
         document.querySelectorAll("select, input").forEach(el => {
                 let category = el.id;
                 let value = el.value;
