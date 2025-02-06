@@ -308,7 +308,16 @@
                 }
             }
         }
-
+             if (shapValues[shortName] !== undefined) {
+            let impactValue = shapValues[shortName][value];
+            if (impactValue !== undefined) {
+                shapImpact.push({
+                    feature: `${shortName} (${value})`, // ✅ Show selected value
+                    impact: impactValue
+                });
+            }
+        }
+    });
         console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
 
         if (typeof score === "function") {
