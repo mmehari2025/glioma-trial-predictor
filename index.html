@@ -357,7 +357,7 @@
             // Fix: Sort negative impacts in descending order to show the most negative first
             let negativeImpact = shapImpact
                 .filter(d => d.impact < 0)
-                .sort((a, b) => b.impact - a.impact) // Ensures most negative impact is first
+                .sort((a, b) => a.impact - b.impact) // Corrected sorting
                 .slice(0, 2);
 
             let impactText = "";
