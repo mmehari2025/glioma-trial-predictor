@@ -7,6 +7,231 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        input, select {
+            display: block;
+            margin: 10px auto;
+            padding: 8px;
+            width: 80%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Glioma Clinical Trial Enrollment Predictor</h2>
+    <form id="predictionForm">
+        <label for="AgeDiagnosis">Age at Initial Diagnosis (years):</label>
+        <input type="number" id="AgeDiagnosis" required><br>
+
+        <label for="Employment">Employment Status:</label>
+        <select id="Employment" required>
+            <option value="1">Employed</option>
+            <option value="2">Unemployed</option>
+            <option value="3">Retired</option>
+            <option value="Unknown">Unknown</option>
+        </select><br>
+
+        <label for="Ethnicity">Ethnicity:</label>
+        <select id="Ethnicity" required>
+            <option value="1">Hispanic/Latino</option>
+            <option value="2">Non-Hispanic/Latino</option>
+            <option value="Unknown">Unknown</option>
+        </select><br>
+
+        <label for="KPSPostOp">KPS Post-op:</label>
+        <select id="KPSPostOp" required>
+            <option value="100">100</option>
+            <option value="90">90</option>
+            <option value="80">80</option>
+            <option value="<80">Less than 80</option>
+            <option value="NA">Unknown</option>
+        </select><br>
+
+        <label for="Minority">Minority Status:</label>
+        <select id="Minority" required>
+            <option value="1">Minority</option>
+            <option value="2">Non-minority</option>
+            <option value="Unknown">Unknown</option>
+        </select><br>
+
+        <label for="TumorLobe">Tumor Lobe:</label>
+        <select id="TumorLobe" required>
+            <option value="Frontal">Frontal</option>
+            <option value="Parietal">Parietal</option>
+            <option value="Temporal">Temporal</option>
+            <option value="Brainstem">Brainstem, Insular, Basal Ganglia, or Thalamus</option>
+            <option value="Multifocal">Multifocal</option>
+            <option value="Occipital">Occipital</option>
+            <option value="Cerebellum">Cerebellum</option>
+            <option value="Unknown">Unknown</option>
+        </select><br>
+
+        <label for="Insurance">Insurance Status at Diagnosis:</label>
+        <select id="Insurance" required>
+            <option value="1">Private</option>
+            <option value="2">Medi-cal/Medicaid</option>
+            <option value="3">Medicare</option>
+            <option value="4">Unknown</option>
+            <option value="5">Self-pay</option>
+        </select><br>
+
+        <label for="Seizure">Seizure Pre-op:</label>
+        <select id="Seizure" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="NA">Unknown</option>
+        </select><br>
+
+        <label for="Sex">Sex:</label>
+        <select id="Sex" required>
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+        </select><br>
+
+        <label for="Chemotherapy">Received Chemotherapy?</label>
+        <select id="Chemotherapy" required>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+            <option value="Unknown">Unknown</option>
+        </select><br>
+
+        <label for="Race">Race:</label>
+        <select id="Race" required>
+            <option value="White">White</option>
+            <option value="Black">Black/African American</option>
+            <option value="Hispanic">Hispanic/Latino</option>
+            <option value="Asian">Asian</option>
+            <option value="Pacific">Pacific Islander</option>
+            <option value="Other">Other</option>
+            <option value="Unknown">Unknown</option>
+        </select><br>
+
+        <label for="WHOGrade">WHO Grade:</label>
+        <select id="WHOGrade" required>
+            <option value="2-3">Grade 2-3</option>
+            <option value="4">Grade 4</option>
+        </select><br>
+
+        <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+    </form>
+
+    <h3 id="result"></h3>
+
+    <script src="jmp_score.js"></script>
+    <script src="model.js"></script>
+    <script>
+        const variableMap = {
+            "AgeDiagnosis": "Age.at.Initial.Diagnosis",
+            "Employment": "Employed(Y=1, N=2, Retired=3) 2",
+            "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
+            "KPSPostOp": "KPS.post.op 3",
+            "Minority": "Minority (Yes=1, No=2) 2",
+            "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
+            "Insurance": "Reordered insurance at diagnosis 2 2",
+            "Seizure": "Seizure.preop 2",
+            "Sex": "Sex (M=1, F=2)",
+            "Chemotherapy": "TMZ anytime 2 2",
+            "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
+            "WHOGrade": "WHO Grade 2 2"
+        };
+
+        function calculateProbability() {
+        let indata = {};
+
+        // Correct categorical mappings
+        const categoricalMappings = {
+            "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
+            "Race": { "White": 5, "Black": 1, "Hispanic": 3, "Asian": 0, "Pacific": 2, "Other": 3, "Unknown": 4 }, // Race mapping
+            "Chemotherapy": { "1": 2, "2": 0, "Unknown": 1 }, // TMZ Chemotherapy mapping
+            "Seizure": { "Yes": 2, "No": 1, "NA": 0 }, // Seizure mapping
+            "Insurance": { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4 }, // Insurance mapping
+            "TumorLobe": { "Brainstem": 0, "Cerebellum": 1, "Frontal": 2, "Multifocal": 3, "Occipital": 4, "Parietal": 5, "Temporal": 6, "Unknown": 7 }, // Tumor Lobe mapping
+            "Minority": { "1": 0, "2": 1, "Unknown": 2 }, // Minority mapping
+            "KPSPostOp": { "100": 3, "90": 2, "80": 1, "<80": 0, "NA": 4 }, // KPS Post-op mapping
+            "Ethnicity": { "1": 0, "2": 1, "Unknown": 2 }, // Ethnicity mapping
+            "Employment": { "1": 0, "2": 1, "3": 2, "Unknown": 3 }, // Employment mapping
+            "Sex": { "1": 1, "2": 2 } // Sex mapping
+        };
+
+        // Map input values to the correct model variable names
+        const variableMap = {
+            "AgeDiagnosis": "Age.at.Initial.Diagnosis",
+            "Employment": "Employed(Y=1, N=2, Retired=3) 2",
+            "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
+            "KPSPostOp": "KPS.post.op 3",
+            "Minority": "Minority (Yes=1, No=2) 2",
+            "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
+            "Insurance": "Reordered insurance at diagnosis 2 2",
+            "Seizure": "Seizure.preop 2",
+            "Sex": "Sex (M=1, F=2)",
+            "Chemotherapy": "TMZ anytime 2 2",
+            "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
+            "WHOGrade": "WHO Grade 2 2"
+        };
+
+        for (let shortName in variableMap) {
+            let fullName = variableMap[shortName];
+            let inputElement = document.getElementById(shortName);
+            if (inputElement) {
+                let value = inputElement.value.trim();
+
+                // Convert categorical variables before sending them to model.js
+                if (categoricalMappings[shortName]) {
+                    indata[fullName] = categoricalMappings[shortName][value] ?? -1;
+                } else {
+                    indata[fullName] = isNaN(value) || value === "" ? value : parseFloat(value);
+                }
+            }
+        }
+
+        console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
+
+        if (typeof score === "function") {
+            let outdata = {};
+            score(indata, outdata);
+            console.log("📊 Output Data from Model:", outdata);
+
+            // Retrieve probability values
+            let probabilityYes = outdata["ProbabilityEnroll"];
+            let probabilityNo = outdata["ProbabilityNotEnroll"];
+
+            if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
+                document.getElementById("result").innerText =
+                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+            } else {
+                document.getElementById("result").innerText =
+                    "Error: Probability could not be calculated.";
+                console.error("⚠️ Probability is NaN or undefined. Check input processing.");
+            }
+        } else {
+            console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
+        }
+    }
+    </script>
+</body>
+</html>
+
+Index.html that works with stratified variables into categories that functions on site:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glioma Trial Enrollment Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
             max-width: 800px;
             margin: auto;
             padding: 20px;
@@ -207,7 +432,6 @@
         </form>
 
         <h3 id="result"></h3>
-        <h4 id="shapImpact"></h4>
     </div>
 
     <script src="jmp_score.js"></script>
@@ -227,42 +451,10 @@
             "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
             "WHOGrade": "WHO Grade 2 2"
         };
-        
-        const shapValues = {
-            "Race": { "Asian": -0.1223, "Black/African American": -0.2135, "White": 0.0205, "Pacific": -0.1144, "Other": -0.1959 },
-            "Ethnicity": { "1": -0.0844, "2": 0.0045 },
-            "Sex": { "1": -0.0053, "2": 0.0071 },
-            "Insurance": { "1": 0.0283, "2": -0.0866, "3": -0.0858, "5": -0.0775 },
-            "Chemotherapy": { "1": 0.0552, "2": -0.1431 },
-            "WHOGrade": { "2-3": -0.0523, "4": 0.03 },
-            "AgeDiagnosis": (age) => {
-                if (age < 20) return 0.0328;
-                if (age < 30) return 0.0108;
-                if (age < 40) return 0.0058;
-                if (age < 50) return 0.0018;
-                if (age < 60) return 0.0012;
-                if (age < 70) return -0.002;
-                if (age < 80) return -0.0196;
-                return -0.0624;
-            },
-            "KPSPostOp": { "100": 0.0888, "90": 0.0719, "80": 0.0307, "<80": -0.1135 },
-            "TumorLobe": { 
-                "Frontal": -0.0178, 
-                "Temporal": -0.0412, 
-                "Parietal": 0.033, 
-                "Brainstem": 0.0737, 
-                "Cerebellum": 0.0641, 
-                "Multifocal": 0.0768, 
-                "Occipital": 0.1362 
-            },
-            "Seizure": { "Yes": 0.0398, "No": -0.0611 },
-            "Employment": { "1": 0.0131, "2": -0.0283, "3": 0.0354 }
-        };
-    
+
         function calculateProbability() {
         let indata = {};
-        let shapImpact = [];
-            
+
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
@@ -331,53 +523,7 @@
         } else {
             console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
         }
-
-        let ageInput = document.getElementById("AgeDiagnosis").value;
-        let age = parseFloat(ageInput);
-            
-        if (!isNaN(age)) {
-                shapImpact.push({ feature: "Age", impact: shapValues["AgeDiagnosis"](age) });
-        }
-            
-        document.querySelectorAll("select, input").forEach(el => {
-                let category = el.id;
-                let value = el.value;
-                indata[category] = value;
-                if (shapValues[category] && shapValues[category][value] !== undefined) {
-                    shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
-                }
-            });
-
-            shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
-
-            let positiveImpact = shapImpact
-                .filter(d => d.impact > 0)
-                .slice(0, 2);
-
-            // Fix: Sort negative impacts in descending order to show the most negative first
-            let negativeImpact = shapImpact
-                .filter(d => d.impact < 0)
-                .sort((a, b) => a.impact - b.impact) // Corrected sorting
-                .slice(0, 2);
-
-            let impactText = "";
-
-            // Ensure increasing factors are only positive
-            if (positiveImpact.length === 0) {
-                impactText += "No significant increasing factors.\n";
-            } else {
-                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
-            }
-
-            // Ensure decreasing factors are only negative
-            if (negativeImpact.length === 0) {
-                impactText += "No significant decreasing factors.";
-            } else {
-                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
-            }
-
-            document.getElementById("shapImpact").innerText = impactText;
-        }
+    }
     </script>
 
 </body>
