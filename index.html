@@ -350,8 +350,15 @@
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
-            let positiveImpact = shapImpact.filter(d => d.impact > 0).slice(0, 2);
-            let negativeImpact = shapImpact.filter(d => d.impact < 0).sort((a, b) => a.impact - b.impact).slice(0, 2);
+            let positiveImpact = shapImpact
+                .filter(d => d.impact > 0)
+                .slice(0, 2);
+
+            // Fix: Sort negative impacts in descending order to show the most negative first
+            let negativeImpact = shapImpact
+                .filter(d => d.impact < 0)
+                .sort((a, b) => b.impact - a.impact) // Ensures most negative impact is first
+                .slice(0, 2);
 
             let impactText = "";
 
