@@ -262,9 +262,10 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
-        let selectedValues = {};
+        let selectedValues = {};  
+
         document.querySelectorAll("select, input").forEach(el => {
-          selectedValues[el.id] = el.value;
+        selectedValues[el.id] = el.value;
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
@@ -310,16 +311,7 @@
                 }
             }
         }
-if (shapValues[el.id] !== undefined) {
-            let impactValue = shapValues[el.id][el.value];
-            if (impactValue !== undefined) {
-                shapImpact.push({
-                    feature: `${el.id} (${el.value})`,  // Include actual selected value
-                    impact: impactValue
-                });
-            }
-        }
-    });
+
         console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
 
         if (typeof score === "function") {
@@ -358,26 +350,6 @@ if (shapValues[el.id] !== undefined) {
                     shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
             });
-let selectedValues = {};
-    document.querySelectorAll("select, input").forEach(el => {
-        selectedValues[el.id] = el.value;
-    });
-
-    // Iterate through the form inputs and compute SHAP impacts
-    for (let category in shapValues) {
-        if (selectedValues[category] !== undefined) {
-            let selectedValue = selectedValues[category]; // The actual user selection
-            let impactValue = shapValues[category][selectedValue];
-
-            if (impactValue !== undefined) {
-                shapImpact.push({
-                    feature: `${category} (${selectedValue})`,  // Include actual selected value
-                    impact: impactValue
-                });
-            }
-        }
-    }
-            
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
