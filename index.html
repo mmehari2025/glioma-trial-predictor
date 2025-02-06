@@ -262,10 +262,7 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
-        let selectedValues = {};  
-
-        document.querySelectorAll("select, input").forEach(el => {
-        selectedValues[el.id] = el.value;
+            
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
