@@ -262,7 +262,9 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
-            
+        let selectedValues = {};
+        document.querySelectorAll("select, input").forEach(el => {
+          selectedValues[el.id] = el.value;
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
@@ -308,7 +310,16 @@
                 }
             }
         }
-
+if (shapValues[el.id] !== undefined) {
+            let impactValue = shapValues[el.id][el.value];
+            if (impactValue !== undefined) {
+                shapImpact.push({
+                    feature: ${el.id} (${el.value}),  // Include actual selected value
+                    impact: impactValue
+                });
+            }
+        }
+    });
         console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
 
         if (typeof score === "function") {
@@ -322,7 +333,7 @@
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
                 document.getElementById("result").innerText =
-                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+                    Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%;
             } else {
                 document.getElementById("result").innerText =
                     "Error: Probability could not be calculated.";
@@ -347,6 +358,26 @@
                     shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
             });
+let selectedValues = {};
+    document.querySelectorAll("select, input").forEach(el => {
+        selectedValues[el.id] = el.value;
+    });
+
+    // Iterate through the form inputs and compute SHAP impacts
+    for (let category in shapValues) {
+        if (selectedValues[category] !== undefined) {
+            let selectedValue = selectedValues[category]; // The actual user selection
+            let impactValue = shapValues[category][selectedValue];
+
+            if (impactValue !== undefined) {
+                shapImpact.push({
+                    feature: ${category} (${selectedValue}),  // Include actual selected value
+                    impact: impactValue
+                });
+            }
+        }
+    }
+            
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
@@ -366,14 +397,14 @@
             if (positiveImpact.length === 0) {
                 impactText += "No significant increasing factors.\n";
             } else {
-                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
+                impactText += Most increasing factors: ${positiveImpact.map(d => ${d.feature} (${(d.impact * 100).toFixed(2)}%)).join(", ")}.\n;
             }
 
             // Ensure decreasing factors are only negative
             if (negativeImpact.length === 0) {
                 impactText += "No significant decreasing factors.";
             } else {
-                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
+                impactText += Most decreasing factors: ${negativeImpact.map(d => ${d.feature} (${(d.impact * 100).toFixed(2)}%)).join(", ")}.;
             }
 
             document.getElementById("shapImpact").innerText = impactText;
