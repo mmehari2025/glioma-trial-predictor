@@ -336,7 +336,9 @@
                 let category = el.id;
                 let value = el.value;
                 indata[category] = value;
-
+                if (shapValues["AgeDiagnosis"] && typeof shapValues["AgeDiagnosis"] === "function") {
+                    shapImpact.push({ feature: "Age", value: age, impact: shapValues["AgeDiagnosis"](age) });
+                }
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
