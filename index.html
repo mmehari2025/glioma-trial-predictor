@@ -349,16 +349,27 @@
 
             shapImpact.sort((a, b) => b.impact - a.impact);
 
-            let positiveImpact = shapImpact.slice(0, 2);
-            let negativeImpact = shapImpact.slice(-2).reverse();
+            let positiveImpact = shapImpact.filter(d => d.impact > 0).slice(0, 2);
+            let negativeImpact = shapImpact.filter(d => d.impact < 0).slice(0, 2).reverse();
 
-            let impactText = `
-                The factors most increasing enrollment probability: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.
-                The factors most decreasing enrollment probability: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.
-            `;
+            let impactText = "";
+
+            // Ensure increasing factors are only positive
+            if (positiveImpact.length === 0) {
+                impactText += "No significant increasing factors.\n";
+            } else {
+                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
+            }
+
+            // Ensure decreasing factors are only negative
+            if (negativeImpact.length === 0) {
+                impactText += "No significant decreasing factors.";
+            } else {
+                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
+            }
 
             document.getElementById("shapImpact").innerText = impactText;
-    }
+        }
     </script>
 
 </body>
