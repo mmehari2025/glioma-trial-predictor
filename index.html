@@ -347,9 +347,14 @@
                 let category = el.id;
                 let value = el.value;
                 indata[category] = value;
+            
+         let displayValue = readableLabels[category] && readableLabels[category][value] 
+                 ? readableLabels[category][value]  // ✅ Convert to readable label if available
+                 : value; 
+            
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
-            feature: `${category}=${value}`, // ✅ Now includes specific value
+            feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
             impact: shapValues[category][value] });
                 }
             });
