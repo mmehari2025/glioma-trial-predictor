@@ -351,13 +351,14 @@
          let displayValue = readableLabels[category] && readableLabels[category][value] 
                  ? readableLabels[category][value]  // ✅ Convert to readable label if available
                  : value; 
-            
+             
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
-            feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
-            impact: shapValues[category][value] });
-                }
-            });
+           feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
+            impact: shapValues[category][value]
+        });
+    }
+}); // ✅ Correct
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
