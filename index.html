@@ -346,7 +346,7 @@
                 indata[category] = value;
 
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
-                    shapImpact.push({ `${category}=${value}, impact: shapValues[category][value] });
+                    shapImpact.push({feature: `${category}=${value}, impact: shapValues[category][value] });
                 }
             });
 
