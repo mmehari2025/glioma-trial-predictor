@@ -207,6 +207,7 @@
         </form>
 
         <h3 id="result"></h3>
+        <h4 id="shapImpact"></h4>
     </div>
 
     <script src="jmp_score.js"></script>
@@ -226,10 +227,21 @@
             "Race": "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2",
             "WHOGrade": "WHO Grade 2 2"
         };
-
+        
+        const shapValues = {
+            "Race": { "Asian": -0.1223, "Black/African American": -0.2135, "White": 0.0205, "Pacific": -0.1144, "Other": -0.1959 },
+            "Ethnicity": { "1": -0.0844, "2": 0.0045 },
+            "Minority": { "1": 0.0972, "2": -0.0157 },
+            "Sex": { "1": -0.0053, "2": 0.0071 },
+            "Insurance": { "1": 0.0283, "2": -0.0866, "3": -0.0858, "5": -0.0775 },
+            "Chemotherapy": { "1": 0.0552, "2": -0.1431 },
+            "WHOGrade": { "2-3": -0.0523, "4": 0.03 }
+        };
+    
         function calculateProbability() {
         let indata = {};
-
+        let shapImpact = [];
+            
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
@@ -298,6 +310,28 @@
         } else {
             console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
         }
+
+        document.querySelectorAll("select, input").forEach(el => {
+                let category = el.id;
+                let value = el.value;
+                indata[category] = value;
+
+                if (shapValues[category] && shapValues[category][value] !== undefined) {
+                    shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
+                }
+            });
+
+            shapImpact.sort((a, b) => b.impact - a.impact);
+
+            let positiveImpact = shapImpact.slice(0, 2);
+            let negativeImpact = shapImpact.slice(-2).reverse();
+
+            let impactText = `
+                The factors most increasing enrollment probability: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.
+                The factors most decreasing enrollment probability: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.
+            `;
+
+            document.getElementById("shapImpact").innerText = impactText;
     }
     </script>
 
