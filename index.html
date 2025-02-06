@@ -264,9 +264,9 @@
         let indata = {};
         let shapImpact = [];
         let selectedValues = {};
-            document.querySelectorAll("select, input").forEach(el => {
-                selectedValues[el.id] = el.value;
-            });    
+    document.querySelectorAll("select, input").forEach(el => {
+        selectedValues[el.id] = el.value;
+    });    
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
@@ -347,16 +347,19 @@
                 let category = el.id;
                 let value = el.value;
                 indata[category] = value;
-                if (selectedValues[category] !== undefined) {
-                    let selectedValue = selectedValues[category]; // The actual user selection
-                    let impactValue = shapValues[category][selectedValue];
-
-                    if (impactValue !== undefined) {
-                        shapImpact.push({
-                            feature: `${category} (${selectedValue})`,  // Include actual selected value
-                            impact: impactValue
-                        });
+                if (shapValues[category] && shapValues[category][value] !== undefined) {
+                    shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
+            for (let category in shapValues) {
+        if (selectedValues[category] !== undefined) {
+            let selectedValue = selectedValues[category]; 
+            let impactValue = shapValues[category][selectedValue];
+
+            if (impactValue !== undefined) {
+                shapImpact.push({
+                    feature: `${category} (${selectedValue})`,  
+                    impact: impactValue
+                });
             });
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
