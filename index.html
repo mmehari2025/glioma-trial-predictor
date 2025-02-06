@@ -346,7 +346,8 @@
         document.querySelectorAll("select, input").forEach(el => {
                 let category = el.id;
                 let value = el.value;
-                indata[category] = value;
+                indata[category] = value; });
+            
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
@@ -360,7 +361,7 @@
                     feature: `${category} (${selectedValue})`,  
                     impact: impactValue
                 });
-            });
+            }}}
 
             shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
