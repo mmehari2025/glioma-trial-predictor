@@ -337,7 +337,10 @@
         let age = parseFloat(ageInput);
             
         if (!isNaN(age)) {
-                shapImpact.push({ feature: "Age", impact: shapValues["AgeDiagnosis"](age) });
+                shapImpact.push({
+        feature: `AgeDiagnosis=${age}`,  // ✅ Now includes exact age value
+        impact: shapValues["AgeDiagnosis"](age) 
+    });
         }
             
         document.querySelectorAll("select, input").forEach(el => {
