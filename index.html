@@ -345,7 +345,9 @@
                 let value = el.value;
                 indata[category] = value;
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
-                    shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
+                    shapImpact.push({
+            feature: `${category}=${value}`, // ✅ Now includes specific value
+            impact: shapValues[category][value] });
                 }
             });
 
