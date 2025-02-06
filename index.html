@@ -262,6 +262,8 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
+        let ageInput = document.getElementById("AgeDiagnosis").value;
+        let age = parseFloat(ageInput);
             
         // Correct categorical mappings
         const categoricalMappings = {
@@ -332,13 +334,14 @@
             console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
         }
 
+        if (!isNaN(age)) {
+                shapImpact.push({ feature: "Age", impact: shapValues["AgeDiagnosis"](age) });
+        }
+            
         document.querySelectorAll("select, input").forEach(el => {
                 let category = el.id;
                 let value = el.value;
                 indata[category] = value;
-                if (shapValues["AgeDiagnosis"] && typeof shapValues["AgeDiagnosis"] === "function") {
-                    shapImpact.push({ feature: "Age", value: age, impact: shapValues["AgeDiagnosis"](age) });
-                }
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({ feature: category, value: value, impact: shapValues[category][value] });
                 }
