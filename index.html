@@ -393,16 +393,16 @@ const readableLabels = {
 
             // Ensure increasing factors are only positive
             if (positiveImpact.length === 0) {
-                impactText += "No significant increasing factors.\n";
+                impactText += "No patient characteristics significantly increase enrollment probability.\n";
             } else {
-                impactText += `Most increasing factors: ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
+                impactText += `Patient characteristics improving this patient's enrollment probability (enrollment probability % increase): ${positiveImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.\n`;
             }
 
             // Ensure decreasing factors are only negative
             if (negativeImpact.length === 0) {
-                impactText += "No significant decreasing factors.";
+                impactText += "No patient characteristics significantly decrease enrollment probability.";
             } else {
-                impactText += `Most decreasing factors: ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
+                impactText += `Patient characteristics lowering this patient's enrollment probability (enrollment probability % decrease): ${negativeImpact.map(d => `${d.feature} (${(d.impact * 100).toFixed(2)}%)`).join(", ")}.`;
             }
 
             document.getElementById("shapImpact").innerText = impactText;
