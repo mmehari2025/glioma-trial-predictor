@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glioma Trial Enrollment Predictor</title>
     <style>
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
@@ -23,16 +24,18 @@
             text-align: left;
         }
 
+        /* Section Titles - UCSF Dark Blue */
         .section-title {
             font-size: 1.2em;
             font-weight: bold;
-            color: #052049;
+            color: #052049; /* UCSF Dark Blue */
             margin-top: 20px;
             padding-bottom: 5px;
-            border-bottom: 2px solid #0056b3;
+            border-bottom: 2px solid #052049; /* Ensure border color matches */
             text-align: left;
         }
 
+        /* Form Inputs */
         .form-group {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -49,54 +52,63 @@
             background: #fafafa;
         }
 
+        /* Calculate Probability Button - UCSF Light Blue */
         button {
             padding: 12px;
             width: 100%;
-            background-color: #0076cf;
+            background-color: #0076cf; /* UCSF Light Blue */
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-top: 20px;
             font-size: 1em;
+            font-weight: bold;
         }
 
         button:hover {
-            background-color: #0056a4;
+            background-color: #0056a4; /* Slightly Darker UCSF Blue */
         }
-        
+
+        /* Impact Container */
         .impact-container {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
         }
-        
+
+        /* Impact Boxes */
         .impact-box {
             width: 48%;
-            padding: 15px;
+            padding: 20px; /* Increased padding for better readability */
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             font-size: 1em;
             background-color: white; /* White Background */
+            border-width: 3px; /* Make the border more prominent */
         }
 
+        /* Positive Impact Box - UCSF Dark Blue Text */
         .positive-impact {
             color: #052049; /* UCSF Dark Blue */
-            border: 2px solid #052049; /* Darker UCSF Blue for border */
+            border: 3px solid #052049; /* UCSF Dark Blue */
         }
 
+        /* Negative Impact Box - UCSF Orange Text */
         .negative-impact {
             color: #e87722; /* UCSF Orange */
-            border: 2px solid #e87722; /* UCSF Orange */
+            border: 3px solid #e87722; /* UCSF Orange */
         }
 
+        /* Impact Titles */
         .impact-title {
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 10px;
         }
 
+        /* Impact Lists */
         .impact-list {
             list-style: none;
             padding: 0;
@@ -104,12 +116,15 @@
 
         .impact-list li {
             margin-bottom: 5px;
+            font-size: 1em;
         }
-        
+
+        /* Headings */
         h3 {
             color: #333;
             margin-top: 15px;
         }
+
     </style>
 </head>
 
