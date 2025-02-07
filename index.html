@@ -82,13 +82,13 @@
 
         .positive-impact {
             background-color: #d4edda;
-            color: #155724;
+            color: #052049;
             border: 2px solid #c3e6cb;
         }
 
         .negative-impact {
             background-color: #f8d7da;
-            color: #721c24;
+            color: #e87722;
             border: 2px solid #f5c6cb;
         }
 
@@ -248,12 +248,12 @@
         <h4 id="shapImpact"></h4>
         <div class="impact-container">
             <div class="impact-box positive-impact">
-                <div class="impact-title">Most Increasing Factors</div>
+                <div class="impact-title">Patient Characteristics That Most Increase Enrollment Probability</div>
                 <ul id="increasingFactors" class="impact-list"></ul>
             </div>
 
             <div class="impact-box negative-impact">
-                <div class="impact-title">Most Decreasing Factors</div>
+                <div class="impact-title">Patient Characteristics That Most Decrease Enrollment Probability</div>
                 <ul id="decreasingFactors" class="impact-list"></ul>
             </div>
         </div>
@@ -448,7 +448,7 @@ const readableLabels = {
             decreasingList.innerHTML = "";
 
             if (positiveImpact.length === 0) {
-                increasingList.innerHTML = "<li>No significant increasing factors.</li>";
+                increasingList.innerHTML = "<li>No patient characteristics significantly increase enrollment probability.</li>";
             } else {
                 positiveImpact.forEach(d => {
                     let listItem = document.createElement("li");
@@ -458,7 +458,7 @@ const readableLabels = {
             }
 
             if (negativeImpact.length === 0) {
-                decreasingList.innerHTML = "<li>No significant decreasing factors.</li>";
+                decreasingList.innerHTML = "<li>No patient characteristics significantly decrease enrollment probability.</li>";
             } else {
                 negativeImpact.forEach(d => {
                     let listItem = document.createElement("li");
