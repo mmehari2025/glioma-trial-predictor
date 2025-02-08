@@ -506,7 +506,35 @@
             updateImpactDisplay(positiveImpact, negativeImpact);
 
         let patientRecommendations = [];
-            
+        }
+    
+        function updateImpactDisplay(positiveImpact, negativeImpact) {
+            let increasingList = document.getElementById("increasingFactors");
+            let decreasingList = document.getElementById("decreasingFactors");
+
+            increasingList.innerHTML = "";
+            decreasingList.innerHTML = "";
+
+            if (positiveImpact.length === 0) {
+                increasingList.innerHTML = "<li>No patient characteristics significantly increase enrollment probability.</li>";
+            } else {
+                positiveImpact.forEach(d => {
+                    let listItem = document.createElement("li");
+                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
+                    increasingList.appendChild(listItem);
+                });
+            }
+
+            if (negativeImpact.length === 0) {
+                decreasingList.innerHTML = "<li>No patient characteristics significantly decrease enrollment probability.</li>";
+            } else {
+                negativeImpact.forEach(d => {
+                    let listItem = document.createElement("li");
+                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
+                    decreasingList.appendChild(listItem);
+                });
+            }
+        }
         // Get input values from the form
         let race = document.getElementById("Race").value;
         let ethnicity = document.getElementById("Ethnicity").value;
@@ -613,36 +641,6 @@
 
         // ✅ Show or Hide the Recommendation Box Based on Content
         document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
-        
-        }
-    
-        function updateImpactDisplay(positiveImpact, negativeImpact) {
-            let increasingList = document.getElementById("increasingFactors");
-            let decreasingList = document.getElementById("decreasingFactors");
-
-            increasingList.innerHTML = "";
-            decreasingList.innerHTML = "";
-
-            if (positiveImpact.length === 0) {
-                increasingList.innerHTML = "<li>No patient characteristics significantly increase enrollment probability.</li>";
-            } else {
-                positiveImpact.forEach(d => {
-                    let listItem = document.createElement("li");
-                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
-                    increasingList.appendChild(listItem);
-                });
-            }
-
-            if (negativeImpact.length === 0) {
-                decreasingList.innerHTML = "<li>No patient characteristics significantly decrease enrollment probability.</li>";
-            } else {
-                negativeImpact.forEach(d => {
-                    let listItem = document.createElement("li");
-                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
-                    decreasingList.appendChild(listItem);
-                });
-            }
-        }
     </script>
 
 </body>
