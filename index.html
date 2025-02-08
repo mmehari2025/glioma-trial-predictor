@@ -536,46 +536,90 @@
 
         let patientRecommendations = [];
 
+        // Get input values from the form
         let race = document.getElementById("Race").value;
         let ethnicity = document.getElementById("Ethnicity").value;
         let insurance = document.getElementById("Insurance").value;
         let employment = document.getElementById("Employment").value;
-        let age = parseFloat(document.getElementById("AgeDiagnosis").value);
+        let age = parseFloat(document.getElementById("AgeDiagnosis").value); // Ensure numerical type
         let kps = document.getElementById("KPSPostOp").value;
         let minority = document.getElementById("Minority").value;
         let language = document.getElementById("PreferredLanguage").value;
-        let income = parseFloat(document.getElementById("IncomeZip").value);
-        let distance = parseFloat(document.getElementById("DistanceHospital").value);
-            
+        let income = parseFloat(document.getElementById("IncomeZip").value); // Ensure numerical type
+        let distance = parseFloat(document.getElementById("DistanceHospital").value); // Ensure numerical type
+
+        // 1️⃣ Minority Patients & Underrepresented Groups
         if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "Minority") {
-            patientRecommendations.push("Minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting the generalizability of scientific findings. Recommendations: Address underlying socioeconomic, healthcare access, and cultural barriers. Consider the role that potential mistrust of the medical system may play in impeding accrual. Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients. Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of trial enrollment.");
+            patientRecommendations.push(
+                "Minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting the generalizability of scientific findings. " +
+                "Recommendations:" +
+                    "Address underlying socioeconomic, healthcare access, and cultural barriers. " +
+                    "Consider the role that potential mistrust of the medical system may play in impeding accrual. " +
+                    "Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients. " +
+                    "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of trial enrollment."
+            );
         }
 
+        // 2️⃣ Non-English Language
         if (language === "Non-English Language") {
-            patientRecommendations.push("Patients with limited or moderate English proficiency are underrepresented in clinical trials. Recommendation: Always use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced and complex treatments and important and challenging decisions.");
+            patientRecommendations.push(
+                "Patients with limited or moderate English proficiency are underrepresented in clinical trials. " +
+                "Recommendation:" +
+                    "Always use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced and complex treatments and important and challenging decisions."
+            );
         }
 
-        if (["Medicaid", "Medicare", "Self-pay"].includes(insurance) || employment === "Unemployed" || income<54000) {
-            patientRecommendations.push("Publicly-insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment, such as travel costs, lost wages, inflexible hours, and out-of-pocket costs for additional treatments and follow-up care. Recommendation: Partner with social work colleagues to explore individualized insurance and financial support resources for patients to facilitate enrollment.");
+        // 3️⃣ Financial & Insurance Barriers
+        if (["Medicaid", "Medicare", "Self-pay"].includes(insurance) || employment === "Unemployed" || income < 54000) {
+            patientRecommendations.push(
+                "Publicly-insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment, such as travel costs, lost wages, inflexible hours, and out-of-pocket costs for additional treatments and follow-up care." +
+                "Recommendation:" +
+                    "Partner with social work colleagues to explore individualized insurance and financial support resources for patients to facilitate enrollment."
+            );
         }
 
-        if (distance > 30) {
-            patientRecommendations.push("Patients living farther from the hospital offering the clinical trial, such as rural patients, may struggle to enroll in clinical trials due to worries about transportation time and costs. Recommendation: Collaborate with social workers/case management to provide local temporary housing options, offer travel vouchers whenever possible, and consolidate appointments and/or offer remote/home-based visits whenever possible.");
+        // 4️⃣ Distance from Hospital (Rural Barriers)
+        if (distance >= 30) {  // Use >= for "greater than or equal to"
+            patientRecommendations.push(
+                "Patients living farther from the hospital offering the clinical trial, such as rural patients, may struggle to enroll in clinical trials due to worries about transportation time and costs." +
+                "Recommendation:" +
+                    "Collaborate with social workers/case management to provide local temporary housing options, offer travel vouchers whenever possible, and consolidate appointments and/or offer remote/home-based visits whenever possible."
+            );
         }
 
+        // 5️⃣ Functional Status (KPS Score)
         if (kps === "Less than 80") {
-            patientRecommendations.push("Recommendation: Evaluate patients' functional status throughout their disease course to explore trial inclusion at various time points.");
+            patientRecommendations.push(
+                "Recommendation:" +
+                    "Evaluate patients' functional status throughout their disease course to explore trial inclusion at various time points."
+            );
         }
 
+        // 6️⃣ Younger Patients (Age ≤ 50)
         if (age <= 50) {
-            patientRecommendations.push("Recommendation: Especially for patients of or near child-bearing age, patients often contemplate how their trial enrollment would impact the children and/or parents they care for. Utilize a multi-disciplinary and patient-centered approach to offer additional social and family support when possible to facilitate participation.");
+            patientRecommendations.push(
+                "Especially for patients of or near child-bearing age, patients often contemplate how their trial enrollment would impact the children and/or parents they care for." +
+                "Recommendation:" + 
+                    "Utilize a multi-disciplinary and patient-centered approach to offer additional social and family support when possible to facilitate participation."
+            );
         }
 
+        // 7️⃣ Older Patients (Age > 50)
         if (age > 50) {
-            patientRecommendations.push("A large percentage of clinical trials have age-based exclusion criteria. Recommendation: Discuss goals of care with all patients regardless of age. For patients excluded by age who would otherwise be good trial candidates based on their goals of care and functional status, advocate for rethinking strict age-based inclusion/exclusion criteria.");
+            patientRecommendations.push(
+                "A large percentage of clinical trials have age-based exclusion criteria. " +
+                "Recommendation:" +
+                    "Discuss goals of care with all patients regardless of age. " +
+                    "For patients excluded by age who would otherwise be good trial candidates based on their goals of care and functional status, advocate for rethinking strict age-based inclusion/exclusion criteria."
+            );
         }
-    
-        document.getElementById("patientRecommendationList").innerHTML = patientRecommendations.map(rec => `<li>${rec}</li>`).join("");
+
+        // ✅ Update Patient-Specific Recommendation Section
+        document.getElementById("patientRecommendationList").innerHTML = patientRecommendations
+            .map(rec => `<li>${rec}</li>`)
+            .join(""); 
+
+        // ✅ Show or Hide the Recommendation Box Based on Content
         document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
     
     </script>
