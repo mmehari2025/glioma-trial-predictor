@@ -119,6 +119,23 @@
             font-size: 1em;
         }
 
+        /* Recommendation Sections */
+        .recommendation-box {
+            background: white;
+            border: 2px solid #dcdcdc;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .recommendation-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #052049;
+            margin-bottom: 10px;
+        }
+
         /* Headings */
         h3 {
             color: #333;
@@ -179,6 +196,14 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="PreferredLanguage">Preferred Language:</label>
+                <select id="PreferredLanguage" required>
+                    <option value="English">English</option>
+                    <option value="NonEnglish">Non-English Language</option>
+                </select>
+            </div>
+
             <!-- SOCIOECONOMIC VARIABLES -->
             <div class="section-title">Socioeconomic Variables</div>
             <div class="form-group">
@@ -200,6 +225,16 @@
                     <option value="3">Retired</option>
                     <option value="Unknown">Unknown</option>
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label for="IncomeZip">Neighborhood Median Household Income by Patient Zip Code ($):</label>
+                <input type="number" id="IncomeZip" required>
+            </div>
+
+            <div class="form-group">
+                <label for="DistanceHospital">Driving Distance from Patient's Home to Hospital (miles):</label>
+                <input type="number" id="DistanceHospital" required>
             </div>
 
             <!-- ONCOLOGIC VARIABLES -->
@@ -271,6 +306,23 @@
                 <ul id="decreasingFactors" class="impact-list"></ul>
             </div>
         </div>
+
+        <!-- Patient-Specific Recommendations -->
+        <div class="recommendation-box" id="patientRecommendations" style="display: none;">
+            <div class="recommendation-title">Patient-Specific Recommendations to Increase Accrual</div>
+            <ul id="patientRecommendationList"></ul>
+        </div>
+
+        <!-- General Recommendations -->
+        <div class="recommendation-box">
+            <div class="recommendation-title">General Recommendations to Increase Patient Accrual</div>
+            <ul>
+                <li>Adopt a "just ask" policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest.</li>
+                <li>Find multiple opportunities to discuss trial enrollment.</li>
+                <li>Identify barriers and work collaboratively to overcome them.</li>
+            </ul>
+        </div>
+        
     </div>
 
     <script src="jmp_score.js"></script>
@@ -400,28 +452,28 @@
             
         if (!isNaN(age)) {
                 shapImpact.push({
-        feature: `AgeDiagnosis=${age}`,  // ✅ Now includes exact age value
-        impact: shapValues["AgeDiagnosis"](age) 
-    });
+                    feature: `AgeDiagnosis=${age}`,  // ✅ Now includes exact age value
+                    impact: shapValues["AgeDiagnosis"](age) 
+                });
         }
         // Define readable labels for easier interpretation
-const readableLabels = {
-    "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
-    "Sex": { "1": "Male", "2": "Female" },
-    "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
-    "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
-    "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
-    "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
-    "TumorLobe": { 
-        "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
-        "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
-        "Multifocal": "Multifocal", "Occipital": "Occipital",
-        "Cerebellum": "Cerebellum", "Unknown": "Unknown"
-    },
-    "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
-    "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
-    "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
-};    
+        const readableLabels = {
+            "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
+            "Sex": { "1": "Male", "2": "Female" },
+            "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
+            "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
+            "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
+            "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
+            "TumorLobe": { 
+                "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
+                "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
+                "Multifocal": "Multifocal", "Occipital": "Occipital",
+                "Cerebellum": "Cerebellum", "Unknown": "Unknown"
+            },
+            "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
+            "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
+            "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
+        };    
         document.querySelectorAll("select, input").forEach(el => {
                 let category = el.id;
                 let value = el.value;
@@ -433,28 +485,28 @@ const readableLabels = {
              
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
-           feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
-            impact: shapValues[category][value]
-        });
-    }
-}); // ✅ Correct
+                       feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
+                        impact: shapValues[category][value]
+                    });
+                }
+        }); // ✅ Correct
 
-            shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
+        shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
-            let positiveImpact = shapImpact
-                .filter(d => d.impact > 0)
-                .slice(0, 2);
+        let positiveImpact = shapImpact
+            .filter(d => d.impact > 0)
+            .slice(0, 2);
 
-            // Fix: Sort negative impacts in descending order to show the most negative first
-            let negativeImpact = shapImpact
-                .filter(d => d.impact < 0)
-                .sort((a, b) => a.impact - b.impact) // Corrected sorting
-                .slice(0, 2);
+        // Fix: Sort negative impacts in descending order to show the most negative first
+        let negativeImpact = shapImpact
+            .filter(d => d.impact < 0)
+            .sort((a, b) => a.impact - b.impact) // Corrected sorting
+            .slice(0, 2);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
         }
     
-    function updateImpactDisplay(positiveImpact, negativeImpact) {
+        function updateImpactDisplay(positiveImpact, negativeImpact) {
             let increasingList = document.getElementById("increasingFactors");
             let decreasingList = document.getElementById("decreasingFactors");
 
@@ -481,6 +533,51 @@ const readableLabels = {
                 });
             }
         }
+
+        let patientRecommendations = [];
+
+        let race = document.getElementById("Race").value;
+        let ethnicity = document.getElementById("Ethnicity").value;
+        let insurance = document.getElementById("Insurance").value;
+        let employment = document.getElementById("Employment").value;
+        let age = parseFloat(document.getElementById("AgeDiagnosis").value);
+        let kps = document.getElementById("KPSPostOp").value;
+        let minority = document.getElementById("Minority").value;
+        let language = document.getElementById("PreferredLanguage").value;
+        let income = parseFloat(document.getElementById("IncomeZip").value);
+        let distance = parseFloat(document.getElementById("DistanceHospital").value);
+            
+        if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "Minority") {
+            patientRecommendations.push("Minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting the generalizability of scientific findings. Recommendations: Address underlying socioeconomic, healthcare access, and cultural barriers. Consider the role that potential mistrust of the medical system may play in impeding accrual. Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients. Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of trial enrollment.");
+        }
+
+        if (language === "Non-English Language") {
+            patientRecommendations.push("Patients with limited or moderate English proficiency are underrepresented in clinical trials. Recommendation: Always use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced and complex treatments and important and challenging decisions.");
+        }
+
+        if (["Medicaid", "Medicare", "Self-pay"].includes(insurance) || employment === "Unemployed" || income<54000) {
+            patientRecommendations.push("Publicly-insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment, such as travel costs, lost wages, inflexible hours, and out-of-pocket costs for additional treatments and follow-up care. Recommendation: Partner with social work colleagues to explore individualized insurance and financial support resources for patients to facilitate enrollment.");
+        }
+
+        if (distance > 30) {
+            patientRecommendations.push("Patients living farther from the hospital offering the clinical trial, such as rural patients, may struggle to enroll in clinical trials due to worries about transportation time and costs. Recommendation: Collaborate with social workers/case management to provide local temporary housing options, offer travel vouchers whenever possible, and consolidate appointments and/or offer remote/home-based visits whenever possible.");
+        }
+
+        if (kps === "Less than 80") {
+            patientRecommendations.push("Recommendation: Evaluate patients' functional status throughout their disease course to explore trial inclusion at various time points.");
+        }
+
+        if (age <= 50) {
+            patientRecommendations.push("Recommendation: Especially for patients of or near child-bearing age, patients often contemplate how their trial enrollment would impact the children and/or parents they care for. Utilize a multi-disciplinary and patient-centered approach to offer additional social and family support when possible to facilitate participation.");
+        }
+
+        if (age > 50) {
+            patientRecommendations.push("A large percentage of clinical trials have age-based exclusion criteria. Recommendation: Discuss goals of care with all patients regardless of age. For patients excluded by age who would otherwise be good trial candidates based on their goals of care and functional status, advocate for rethinking strict age-based inclusion/exclusion criteria.");
+        }
+    
+        document.getElementById("patientRecommendationList").innerHTML = patientRecommendations.map(rec => `<li>${rec}</li>`).join("");
+        document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
+    
     </script>
 
 </body>
