@@ -200,8 +200,8 @@
             <div class="form-group">
                 <label for="PreferredLanguage">Preferred Language:</label>
                 <select id="PreferredLanguage" required>
-                    <option value="English">English</option>
-                    <option value="NonEnglish">Non-English Language</option>
+                    <option value="1">English</option>
+                    <option value="2">Non-English Language</option>
                 </select>
             </div>
 
@@ -382,20 +382,15 @@
         let shapImpact = [];
         let patientRecommendations = []; // ✅ FIXED: Ensure empty array before updating
 
-        // Get input values from the form
-        let race = document.getElementById("Race").value;
-        let ethnicity = document.getElementById("Ethnicity").value;
-        let insurance = document.getElementById("Insurance").value;
-        let employment = document.getElementById("Employment").value;
-        let age = parseFloat(document.getElementById("AgeDiagnosis").value); // Ensure numerical type
-        let kps = document.getElementById("KPSPostOp").value;
-        let minority = document.getElementById("Minority").value;
-        let language = document.getElementById("PreferredLanguage").value;
-        let income = parseFloat(document.getElementById("IncomeZip").value); // Ensure numerical type
-        let distance = parseFloat(document.getElementById("DistanceHospital").value); // Ensure numerical type
+        // ✅ FIX: Ensure model.js is properly loaded before running `score()`
+            if (typeof score !== "function") {
+                console.error("⚠️ ERROR: score() function is not defined. Check that model.js is properly linked.");
+                document.getElementById("result").innerText = "Error: Model not loaded.";
+                return; // Stop execution
+            }
 
         // 1️⃣ Minority Patients & Underrepresented Groups
-        if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "1") {
+        if ("Race" === "Asian" || "Race" === "Black" || "Race" === "Pacific" || "Race" === "Other" || "Race" === "Hispanic" || "Ethnicity" === "1" || "Minority" === "1") {
             patientRecommendations.push({
                 message: "Minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting the generalizability of scientific findings. ",
                 recommendations: [
@@ -408,7 +403,7 @@
         }
 
         // 2️⃣ Non-English Language
-        if (language === "Non-English Language") {
+        if ("PreferredLanguage" === "2") {
             patientRecommendations.push({
                 message: "Patients with limited or moderate English proficiency are underrepresented in clinical trials.",
                 recommendations: [
@@ -418,7 +413,7 @@
         }
 
         // 3️⃣ Financial & Insurance Barriers
-        if (["Medicaid", "Medicare", "Self-pay"].includes(insurance) || employment === "Unemployed" || income < 54000) {
+        if ("Insurance" === "2" || "Insurance" === "3" || "Insurance" === "5" || "Employment" === "2" || "IncomeZip" < 54000) {
             patientRecommendations.push({
                 message: "Publicly-insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment, such as travel costs, lost wages, inflexible hours, and out-of-pocket costs for additional treatments and follow-up care.",
                 recommendations: [
@@ -428,7 +423,7 @@
         }
 
         // 4️⃣ Distance from Hospital (Rural Barriers)
-        if (distance >= 30) {  // Use >= for "greater than or equal to"
+        if ("DistanceHospital" >= 30) {  // Use >= for "greater than or equal to"
             patientRecommendations.push({
                 message: "Patients living farther from the hospital offering the clinical trial, such as rural patients, may struggle to enroll in clinical trials due to worries about transportation time and costs.",
                 recommendations: [
@@ -438,7 +433,7 @@
         }
 
         // 5️⃣ Functional Status (KPS Score)
-        if (kps === "Less than 80") {
+        if ("KPSPostOp" === "<80") {
             patientRecommendations.push({
                 recommendations: [
                     "Evaluate patients' functional status throughout their disease course to explore trial inclusion at various time points."
@@ -447,7 +442,7 @@
         }
 
         // 6️⃣ Younger Patients (Age ≤ 50)
-        if (age <= 50) {
+        if ("AgeDiagnosis" <= 50) {
             patientRecommendations.push({
                 message: "Younger patients often worry about how clinical trial participation might affect their ability to care for their children and/or parents.",
                 recommendations: [ 
@@ -457,7 +452,7 @@
         }
 
         // 7️⃣ Older Patients (Age > 50)
-        if (age > 50) {
+        if ("AgeDiagnosis" > 50) {
             patientRecommendations.push({
                 message: "Older patients may face age-related exclusion criteria in clinical trials",
                 recommendations: [
