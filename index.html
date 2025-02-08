@@ -316,7 +316,7 @@
         </div>
 
         <!-- General Recommendations -->
-        <div class="recommendation-box">
+        <div class="recommendation-box"> id="generalRecommendations">
             <div class="recommendation-title">General Recommendations to Increase Patient Accrual</div>
             <ul>
                 <li>Adopt a "just ask" policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest.</li>
@@ -486,6 +486,8 @@
             // ✅ FIX: Ensure section is displayed when recommendations exist
             document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
 
+            // ✅ Ensure general recommendations are displayed after probability is calculated
+            document.getElementById("generalRecommendations").style.display = "block";
         
         // Correct categorical mappings
         const categoricalMappings = {
