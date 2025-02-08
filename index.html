@@ -389,89 +389,103 @@
                 return; // Stop execution
             }
 
-        // 1️⃣ Minority Patients & Underrepresented Groups
-        if ("Race" === "Asian" || "Race" === "Black" || "Race" === "Pacific" || "Race" === "Other" || "Race" === "Hispanic" || "Ethnicity" === "1" || "Minority" === "1") {
-            patientRecommendations.push({
-                message: "Minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting the generalizability of scientific findings. ",
-                recommendations: [
-                    "Address underlying socioeconomic, healthcare access, and cultural barriers.",
-                    "Consider the role that potential mistrust of the medical system may play in impeding accrual.",
-                    "Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients.",
-                    "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of trial enrollment."
-                ]
-            });
-        }
+        // ✅ FIX: Correctly retrieve input values
+            let age = parseFloat(document.getElementById("AgeDiagnosis").value);
+            let race = document.getElementById("Race")?.value;
+            let ethnicity = document.getElementById("Ethnicity")?.value;
+            let minority = document.getElementById("Minority")?.value;
+            let language = document.getElementById("PreferredLanguage")?.value;
+            let insurance = document.getElementById("Insurance")?.value;
+            let employment = document.getElementById("Employment")?.value;
+            let income = parseFloat(document.getElementById("IncomeZip")?.value);
+            let distance = parseFloat(document.getElementById("DistanceHospital")?.value);
+            let kps = document.getElementById("KPSPostOp")?.value;
 
-        // 2️⃣ Non-English Language
-        if ("PreferredLanguage" === "2") {
-            patientRecommendations.push({
-                message: "Patients with limited or moderate English proficiency are underrepresented in clinical trials.",
-                recommendations: [
-                    "Always use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced and complex treatments and important and challenging decisions."
+            // ✅ FIX: Debugging checks
+            console.log("🚀 Input values:", { age, race, ethnicity, minority, language, insurance, employment, income, distance, kps });
+
+            // 1️⃣ Minority Patients
+            if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "1") {
+                patientRecommendations.push({
+                    message: "Minority patients are underrepresented in clinical trials.",
+                    recommendations: [
+                        "Address socioeconomic and healthcare access barriers.",
+                        "Build trust with patients from diverse backgrounds."
                     ]
-            });
-        }
+                });
+            }
 
-        // 3️⃣ Financial & Insurance Barriers
-        if ("Insurance" === "2" || "Insurance" === "3" || "Insurance" === "5" || "Employment" === "2" || "IncomeZip" < 54000) {
-            patientRecommendations.push({
-                message: "Publicly-insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment, such as travel costs, lost wages, inflexible hours, and out-of-pocket costs for additional treatments and follow-up care.",
-                recommendations: [
-                    "Partner with social work colleagues to explore individualized insurance and financial support resources for patients to facilitate enrollment."
-                ]
-            });
-        }
+            // 2️⃣ Non-English Language
+            if (language === "2") {
+                patientRecommendations.push({
+                    message: "Non-English speakers face additional barriers.",
+                    recommendations: [
+                        "Always use medical interpreters for trial discussions."
+                    ]
+                });
+            }
 
-        // 4️⃣ Distance from Hospital (Rural Barriers)
-        if ("DistanceHospital" >= 30) {  // Use >= for "greater than or equal to"
-            patientRecommendations.push({
-                message: "Patients living farther from the hospital offering the clinical trial, such as rural patients, may struggle to enroll in clinical trials due to worries about transportation time and costs.",
-                recommendations: [
-                    "Collaborate with social workers/case management to provide local temporary housing options, offer travel vouchers whenever possible, and consolidate appointments and/or offer remote/home-based visits whenever possible."
-                ]
-            });
-        }
+            // 3️⃣ Financial Barriers
+            if (["2", "3", "5"].includes(insurance) || employment === "2" || income < 54000) {
+                patientRecommendations.push({
+                    message: "Financial concerns impact trial participation.",
+                    recommendations: [
+                        "Partner with social workers to explore financial support."
+                    ]
+                });
+            }
 
-        // 5️⃣ Functional Status (KPS Score)
-        if ("KPSPostOp" === "<80") {
-            patientRecommendations.push({
-                recommendations: [
-                    "Evaluate patients' functional status throughout their disease course to explore trial inclusion at various time points."
-                ]
-            });
-        }
+            // 4️⃣ Distance from Hospital
+            if (distance >= 30) {
+                patientRecommendations.push({
+                    message: "Patients living farther from the hospital may struggle to enroll.",
+                    recommendations: [
+                        "Offer travel vouchers or remote visit options."
+                    ]
+                });
+            }
 
-        // 6️⃣ Younger Patients (Age ≤ 50)
-        if ("AgeDiagnosis" <= 50) {
-            patientRecommendations.push({
-                message: "Younger patients often worry about how clinical trial participation might affect their ability to care for their children and/or parents.",
-                recommendations: [ 
-                    "Utilize a multi-disciplinary approach to offer additional social and family support."
-                ]
-            });
-        }
+            // 5️⃣ Functional Status (KPS Score)
+            if (kps === "<80") {
+                patientRecommendations.push({
+                    message: "Patients with lower functional status may face eligibility challenges.",
+                    recommendations: [
+                        "Evaluate functional status periodically to reassess trial eligibility."
+                    ]
+                });
+            }
 
-        // 7️⃣ Older Patients (Age > 50)
-        if ("AgeDiagnosis" > 50) {
-            patientRecommendations.push({
-                message: "Older patients may face age-related exclusion criteria in clinical trials",
-                recommendations: [
-                    "Discuss goals of care with all patients regardless of age.",
-                    "Advocate for re-evaluating strict age-based exclusion criteria for patients who otherwise would be good trial candidates based on functional status and goals of care."
-                ]
-            });
-        }
+            // 6️⃣ Younger Patients
+            if (age <= 50) {
+                patientRecommendations.push({
+                    message: "Younger patients often have family-related concerns.",
+                    recommendations: [
+                        "Provide social and family support resources."
+                    ]
+                });
+            }
 
-        // ✅ Update Patient-Specific Recommendations Display
-        let recommendationsHTML = patientRecommendations.map(item => `
-            <li>
-                ${item.message ? `<strong>${item.message}</strong>` : ""}
-                <ul>${item.recommendations.map(rec => `<li>${rec}</li>`).join("")}</ul>
-            </li>
-    `    ).join("");
+            // 7️⃣ Older Patients
+            if (age > 50) {
+                patientRecommendations.push({
+                    message: "Older patients may face age-related trial exclusions.",
+                    recommendations: [
+                        "Advocate for reducing strict age-based exclusion criteria."
+                    ]
+                });
+            }
 
-        document.getElementById("patientRecommendationList").innerHTML = recommendationsHTML;
-        document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
+            // ✅ FIX: Ensure UI updates properly
+            let recommendationsHTML = patientRecommendations.map(item => `
+                <li><strong>${item.message}</strong>
+                <ul>${item.recommendations.map(rec => `<li>${rec}</li>`).join("")}</ul></li>
+            `).join("");
+
+            document.getElementById("patientRecommendationList").innerHTML = recommendationsHTML;
+
+            // ✅ FIX: Ensure section is displayed when recommendations exist
+            document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
+
         
         // Correct categorical mappings
         const categoricalMappings = {
