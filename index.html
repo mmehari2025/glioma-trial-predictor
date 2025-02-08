@@ -548,7 +548,7 @@
         let distance = parseFloat(document.getElementById("DistanceHospital").value); // Ensure numerical type
 
         // 1️⃣ Minority Patients & Underrepresented Groups
-        if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "Minority") {
+        if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "1") {
             patientRecommendations.push({
                 message: "Minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting the generalizability of scientific findings. ",
                 recommendations: [
