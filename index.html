@@ -353,14 +353,14 @@
             "Insurance": { "1": 0.0283, "2": -0.0866, "3": -0.0858, "5": -0.0775 },
             "Chemotherapy": { "1": 0.0552, "2": -0.1431 },
             "WHOGrade": { "2-3": -0.0523, "4": 0.03 },
-            "AgeDiagnosis": (age) => {
-                if (age < 20) return 0.0328;
-                if (age < 30) return 0.0108;
-                if (age < 40) return 0.0058;
-                if (age < 50) return 0.0018;
-                if (age < 60) return 0.0012;
-                if (age < 70) return -0.002;
-                if (age < 80) return -0.0196;
+            "AgeDiagnosis": (ages) => {
+                if (ages < 20) return 0.0328;
+                if (ages < 30) return 0.0108;
+                if (ages < 40) return 0.0058;
+                if (ages < 50) return 0.0018;
+                if (ages < 60) return 0.0012;
+                if (ages < 70) return -0.002;
+                if (ages < 80) return -0.0196;
                 return -0.0624;
             },
             "KPSPostOp": { "100": 0.0888, "90": 0.0719, "80": 0.0307, "<80": -0.1135 },
@@ -557,12 +557,12 @@
         }
 
         let ageInput = document.getElementById("AgeDiagnosis").value;
-        let age = parseFloat(ageInput);
+        let ages = parseFloat(ageInput);
             
-        if (!isNaN(age)) {
+        if (!isNaN(ages)) {
                 shapImpact.push({
-                    feature: `AgeDiagnosis=${age}`,  // ✅ Now includes exact age value
-                    impact: shapValues["AgeDiagnosis"](age) 
+                    feature: `AgeDiagnosis=${ages}`,  // ✅ Now includes exact age value
+                    impact: shapValues["AgeDiagnosis"](ages) 
                 });
         }
         // Define readable labels for easier interpretation
