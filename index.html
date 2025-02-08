@@ -127,6 +127,7 @@
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
+            display: none; /* ❌ FIX: Hide by default */
         }
 
         .recommendation-title {
@@ -295,6 +296,7 @@
 
         <h3 id="result"></h3>
         <h4 id="shapImpact"></h4>
+        
         <div class="impact-container">
             <div class="impact-box positive-impact">
                 <div class="impact-title">Patient Characteristics That Most Increase Enrollment Probability</div>
@@ -308,7 +310,7 @@
         </div>
 
         <!-- Patient-Specific Recommendations -->
-        <div class="recommendation-box" id="patientRecommendations" style="display: none;">
+        <div class="recommendation-box" id="patientRecommendations">
             <div class="recommendation-title">Patient-Specific Recommendations to Increase Accrual</div>
             <ul id="patientRecommendationList"></ul>
         </div>
@@ -325,9 +327,10 @@
         
     </div>
 
-    <script src="jmp_score.js"></script>
+    <script src="jmp_score.js"></script> <!-- 📌 Ensures the model is correctly linked -->
     <script src="model.js"></script>
-<script>
+    
+    <script>
         const variableMap = {
             "AgeDiagnosis": "Age.at.Initial.Diagnosis",
             "Employment": "Employed(Y=1, N=2, Retired=3) 2",
@@ -377,7 +380,7 @@
         function calculateProbability() {
         let indata = {};
         let shapImpact = [];
-        let patientRecommendations = [];
+        let patientRecommendations = []; // ✅ FIXED: Ensure empty array before updating
 
         // Get input values from the form
         let race = document.getElementById("Race").value;
@@ -446,9 +449,9 @@
         // 6️⃣ Younger Patients (Age ≤ 50)
         if (age <= 50) {
             patientRecommendations.push({
-                message: "Especially for patients of or near child-bearing age, patients often contemplate how their trial enrollment would impact the children and/or parents they care for.",
+                message: "Younger patients often worry about how clinical trial participation might affect their ability to care for their children and/or parents.",
                 recommendations: [ 
-                    "Utilize a multi-disciplinary and patient-centered approach to offer additional social and family support when possible to facilitate participation."
+                    "Utilize a multi-disciplinary approach to offer additional social and family support."
                 ]
             });
         }
@@ -456,10 +459,10 @@
         // 7️⃣ Older Patients (Age > 50)
         if (age > 50) {
             patientRecommendations.push({
-                message: "A large percentage of clinical trials have age-based exclusion criteria.",
+                message: "Older patients may face age-related exclusion criteria in clinical trials",
                 recommendations: [
                     "Discuss goals of care with all patients regardless of age.",
-                    "For patients excluded by age who would otherwise be good trial candidates based on their goals of care and functional status, advocate for rethinking strict age-based inclusion/exclusion criteria."
+                    "Advocate for re-evaluating strict age-based exclusion criteria for patients who otherwise would be good trial candidates based on functional status and goals of care."
                 ]
             });
         }
