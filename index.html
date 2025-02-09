@@ -684,12 +684,20 @@
             let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
 
             for (let i = 0; i < maxRows; i++) {
-                if (positiveImpact.length === 0) {
+                let row = document.createElement("tr");
+                let increaseCell = document.createElement("td");
+                let decreaseCell = document.createElement("td");
+
+                if (positiveImpact.length === 0 && negativeImpact.length === 0) {
                     let row = document.createElement("tr");
                     let increaseCell = document.createElement("td");
+                    let decreaseCell = document.createElement("td");
                     increaseCell.innerHTML = `<span class="increase">No significant factors</span>`;
+                    decreaseCell.innerHTML = `<span class="decrease">No significant factors</span>`;
                     row.appendChild(increaseCell);
+                    row.appendChild(decreaseCell);
                     impactTableBody.appendChild(row);
+                    return; // ✅ Exit function early if no impact data
                 }
 
                 if (negativeImpact.length === 0) {
@@ -703,11 +711,15 @@
                 if (positiveImpact[i]) {
                     let formattedFeature = formatFeatureName(positiveImpact[i].feature);
                     increaseCell.innerHTML = `<span class="increase">${formattedFeature}: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
+                }  else {
+                    increaseCell.innerHTML = ""; // ✅ Ensures empty cell if no data
                 }
 
                 if (negativeImpact[i]) {
                     let formattedFeature = formatFeatureName(negativeImpact[i].feature);
                     decreaseCell.innerHTML = `<span class="decrease">${formattedFeature}: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
+                } else {
+                    decreaseCell.innerHTML = ""; // ✅ Ensures empty cell if no data
                 }
 
                 row.appendChild(increaseCell);
