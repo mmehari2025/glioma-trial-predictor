@@ -699,7 +699,6 @@
          let displayValue = readableLabels[category] && readableLabels[category][value] 
                  ? readableLabels[category][value]  // ✅ Convert to readable label if available
                  : value; 
-             console.log(`📝 Processing ${category}: User Input = ${displayValue}, Coded Impact = ${impactValue}`);
             
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
