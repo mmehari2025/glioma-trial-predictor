@@ -82,12 +82,16 @@
             background: #f0f0f0;
             border-radius: 10px;
             text-align: center;
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: bold;
-            border: 2px solid #dcdcdc;
+            border: 2px solid #052049;
             width: 80%;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        #resultText {
+            font-size: 1.2em; /* Same as heading */
         }
 
         /* Toggle Buttons */
@@ -348,8 +352,10 @@
 
         <!-- Impact Section -->
         <div id="impactSection" class="toggle-content">
-            <div class="impact-title">Patient Characteristics That Most Increase Enrollment Probability</div>
+            <div class="impact-title">Patient-Specific Characteristics That Most Influence Enrollment Probability</div>
+                <h3>Patient-Specific Characteristics The Most Increase Enrollment Probability</h3>
                 <ul id="increasingFactors" class="impact-list"></ul>
+            <h3>Patient-Specific Characteristics The Most Decrease Enrollment Probability</h3>
                 <ul id="decreasingFactors" class="impact-list"></ul>
         </div>
 
