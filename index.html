@@ -453,6 +453,29 @@
             "Seizure": { "Yes": 0.0398, "No": -0.0611 },
             "Employment": { "1": 0.0131, "2": -0.0283, "3": 0.0354 }
         };
+
+        // Convert variable names to readable format
+        function formatFeatureName(feature, value) {
+            const featureMap = {
+                "AgeDiagnosis": "Age at Initial Diagnosis",
+                "Sex": "Sex",
+                "Race": "Race",
+                "Ethnicity": "Ethnicity",
+                "Minority": "Minority Status",
+                "PreferredLanguage": "Preferred Language",
+                "Insurance": "Insurance Status",
+                "Employment": "Employment Status",
+                "IncomeZip": "Median Neighborhood Income by Zip Code",
+                "DistanceHospital": "Distance to Hospital (miles)",
+                "WHOGrade": "WHO Tumor Grade",
+                "TumorLobe": "Tumor Location",
+                "Seizure": "Pre-Operative Seizure",
+                "KPSPostOp": "Post-Operative KPS",
+                "Chemotherapy": "Chemotherapy Received"
+            };
+
+            return featureMap[feature] ? `${featureMap[feature]}: ${value}` : `${feature}=${value}`;
+        }
     
         function calculateProbability() {
         let indata = {};
@@ -652,29 +675,6 @@
             .slice(0, 2);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
-        }
-
-        // Convert variable names to readable format
-        function formatFeatureName(feature, value) {
-            const featureMap = {
-                "AgeDiagnosis": "Age at Initial Diagnosis",
-                "Sex": "Sex",
-                "Race": "Race",
-                "Ethnicity": "Ethnicity",
-                "Minority": "Minority Status",
-                "PreferredLanguage": "Preferred Language",
-                "Insurance": "Insurance Status",
-                "Employment": "Employment Status",
-                "IncomeZip": "Median Neighborhood Income by Zip Code",
-                "DistanceHospital": "Distance to Hospital (miles)",
-                "WHOGrade": "WHO Tumor Grade",
-                "TumorLobe": "Tumor Location",
-                "Seizure": "Pre-Operative Seizure",
-                "KPSPostOp": "Post-Operative KPS",
-                "Chemotherapy": "Chemotherapy Received"
-            };
-
-            return featureMap[feature] ? `${featureMap[feature]}: ${value}` : `${feature}=${value}`;
         }
         
         function updateImpactDisplay(positiveImpact, negativeImpact) {
