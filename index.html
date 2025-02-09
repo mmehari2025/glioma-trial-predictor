@@ -161,23 +161,38 @@
             margin-top: 15px;
         }
 
-        /* Impact Titles */
-        .impact-title {
-            font-size: 1.2em;
+        
+        /* Impact Table */
+        .impact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .impact-table th, .impact-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .impact-table th {
+            background-color: #f5f5f5;
             font-weight: bold;
-            margin-bottom: 10px;
         }
 
-        /* Impact Lists */
-        .impact-list {
-            list-style: none;
-            padding: 0;
+        /* Increasing Factors Column - UCSF Blue */
+        .increase {
+            color: #052049;
+            font-weight: bold;
         }
 
-        .impact-list li {
-            margin-bottom: 5px;
-            font-size: 1em;
+        /* Decreasing Factors Column - UCSF Orange */
+        .decrease {
+            color: #C04C00;
+            font-weight: bold;
         }
+        
+        
     </style>
 </head>
 
@@ -352,10 +367,16 @@
 
         <!-- Impact Section -->
         <div id="impactSection" class="toggle-content">
-                <h3>Patient-Specific Characteristics The Most Increase Enrollment Probability</h3>
-                <ul id="increasingFactors" class="impact-list"></ul>
-            <h3>Patient-Specific Characteristics The Most Decrease Enrollment Probability</h3>
-                <ul id="decreasingFactors" class="impact-list"></ul>
+                <h3>Patient-Specific Characteristics Most Influencing Enrollment</h3>
+                <table class="impact-table">
+                    <thead>
+                        <tr>
+                            <th style="color: #052049;">Factors Increasing Enrollment Probability</th>
+                            <th style="color: #C04C00;">Factors Decreasing Enrollment Probability</th>
+                        </tr>
+                    </thead>
+                    <tbody id="impactTableBody"></tbody>
+                </table>
         </div>
 
         <!-- Patient-Specific Recommendations -->
@@ -617,41 +638,28 @@
                     impact: shapValues["AgeDiagnosis"](ages) 
                 });
         }
-        // Define readable labels for easier interpretation
-        const readableLabels = {
-            "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
-            "Sex": { "1": "Male", "2": "Female" },
-            "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
-            "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
-            "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
-            "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
-            "TumorLobe": { 
-                "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
-                "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
-                "Multifocal": "Multifocal", "Occipital": "Occipital",
-                "Cerebellum": "Cerebellum", "Unknown": "Unknown"
-            },
-            "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
-            "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
-            "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
-        };   
-        
-        document.querySelectorAll("select, input").forEach(el => {
-                let category = el.id;
-                let value = el.value;
-                indata[category] = value;
-            
-         let displayValue = readableLabels[category] && readableLabels[category][value] 
-                 ? readableLabels[category][value]  // ✅ Convert to readable label if available
-                 : value; 
-             
-                if (shapValues[category] && shapValues[category][value] !== undefined) {
-                    shapImpact.push({
-                       feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
-                        impact: shapValues[category][value]
-                    });
-                }
-        }); // ✅ Correct
+        // Convert variable names to readable format
+        function formatFeatureName(feature, value) {
+            const featureMap = {
+                "AgeDiagnosis": "Age at Initial Diagnosis",
+                "Sex": "Sex",
+                "Race": "Race",
+                "Ethnicity": "Ethnicity",
+                "Minority": "Minority Status",
+                "PreferredLanguage": "Preferred Language",
+                "Insurance": "Insurance Status",
+                "Employment": "Employment Status",
+                "IncomeZip": "Median Neighborhood Income by Zip Code",
+                "DistanceHospital": "Distance to Hospital (miles)",
+                "WHOGrade": "WHO Tumor Grade",
+                "TumorLobe": "Tumor Location",
+                "Seizure": "Pre-Operative Seizure",
+                "KPSPostOp": "Post-Operative KPS",
+                "Chemotherapy": "Chemotherapy Received"
+            };
+
+            return featureMap[feature] ? `${featureMap[feature]}: ${value}` : `${feature}=${value}`;
+        }
 
         shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
@@ -667,31 +675,32 @@
             
             updateImpactDisplay(positiveImpact, negativeImpact);
         }
+        
         function updateImpactDisplay(positiveImpact, negativeImpact) {
-            let increasingList = document.getElementById("increasingFactors");
-            let decreasingList = document.getElementById("decreasingFactors");
+            let impactTableBody = document.getElementById("impactTableBody");
+            impactTableBody.innerHTML = "";
 
-            increasingList.innerHTML = "";
-            decreasingList.innerHTML = "";
+            let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
 
-            if (positiveImpact.length === 0) {
-                increasingList.innerHTML = "<li>No patient characteristics significantly increase enrollment probability.</li>";
-            } else {
-                positiveImpact.forEach(d => {
-                    let listItem = document.createElement("li");
-                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
-                    increasingList.appendChild(listItem);
-                });
-            }
+            for (let i = 0; i < maxRows; i++) {
+                let row = document.createElement("tr");
 
-            if (negativeImpact.length === 0) {
-                decreasingList.innerHTML = "<li>No patient characteristics significantly decrease enrollment probability.</li>";
-            } else {
-                negativeImpact.forEach(d => {
-                    let listItem = document.createElement("li");
-                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
-                    decreasingList.appendChild(listItem);
-                });
+                let increaseCell = document.createElement("td");
+                let decreaseCell = document.createElement("td");
+
+                if (positiveImpact[i]) {
+                    let formattedFeature = formatFeatureName(positiveImpact[i].feature, positiveImpact[i].impact);
+                    increaseCell.innerHTML = `<span class="increase">${formattedFeature}: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
+                }
+
+                if (negativeImpact[i]) {
+                    let formattedFeature = formatFeatureName(negativeImpact[i].feature, negativeImpact[i].impact);
+                    decreaseCell.innerHTML = `<span class="decrease">${formattedFeature}: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
+                }
+
+                row.appendChild(increaseCell);
+                row.appendChild(decreaseCell);
+                impactTableBody.appendChild(row);
             }
         }
     </script>
