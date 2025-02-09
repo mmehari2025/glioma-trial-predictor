@@ -487,7 +487,12 @@
             document.getElementById("patientRecommendations").style.display = patientRecommendations.length ? "block" : "none";
 
             // ✅ Ensure general recommendations are displayed after probability is calculated
-            document.getElementById("generalRecommendations").style.display = "block";
+            let generalRecommendations = document.getElementById("generalRecommendations");
+                if (generalRecommendations) {
+                    generalRecommendations.style.display = "block";
+                } else {
+                    console.error("⚠️ ERROR: 'generalRecommendations' element not found in the DOM.");
+                }
         
         // Correct categorical mappings
         const categoricalMappings = {
