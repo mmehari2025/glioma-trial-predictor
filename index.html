@@ -723,12 +723,12 @@
             .sort((a, b) => a.impact - b.impact) // Corrected sorting
             .slice(0, 2);
 
-        console.log("🔻 Sorted Negative Impact Factors:", negativeImpact);
+            console.log("✅ Final Sorted Positive Impact Factors:", positiveImpact);
+            console.log("❌ Final Sorted Negative Impact Factors:", negativeImpact);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
             updateRecommendationDisplay(patientRecommendations);
-            console.log("✅ Final Sorted Positive Impact Factors:", positiveImpact);
-            console.log("❌ Final Sorted Negative Impact Factors:", negativeImpact);
+            
         }
         function updateImpactDisplay(positiveImpact, negativeImpact) {
             let impactTableBody = document.getElementById("impactTableBody");
