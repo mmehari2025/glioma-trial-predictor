@@ -197,6 +197,36 @@
             color: #C04C00;
             font-weight: bold;
         }
+
+        .recommendation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .recommendation-table th, .recommendation-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .recommendation-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        /* Patient Characteristics Column - UCSF Blue */
+        .characteristics {
+            color: #052049;
+            font-weight: bold;
+        }
+
+        /* Recommendations Column - UCSF Orange */
+        .recommendations {
+            color: #C04C00;
+        }
+
+        
     </style>
 </head>
 
@@ -384,9 +414,17 @@
         </div>
 
         <!-- Patient-Specific Recommendations -->
-        <div id="patientRecommendations" class="toggle-content">
-                <div class="impact-title">Patient-Specific Recommendations</div>
-                <ul id="patientRecommendationList"></ul>
+       <div id="patientRecommendations" class="toggle-content">
+            <div class="impact-title">Patient-Specific Recommendations</div>
+            <table class="recommendation-table">
+                <thead>
+                    <tr>
+                        <th style="color: #052049;">Patient Characteristics and Context</th>
+                        <th style="color: #C04C00;">Recommendations</th>
+                    </tr>
+                </thead>
+                <tbody id="patientRecommendationTableBody"></tbody>
+            </table>
         </div>
 
         <!-- General Recommendations -->
@@ -555,14 +593,6 @@
                     ]
                 });
             }
-
-            // ✅ FIX: Ensure UI updates properly
-            let recommendationsHTML = patientRecommendations.map(item => `
-                <li><strong>${item.message}</strong>
-                <ul>${item.recommendations.map(rec => `<li>${rec}</li>`).join("")}</ul></li>
-            `).join("");
-
-            document.getElementById("patientRecommendationList").innerHTML = recommendationsHTML;
         
         // Correct categorical mappings
         const categoricalMappings = {
@@ -691,6 +721,7 @@
             .slice(0, 2);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
+            updateRecommendationDisplay(patientRecommendations);
         }
         function updateImpactDisplay(positiveImpact, negativeImpact) {
             let impactTableBody = document.getElementById("impactTableBody");
@@ -720,6 +751,33 @@
                 impactTableBody.appendChild(row);
             }
         }
+
+        function updateRecommendationDisplay(patientRecommendations) {
+                let recommendationTableBody = document.getElementById("patientRecommendationTableBody");
+                recommendationTableBody.innerHTML = ""; // Clear existing content
+
+                patientRecommendations.forEach(item => {
+                    let row = document.createElement("tr");
+                    let characteristicCell = document.createElement("td");
+                    let recommendationsCell = document.createElement("td");
+
+                    characteristicCell.innerHTML = `<span class="characteristics"><strong>${item.message}</strong></span>`;
+
+                    let recommendationList = "<ul>";
+                    item.recommendations.forEach(rec => {
+                        recommendationList += `<li>${rec}</li>`;
+                    });
+                    recommendationList += "</ul>";
+
+                    recommendationsCell.innerHTML = `<span class="recommendations">${recommendationList}</span>`;
+
+                    row.appendChild(characteristicCell);
+                    row.appendChild(recommendationsCell);
+                    recommendationTableBody.appendChild(row);
+                });
+            }
+
+        
     </script>
 
 </body>
