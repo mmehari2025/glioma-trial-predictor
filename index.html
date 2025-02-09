@@ -593,7 +593,7 @@
             let probabilityNo = outdata["ProbabilityNotEnroll"];
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
-                document.getElementById("result").innerText = `Estimated Probability of Enrollment: ${probabilityYes.toFixed(2)}%`;
+                document.getElementById("result").innerText = `Estimated Probability of Enrollment: ${(probabilityYes*100).toFixed(2)}%`;
                 document.getElementById("resultBox").style.display = "block";
             } else {
                 document.getElementById("result").innerText =
