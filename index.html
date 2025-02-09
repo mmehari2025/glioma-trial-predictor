@@ -474,7 +474,7 @@
                 "Chemotherapy": "Chemotherapy Received"
             };
 
-            return featureMap[feature] ? `${featureMap[feature]}: ${value}` : `${feature}=${value}`;
+            return featureMap[feature] ? featureMap[feature] : feature;
         }
     
         function calculateProbability() {
@@ -657,8 +657,8 @@
             
         if (!isNaN(ages)) {
                 shapImpact.push({
-                    feature: `AgeDiagnosis=${ages}`,  // ✅ Now includes exact age value
-                    impact: shapValues["AgeDiagnosis"](ages) 
+                    feature: formatFeatureName("AgeDiagnosis", ages),  
+                    impact: shapValues["AgeDiagnosis"](ages)
                 });
         }
         
@@ -684,18 +684,29 @@
             let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
 
             for (let i = 0; i < maxRows; i++) {
-                let row = document.createElement("tr");
+                if (positiveImpact.length === 0) {
+                    let row = document.createElement("tr");
+                    let increaseCell = document.createElement("td");
+                    increaseCell.innerHTML = `<span class="increase">No significant factors</span>`;
+                    row.appendChild(increaseCell);
+                    impactTableBody.appendChild(row);
+                }
 
-                let increaseCell = document.createElement("td");
-                let decreaseCell = document.createElement("td");
+                if (negativeImpact.length === 0) {
+                    let row = document.createElement("tr");
+                    let decreaseCell = document.createElement("td");
+                    decreaseCell.innerHTML = `<span class="decrease">No significant factors</span>`;
+                    row.appendChild(decreaseCell);
+                    impactTableBody.appendChild(row);
+                }
 
                 if (positiveImpact[i]) {
-                    let formattedFeature = formatFeatureName(positiveImpact[i].feature, positiveImpact[i].impact);
+                    let formattedFeature = formatFeatureName(positiveImpact[i].feature);
                     increaseCell.innerHTML = `<span class="increase">${formattedFeature}: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
                 }
 
                 if (negativeImpact[i]) {
-                    let formattedFeature = formatFeatureName(negativeImpact[i].feature, negativeImpact[i].impact);
+                    let formattedFeature = formatFeatureName(negativeImpact[i].feature);
                     decreaseCell.innerHTML = `<span class="decrease">${formattedFeature}: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
                 }
 
