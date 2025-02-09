@@ -593,7 +593,7 @@
             let probabilityNo = outdata["ProbabilityNotEnroll"];
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
-                document.getElementById("result").innerText = `${probabilityYes.toFixed(2)}%`;
+                document.getElementById("result").innerText = `Estimated Probability of Enrollment: ${probabilityYes.toFixed(2)}%`;
                 document.getElementById("resultBox").style.display = "block";
             } else {
                 document.getElementById("result").innerText =
@@ -630,7 +630,8 @@
             "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
             "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
             "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
-        };    
+        };   
+        
         document.querySelectorAll("select, input").forEach(el => {
                 let category = el.id;
                 let value = el.value;
@@ -661,7 +662,7 @@
             .slice(0, 2);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
-    
+        }
         function updateImpactDisplay(positiveImpact, negativeImpact) {
             let increasingList = document.getElementById("increasingFactors");
             let decreasingList = document.getElementById("decreasingFactors");
