@@ -727,6 +727,8 @@
             
             updateImpactDisplay(positiveImpact, negativeImpact);
             updateRecommendationDisplay(patientRecommendations);
+            console.log("✅ Final Sorted Positive Impact Factors:", positiveImpact);
+            console.log("❌ Final Sorted Negative Impact Factors:", negativeImpact);
         }
         function updateImpactDisplay(positiveImpact, negativeImpact) {
             let impactTableBody = document.getElementById("impactTableBody");
