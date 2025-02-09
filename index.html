@@ -9,39 +9,37 @@
         /* General Styling */
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: auto;
+            margin: 0;
             padding: 20px;
             text-align: center;
             background-color: #f5f5f5;
         }
 
         .container {
-            background: white;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 100%;
             padding: 20px;
+            background: white;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
         }
 
-        /* Section Titles - UCSF Dark Blue */
-        .section-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #052049; /* UCSF Dark Blue */
-            margin-top: 20px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #052049; /* Ensure border color matches */
-            text-align: left;
+        /* Form Layout Adjustments */
+        .form-section {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Form Inputs */
         .form-group {
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             align-items: center;
-            margin: 10px 0;
+            margin: 5px 0;
         }
 
         input, select {
@@ -56,20 +54,26 @@
         button {
             padding: 12px;
             width: 100%;
-            background-color: #0076cf; /* UCSF Light Blue */
+            background-color: #0076cf;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
             font-size: 1em;
             font-weight: bold;
+            margin-top: 10px;
         }
 
         button:hover {
             background-color: #0056a4; /* Slightly Darker UCSF Blue */
         }
 
+        .impact-container, .recommendation-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
         /* Impact Container */
         .impact-container {
             display: flex;
@@ -77,254 +81,201 @@
             margin-top: 20px;
         }
 
-        /* Impact Boxes */
-        .impact-box {
-            width: 48%;
-            padding: 20px; /* Increased padding for better readability */
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-size: 1em;
-            background-color: white; /* White Background */
-            border-width: 3px; /* Make the border more prominent */
-        }
-
-        /* Positive Impact Box - UCSF Dark Blue Text */
-        .positive-impact {
-            color: #052049; /* UCSF Dark Blue */
-            border: 3px solid #052049; /* UCSF Dark Blue */
-        }
-
-        /* Negative Impact Box - UCSF Orange Text */
-        .negative-impact {
-            color: #C04C00; /* UCSF Darker Orange */
-            border: 3px solid #C04C00; /* UCSF Darker Orange */
-        }
-
-        /* Impact Titles */
-        .impact-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        /* Impact Lists */
-        .impact-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .impact-list li {
-            margin-bottom: 5px;
-            font-size: 1em;
-        }
-
-        /* Recommendation Sections */
-        .recommendation-box {
-            background: white;
-            border: 2px solid #dcdcdc;
+        .impact-box, .recommendation-box {
             padding: 15px;
             border-radius: 10px;
+            background-color: white;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            display: none; /* ❌ FIX: Hide by default */
         }
 
-        .recommendation-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #052049;
-            margin-bottom: 10px;
-        }
-
-        /* Headings */
-        h3 {
-            color: #333;
-            margin-top: 15px;
-        }
+        .positive-impact { border: 3px solid #052049; color: #052049; }
+        .negative-impact { border: 3px solid #C04C00; color: #C04C00; }
+        .recommendation-box { display: none; }
 
     </style>
 </head>
 
 <body>
-    <h2>Glioma Clinical Trial Enrollment Predictor</h2>
+    <h2 style="text-align: center;">Glioma Clinical Trial Enrollment Predictor</h2>
     <div class="container">
-        <form id="predictionForm">
-            
-            <!-- DEMOGRAPHIC VARIABLES -->
-            <div class="section-title">Demographic Variables</div>
-            <div class="form-group">
-                <label for="AgeDiagnosis">Age at Initial Diagnosis (years):</label>
-                <input type="number" id="AgeDiagnosis" required>
+            <!-- Left Column: Demographic & Socioeconomic Variables -->
+            <div>
+                <div class="form-section">
+                    <h3>Demographic Variables</h3>
+                    <div class="form-group">
+                        <label for="AgeDiagnosis">Age at Diagnosis:</label>
+                        <input type="number" id="AgeDiagnosis" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Sex">Sex:</label>
+                        <select id="Sex" required>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Race">Race:</label>
+                        <select id="Race" required>
+                            <option value="White">White</option>
+                            <option value="Black">Black/African American</option>
+                            <option value="Hispanic">Hispanic/Latino</option>
+                            <option value="Asian">Asian</option>
+                            <option value="Pacific">Pacific Islander</option>
+                            <option value="Other">Other</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Ethnicity">Ethnicity:</label>
+                        <select id="Ethnicity" required>
+                            <option value="1">Hispanic/Latino</option>
+                            <option value="2">Non-Hispanic/Latino</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Minority">Minority Status:</label>
+                        <select id="Minority" required>
+                            <option value="1">Minority</option>
+                            <option value="2">Non-minority</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PreferredLanguage">Preferred Language:</label>
+                        <select id="PreferredLanguage" required>
+                            <option value="1">English</option>
+                            <option value="2">Non-English Language</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Socioeconomic Variables</h3>
+                    <div class="section-title">Socioeconomic Variables</div>
+                    <div class="form-group">
+                        <label for="Insurance">Insurance Status at Diagnosis:</label>
+                        <select id="Insurance" required>
+                            <option value="1">Private</option>
+                            <option value="2">Medi-cal/Medicaid</option>
+                            <option value="3">Medicare</option>
+                            <option value="4">Unknown</option>
+                            <option value="5">Self-pay</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment">Employment Status:</label>
+                        <select id="Employment" required>
+                            <option value="1">Employed</option>
+                            <option value="2">Unemployed</option>
+                            <option value="3">Retired</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="IncomeZip">Neighborhood Median Household Income by Patient Zip Code ($):</label>
+                        <input type="number" id="IncomeZip" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DistanceHospital">Driving Distance from Patient's Home to Hospital (miles):</label>
+                        <input type="number" id="DistanceHospital" required>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="Sex">Sex:</label>
-                <select id="Sex" required>
-                    <option value="1">Male</option>
-                    <option value="2">Female</option>
-                </select>
+            <!-- Right Column: Oncologic Variables & Probability Calculation -->
+            <div>
+                <div class="form-section">
+                    <h3>Oncologic Variables</h3>
+                    <div class="form-group">
+                        <label for="WHOGrade">WHO Grade:</label>
+                        <select id="WHOGrade" required>
+                            <option value="2-3">Grade 2-3</option>
+                            <option value="4">Grade 4</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TumorLobe">Tumor Lobe:</label>
+                        <select id="TumorLobe" required>
+                            <option value="Frontal">Frontal</option>
+                            <option value="Parietal">Parietal</option>
+                            <option value="Temporal">Temporal</option>
+                            <option value="Brainstem">Brainstem, Insular, Basal Ganglia, or Thalamus</option>
+                            <option value="Multifocal">Multifocal</option>
+                            <option value="Occipital">Occipital</option>
+                            <option value="Cerebellum">Cerebellum</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Seizure">Seizure Pre-op:</label>
+                        <select id="Seizure" required>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="NA">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="KPSPostOp">KPS Post-op:</label>
+                        <select id="KPSPostOp" required>
+                            <option value="100">100</option>
+                            <option value="90">90</option>
+                            <option value="80">80</option>
+                            <option value="<80">Less than 80</option>
+                            <option value="NA">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Chemotherapy">Received Chemotherapy?</label>
+                        <select id="Chemotherapy" required>
+                            <option value="1">Yes</option>
+                            <option value="2">No</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+                    <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+                    <h3 id="result"></h3>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="Race">Race:</label>
-                <select id="Race" required>
-                    <option value="White">White</option>
-                    <option value="Black">Black/African American</option>
-                    <option value="Hispanic">Hispanic/Latino</option>
-                    <option value="Asian">Asian</option>
-                    <option value="Pacific">Pacific Islander</option>
-                    <option value="Other">Other</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="Ethnicity">Ethnicity:</label>
-                <select id="Ethnicity" required>
-                    <option value="1">Hispanic/Latino</option>
-                    <option value="2">Non-Hispanic/Latino</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="Minority">Minority Status:</label>
-                <select id="Minority" required>
-                    <option value="1">Minority</option>
-                    <option value="2">Non-minority</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="PreferredLanguage">Preferred Language:</label>
-                <select id="PreferredLanguage" required>
-                    <option value="1">English</option>
-                    <option value="2">Non-English Language</option>
-                </select>
-            </div>
-
-            <!-- SOCIOECONOMIC VARIABLES -->
-            <div class="section-title">Socioeconomic Variables</div>
-            <div class="form-group">
-                <label for="Insurance">Insurance Status at Diagnosis:</label>
-                <select id="Insurance" required>
-                    <option value="1">Private</option>
-                    <option value="2">Medi-cal/Medicaid</option>
-                    <option value="3">Medicare</option>
-                    <option value="4">Unknown</option>
-                    <option value="5">Self-pay</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="Employment">Employment Status:</label>
-                <select id="Employment" required>
-                    <option value="1">Employed</option>
-                    <option value="2">Unemployed</option>
-                    <option value="3">Retired</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="IncomeZip">Neighborhood Median Household Income by Patient Zip Code ($):</label>
-                <input type="number" id="IncomeZip" required>
-            </div>
-
-            <div class="form-group">
-                <label for="DistanceHospital">Driving Distance from Patient's Home to Hospital (miles):</label>
-                <input type="number" id="DistanceHospital" required>
-            </div>
-
-            <!-- ONCOLOGIC VARIABLES -->
-            <div class="section-title">Oncologic Variables</div>
-            <div class="form-group">
-                <label for="WHOGrade">WHO Grade:</label>
-                <select id="WHOGrade" required>
-                    <option value="2-3">Grade 2-3</option>
-                    <option value="4">Grade 4</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="TumorLobe">Tumor Lobe:</label>
-                <select id="TumorLobe" required>
-                    <option value="Frontal">Frontal</option>
-                    <option value="Parietal">Parietal</option>
-                    <option value="Temporal">Temporal</option>
-                    <option value="Brainstem">Brainstem, Insular, Basal Ganglia, or Thalamus</option>
-                    <option value="Multifocal">Multifocal</option>
-                    <option value="Occipital">Occipital</option>
-                    <option value="Cerebellum">Cerebellum</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="Seizure">Seizure Pre-op:</label>
-                <select id="Seizure" required>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                    <option value="NA">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="KPSPostOp">KPS Post-op:</label>
-                <select id="KPSPostOp" required>
-                    <option value="100">100</option>
-                    <option value="90">90</option>
-                    <option value="80">80</option>
-                    <option value="<80">Less than 80</option>
-                    <option value="NA">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="Chemotherapy">Received Chemotherapy?</label>
-                <select id="Chemotherapy" required>
-                    <option value="1">Yes</option>
-                    <option value="2">No</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <button type="button" onclick="calculateProbability()">Calculate Probability</button>
-        </form>
-
-        <h3 id="result"></h3>
         <h4 id="shapImpact"></h4>
-        
-        <div class="impact-container">
-            <div class="impact-box positive-impact">
-                <div class="impact-title">Patient Characteristics That Most Increase Enrollment Probability</div>
-                <ul id="increasingFactors" class="impact-list"></ul>
+
+        <!-- Impact and Recommendation Containers -->
+            <div class="impact-container">
+                <div class="impact-box positive-impact">
+                    <h4>Patient Characteristics That Most Increase Enrollment Probability</h4>
+                    <ul id="increasingFactors"></ul>
+                </div>
+                <div class="impact-box negative-impact">
+                    <h4>Patient Characteristics That Most Decrease Enrollment Probability</h4>
+                    <ul id="decreasingFactors"></ul>
+                </div>
             </div>
 
-            <div class="impact-box negative-impact">
-                <div class="impact-title">Patient Characteristics That Most Decrease Enrollment Probability</div>
-                <ul id="decreasingFactors" class="impact-list"></ul>
-            </div>
-        </div>
-
-        <!-- Patient-Specific Recommendations -->
-        <div class="recommendation-box" id="patientRecommendations">
-            <div class="recommendation-title">Patient-Specific Recommendations to Increase Accrual</div>
-            <ul id="patientRecommendationList"></ul>
-        </div>
-
-        <!-- General Recommendations -->
-        <div class="recommendation-box" id="generalRecommendations">
-            <div class="recommendation-title">General Recommendations to Increase Patient Accrual</div>
-            <ul>
-                <li>Adopt a "just ask" policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest.</li>
-                <li>Find multiple opportunities to discuss trial enrollment.</li>
-                <li>Identify barriers and work collaboratively to overcome them.</li>
-            </ul>
-        </div>
         
+            <div class="recommendation-container">
+                <div class="recommendation-box" id="patientRecommendations">
+                    <h4>Patient-Specific Recommendations</h4>
+                    <ul id="patientRecommendationList"></ul>
+                </div>
+                <div class="recommendation-box" id="generalRecommendations">
+                    <h4>General Recommendations</h4>
+                    <ul>
+                        <li>Adopt a "just ask" policy.</li>
+                        <li>Find multiple opportunities to discuss trial enrollment.</li>
+                        <li>Identify barriers and work collaboratively to overcome them.</li>
+                    </ul>
+                </div>
+            </div>
     </div>
 
     <script src="jmp_score.js"></script> <!-- 📌 Ensures the model is correctly linked -->
