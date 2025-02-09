@@ -168,15 +168,34 @@
             margin-bottom: 10px;
         }
 
-        /* Impact Lists */
-        .impact-list {
-            list-style: none;
-            padding: 0;
+        /* Impact Table */
+        .impact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
 
-        .impact-list li {
-            margin-bottom: 5px;
-            font-size: 1em;
+        .impact-table th, .impact-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .impact-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        /* Increasing Factors Column - UCSF Blue */
+        .increase {
+            color: #052049;
+            font-weight: bold;
+        }
+
+        /* Decreasing Factors Column - UCSF Orange */
+        .decrease {
+            color: #C04C00;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -353,10 +372,15 @@
         <!-- Impact Section -->
         <div id="impactSection" class="toggle-content">
             <div class="impact-title">Patient-Specific Characteristics That Most Influence Enrollment Probability</div>
-                <h3>Patient-Specific Characteristics The Most Increase Enrollment Probability</h3>
-                <ul id="increasingFactors" class="impact-list"></ul>
-            <h3>Patient-Specific Characteristics The Most Decrease Enrollment Probability</h3>
-                <ul id="decreasingFactors" class="impact-list"></ul>
+                <table class="impact-table">
+                    <thead>
+                        <tr>
+                            <th style="color: #052049;">Factors Increasing Enrollment Probability</th>
+                            <th style="color: #C04C00;">Factors Decreasing Enrollment Probability</th>
+                        </tr>
+                    </thead>
+                    <tbody id="impactTableBody"></tbody>
+                </table>
         </div>
 
         <!-- Patient-Specific Recommendations -->
@@ -669,30 +693,31 @@
             updateImpactDisplay(positiveImpact, negativeImpact);
         }
         function updateImpactDisplay(positiveImpact, negativeImpact) {
-            let increasingList = document.getElementById("increasingFactors");
-            let decreasingList = document.getElementById("decreasingFactors");
+            let impactTableBody = document.getElementById("impactTableBody");
+            impactTableBody.innerHTML = ""; // Clear existing content
 
-            increasingList.innerHTML = "";
-            decreasingList.innerHTML = "";
+            let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
+            
+            for (let i = 0; i < maxRows; i++) {
+                let row = document.createElement("tr");
+                let increaseCell = document.createElement("td");
+                let decreaseCell = document.createElement("td");
 
-            if (positiveImpact.length === 0) {
-                increasingList.innerHTML = "<li>No patient characteristics significantly increase enrollment probability.</li>";
-            } else {
-                positiveImpact.forEach(d => {
-                    let listItem = document.createElement("li");
-                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
-                    increasingList.appendChild(listItem);
-                });
-            }
+                if (positiveImpact[i]) {
+                    increaseCell.innerHTML = `<span class="increase"><strong>${positiveImpact[i].feature}</strong>: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
+                } else {
+                    increaseCell.innerHTML = `<span class="increase">No strong positive factors</span>`;
+                }
 
-            if (negativeImpact.length === 0) {
-                decreasingList.innerHTML = "<li>No patient characteristics significantly decrease enrollment probability.</li>";
-            } else {
-                negativeImpact.forEach(d => {
-                    let listItem = document.createElement("li");
-                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
-                    decreasingList.appendChild(listItem);
-                });
+                if (negativeImpact[i]) {
+                    decreaseCell.innerHTML = `<span class="decrease"><strong>${negativeImpact[i].feature}</strong>: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
+                } else {
+                    decreaseCell.innerHTML = `<span class="decrease">No strong negative factors</span>`;
+                }
+
+                row.appendChild(increaseCell);
+                row.appendChild(decreaseCell);
+                impactTableBody.appendChild(row);
             }
         }
     </script>
