@@ -330,7 +330,8 @@
 
         <!-- Display Probability -->
         <div id="resultBox" class="result-box">
-            <h3 id="result"></h3>
+            <h3>Estimated Enrollment Probability</h3>
+            <p id="result"></p> <!-- ✅ Fixed: Probability is displayed inside the gray box -->
         </div>
         
         <!-- Toggle Buttons -->
@@ -592,8 +593,8 @@
             let probabilityNo = outdata["ProbabilityNotEnroll"];
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
-                document.getElementById("result").innerText =
-                    `Estimated Probability of Enrollment: ${(probabilityYes * 100).toFixed(2)}%`;
+                document.getElementById("result").innerText = `${probabilityYes.toFixed(2)}%`;
+                document.getElementById("resultBox").style.display = "block";
             } else {
                 document.getElementById("result").innerText =
                     "Error: Probability could not be calculated.";
@@ -660,10 +661,6 @@
             .slice(0, 2);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
-
-        document.getElementById("resultBox").style.display = "block";
-            document.getElementById("result").innerText = "Estimated Enrollment Probability: 75%";
-        }
     
         function updateImpactDisplay(positiveImpact, negativeImpact) {
             let increasingList = document.getElementById("increasingFactors");
