@@ -667,7 +667,6 @@
 
         // Iterate through each SHAP variable and retrieve its impact
         Object.keys(shapValues).forEach(variable => {
-            let mappedVar = variableMap[variable]; // Ensure mapping exists
             let value = indata[mappedVar];
 
             if (value === undefined) {
@@ -688,17 +687,16 @@
 
             if (impactValue !== 0) {
                 shapImpact.push({
-                    feature: formatFeatureName(variable, value),
+                    feature: `${variable}=${value}`, // ✅ FIXED: Use direct format like "KPSPostOp=100"
                     impact: impactValue
                 });
             }
         });
         console.log("📊 Final SHAP Impacts:", shapImpact);
-        
-        shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
+            .sort((a, b) => b.impact - a.impact) // ✅ Sort high to low
             .slice(0, 2);
 
         // Fix: Sort negative impacts in descending order to show the most negative first
@@ -722,13 +720,13 @@
                 let decreaseCell = document.createElement("td");
 
                 if (positiveImpact[i]) {
-                    increaseCell.innerHTML = `<span class="increase"><strong>${d.feature}</strong>: +${(d.impact * 100).toFixed(2)}%</span>`;
+                    increaseCell.innerHTML = `<span class="increase"><strong>${positiveImpact[i].feature}</strong>: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
                 } else {
                     increaseCell.innerHTML = `<span class="increase">No strong positive factors</span>`;
                 }
 
                 if (negativeImpact[i]) {
-                    decreaseCell.innerHTML = `<span class="decrease"><strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%</span>`;
+                    decreaseCell.innerHTML = `<span class="decrease"><strong>${negativeImpact[i].feature}</strong>: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
                 } else {
                     decreaseCell.innerHTML = `<span class="decrease">No strong negative factors</span>`;
                 }
