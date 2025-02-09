@@ -699,13 +699,15 @@
          let displayValue = readableLabels[category] && readableLabels[category][value] 
                  ? readableLabels[category][value]  // ✅ Convert to readable label if available
                  : value; 
-             
+             console.log(`📝 Processing ${category}: User Input = ${displayValue}, Coded Impact = ${impactValue}`);
+            
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
                        feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
                         impact: shapValues[category][value]
                     });
                 }
+            console.log("📊 Full List of Computed SHAP Impact Factors:", shapImpact);
         }); // ✅ Correct
 
         shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
@@ -713,12 +715,15 @@
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
             .slice(0, 2);
+        console.log("🔻 Sorted Positive Impact Factors:", positiveImpact);
 
         // Fix: Sort negative impacts in descending order to show the most negative first
         let negativeImpact = shapImpact
             .filter(d => d.impact < 0)
             .sort((a, b) => a.impact - b.impact) // Corrected sorting
             .slice(0, 2);
+
+        console.log("🔻 Sorted Negative Impact Factors:", negativeImpact);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
             updateRecommendationDisplay(patientRecommendations);
