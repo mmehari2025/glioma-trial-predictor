@@ -329,8 +329,8 @@
 
         <!-- Display Probability -->
         <div id="resultBox" class="result-box">
-            <h3>Estimated Enrollment Probability</h3>
-            <p id="result"></p> <!-- ✅ Fixed: Probability is displayed inside the gray box -->
+            <h3>Estimated Enrollment Probability:</h3>
+            <p id="resultText"></p> <!-- ✅ Fixed: Probability is displayed inside the gray box -->
         </div>
         
         <!-- Toggle Buttons -->
@@ -436,7 +436,7 @@
         // ✅ FIX: Ensure model.js is properly loaded before running `score()`
             if (typeof score !== "function") {
                 console.error("⚠️ ERROR: score() function is not defined. Check that model.js is properly linked.");
-                document.getElementById("result").innerText = "Error: Model not loaded.";
+                document.getElementById("resultText").innerText = "Error: Model not loaded.";
                 return; // Stop execution
             }
 
@@ -592,10 +592,10 @@
             let probabilityNo = outdata["ProbabilityNotEnroll"];
 
             if (!isNaN(probabilityYes) && probabilityYes !== undefined) {
-                document.getElementById("result").innerText = `Estimated Probability of Enrollment: ${(probabilityYes*100).toFixed(2)}%`;
+                document.getElementById("resultText").innerText = `${(probabilityYes*100).toFixed(2)}%`;
                 document.getElementById("resultBox").style.display = "block";
             } else {
-                document.getElementById("result").innerText =
+                document.getElementById("resultText").innerText =
                     "Error: Probability could not be calculated.";
                 console.error("⚠️ Probability is NaN or undefined. Check input processing.");
             }
