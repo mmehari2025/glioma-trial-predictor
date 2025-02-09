@@ -14,18 +14,21 @@
             text-align: left;
             background-color: #f5f5f5;
         }
-
         .container {
             display: flex;
             gap: 20px;
             max-width: 100%;
-            gap: 20px;
             padding: 20px;
+        }
+
+        /* Title Alignment */
+        h2 {
+            text-align: left;
         }
 
         /* Left Column: Calculator */
         .calculator {
-            width: 50%;
+            width: 65%;
             background: white;
             padding: 20px;
             border-radius: 10px;
@@ -34,7 +37,7 @@
 
         /* Right Column: Results & Recommendations */
         .results {
-            width: 50%;
+            width: 35%;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -49,17 +52,21 @@
             margin-bottom: 15px;
         }
 
+        /* Borders for Section Types */
+        .demographic-section { border: 3px solid #052049; } /* UCSF Dark Blue */
+        .socioeconomic-section { border: 3px solid #0076cf; } /* UCSF Light Blue */
+        .oncologic-section { border: 3px solid #052049; } /* UCSF Dark Blue */
+
         .form-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             margin: 5px 0;
         }
 
         input, select {
             padding: 8px;
-            width: 100%;
+            width: 60%;
             border: 1px solid #ccc;
             border-radius: 5px;
             background: #fafafa;
@@ -84,15 +91,29 @@
         }
 
         /* Right Section Boxes */
+        .impact-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
         .impact-box, .recommendation-box {
-            width: 100%; /* Ensures full width */
             padding: 15px;
             border-radius: 10px;
             background-color: white;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+
+        .impact-box {
+            width: 48%; /* Side-by-side arrangement */
+        }
+        
         .positive-impact { border: 3px solid #052049; color: #052049; }
         .negative-impact { border: 3px solid #C04C00; color: #C04C00; }
+
+        .recommendation-box {
+            width: 100%;
+        }
         
         /* Ensures equal height distribution for results to match the calculator height */
         .results > div {
@@ -103,13 +124,12 @@
 </head>
 
 <body>
-    <h2 style="text-align: center;">Glioma Clinical Trial Enrollment Predictor</h2>
+    <h2 style="text-align: left;">Glioma Clinical Trial Enrollment Predictor</h2>
     <div class="container">
             <!-- Left Column: Calculator -->
             <div class="calculator">
             <form id="predictionForm">
                 <div class="form-section">
-                    <h3>Demographic Variables</h3>
                     <div class="section-title">Demographic Variables</div>
                     <div class="form-group">
                         <label for="AgeDiagnosis">Age at Diagnosis:</label>
@@ -163,7 +183,6 @@
                 </div>
 
                 <div class="form-section">
-                    <h3>Socioeconomic Variables</h3>
                     <div class="section-title">Socioeconomic Variables</div>
                     <div class="form-group">
                         <label for="Insurance">Insurance Status at Diagnosis:</label>
@@ -198,7 +217,6 @@
                 </div>
 
                 <div class="form-section">
-                    <h3>Oncologic Variables</h3>
                     <div class="section-title">Oncologic Variables</div>
                     <div class="form-group">
                         <label for="WHOGrade">WHO Grade:</label>
@@ -258,13 +276,15 @@
 
             <!-- Right Column: Oncologic Variables & Probability Calculation -->
             <div class="results">
-                <div class="impact-box positive-impact">
-                    <h4>Patient Characteristics That Most Increase Enrollment Probability</h4>
-                    <ul id="increasingFactors"></ul>
-                </div>
-                <div class="impact-box negative-impact">
-                    <h4>Patient Characteristics That Most Decrease Enrollment Probability</h4>
-                    <ul id="decreasingFactors"></ul>
+                <div class="impact-container">
+                    <div class="impact-box positive-impact">
+                        <h4>Patient Characteristics That Most Increase Enrollment Probability</h4>
+                        <ul id="increasingFactors"></ul>
+                    </div>
+                    <div class="impact-box negative-impact">
+                        <h4>Patient Characteristics That Most Decrease Enrollment Probability</h4>
+                        <ul id="decreasingFactors"></ul>
+                    </div>
                 </div>
                 
                 <div class="recommendation-box" id="patientRecommendations">
@@ -280,8 +300,8 @@
                         <li>Identify barriers and work collaboratively to overcome them.</li>
                     </ul>
                 </div>
-                <h4 id="shapImpact"></h4>   
-            </div>    
+            <h4 id="shapImpact"></h4>   
+        </div>    
     </div>
 
     <script src="jmp_score.js"></script> <!-- 📌 Ensures the model is correctly linked -->
