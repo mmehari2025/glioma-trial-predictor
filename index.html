@@ -654,13 +654,23 @@
 
         // Iterate through each SHAP variable and retrieve its impact
         Object.keys(shapValues).forEach(variable => {
-            let value = indata[variableMap[variable]]; // Get mapped variable name
+            let mappedVar = variableMap[variable]; // Ensure mapping exists
+            let value = indata[mappedVar];
+
+            if (value === undefined) {
+                console.warn(`⚠️ Skipping ${variable} - Value not found in input data.`);
+                return; // Skip if no value found
+            }
+
             let impactValue = shapValues[variable];
 
             if (typeof impactValue === "function") {
                 impactValue = impactValue(value); // Call function for Age
+            } else if (impactValue[value] !== undefined) {
+                impactValue = impactValue[value]; // Lookup categorical SHAP value
             } else {
-                impactValue = impactValue[value] ?? 0; // Lookup categorical impact, default to 0
+                console.warn(`⚠️ SHAP value not found for ${variable} (${value}). Defaulting to 0.`);
+                impactValue = 0; // Default if SHAP value isn't found
             }
 
             if (impactValue !== 0) {
@@ -670,8 +680,7 @@
                 });
             }
         });
-
-        console.log("📊 SHAP Impact Calculations:", shapImpact);
+        console.log("📊 Final SHAP Impacts:", shapImpact);
         
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
@@ -699,16 +708,12 @@
                 let increaseCell = document.createElement("td");
                 let decreaseCell = document.createElement("td");
 
-                if (positiveImpact.length === 0 && negativeImpact.length === 0) {
-                    let row = document.createElement("tr");
-                    let increaseCell = document.createElement("td");
-                    let decreaseCell = document.createElement("td");
-                    increaseCell.innerHTML = `<span class="increase">No significant factors</span>`;
-                    decreaseCell.innerHTML = `<span class="decrease">No significant factors</span>`;
-                    row.appendChild(increaseCell);
-                    row.appendChild(decreaseCell);
-                    impactTableBody.appendChild(row);
-                    return; // ✅ Exit function early if no impact data
+                if (positiveImpact.length === 0) {
+                    positiveImpact.push({ feature: "None", impact: 0 });
+                }
+
+                if (negativeImpact.length === 0) {
+                    negativeImpact.push({ feature: "None", impact: 0 });
                 }
 
                 if (negativeImpact.length === 0) {
