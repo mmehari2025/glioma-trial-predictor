@@ -161,38 +161,23 @@
             margin-top: 15px;
         }
 
-        
-        /* Impact Table */
-        .impact-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .impact-table th, .impact-table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        .impact-table th {
-            background-color: #f5f5f5;
+        /* Impact Titles */
+        .impact-title {
+            font-size: 1.2em;
             font-weight: bold;
+            margin-bottom: 10px;
         }
 
-        /* Increasing Factors Column - UCSF Blue */
-        .increase {
-            color: #052049;
-            font-weight: bold;
+        /* Impact Lists */
+        .impact-list {
+            list-style: none;
+            padding: 0;
         }
 
-        /* Decreasing Factors Column - UCSF Orange */
-        .decrease {
-            color: #C04C00;
-            font-weight: bold;
+        .impact-list li {
+            margin-bottom: 5px;
+            font-size: 1em;
         }
-        
-        
     </style>
 </head>
 
@@ -367,16 +352,10 @@
 
         <!-- Impact Section -->
         <div id="impactSection" class="toggle-content">
-                <h3>Patient-Specific Characteristics Most Influencing Enrollment</h3>
-                <table class="impact-table">
-                    <thead>
-                        <tr>
-                            <th style="color: #052049;">Factors Increasing Enrollment Probability</th>
-                            <th style="color: #C04C00;">Factors Decreasing Enrollment Probability</th>
-                        </tr>
-                    </thead>
-                    <tbody id="impactTableBody"></tbody>
-                </table>
+                <h3>Patient-Specific Characteristics The Most Increase Enrollment Probability</h3>
+                <ul id="increasingFactors" class="impact-list"></ul>
+            <h3>Patient-Specific Characteristics The Most Decrease Enrollment Probability</h3>
+                <ul id="decreasingFactors" class="impact-list"></ul>
         </div>
 
         <!-- Patient-Specific Recommendations -->
@@ -453,42 +432,6 @@
             "Seizure": { "Yes": 0.0398, "No": -0.0611 },
             "Employment": { "1": 0.0131, "2": -0.0283, "3": 0.0354 }
         };
-
-        // Define readable labels for easier interpretation
-        const readableLabels = {
-            "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
-            "Sex": { "1": "Male", "2": "Female" },
-            "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
-            "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
-            "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
-            "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
-            "TumorLobe": { 
-                "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
-                "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
-                "Multifocal": "Multifocal", "Occipital": "Occipital",
-                "Cerebellum": "Cerebellum", "Unknown": "Unknown"
-            },
-            "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
-            "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
-            "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
-        };   
-        
-        document.querySelectorAll("select, input").forEach(el => {
-                let category = el.id;
-                let value = el.value;
-                indata[category] = value;
-            
-         let displayValue = readableLabels[category] && readableLabels[category][value] 
-                 ? readableLabels[category][value]  // ✅ Convert to readable label if available
-                 : value; 
-             
-                if (shapValues[category] && shapValues[category][value] !== undefined) {
-                    shapImpact.push({
-                       feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
-                        impact: shapValues[category][value]
-                    });
-                }
-        }); // ✅ Correct
     
         function calculateProbability() {
         let indata = {};
@@ -665,39 +608,55 @@
             console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
         }
 
-        // Iterate through each SHAP variable and retrieve its impact
-        Object.keys(shapValues).forEach(variable => {
-            let mappedVar = variableMap[variable] || variable; // ✅ Fix: Default to variable if no mapping exists
-            let value = indata[mappedVar];
-
-            if (value === undefined) {
-                console.warn(`⚠️ Skipping ${variable} - Value not found in input data.`);
-                return; // Skip if no value found
-            }
-
-            let impactValue = shapValues[variable]; // ✅ Directly reference shapValues
-
-            if (typeof impactValue === "function") {
-                impactValue = impactValue(value); // Call function for Age
-            } else if (impactValue[value] !== undefined) {
-                impactValue = impactValue[value]; // Lookup categorical SHAP value
-            } else {
-                console.warn(`⚠️ SHAP value not found for ${variable} (${value}). Defaulting to 0.`);
-                impactValue = 0; // Default if SHAP value isn't found
-            }
-
-            if (impactValue !== 0) {
+        let ageInput = document.getElementById("AgeDiagnosis").value;
+        let ages = parseFloat(ageInput);
+            
+        if (!isNaN(ages)) {
                 shapImpact.push({
-                    feature: `${variable}=${value}`, // ✅ FIXED: Use direct format like "KPSPostOp=100"
-                    impact: impactValue
+                    feature: `AgeDiagnosis=${ages}`,  // ✅ Now includes exact age value
+                    impact: shapValues["AgeDiagnosis"](ages) 
                 });
-            }
-        });
-        console.log("📊 Final SHAP Impacts:", shapImpact);
+        }
+        // Define readable labels for easier interpretation
+        const readableLabels = {
+            "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
+            "Sex": { "1": "Male", "2": "Female" },
+            "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
+            "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
+            "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
+            "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
+            "TumorLobe": { 
+                "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
+                "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
+                "Multifocal": "Multifocal", "Occipital": "Occipital",
+                "Cerebellum": "Cerebellum", "Unknown": "Unknown"
+            },
+            "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
+            "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
+            "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
+        };   
+        
+        document.querySelectorAll("select, input").forEach(el => {
+                let category = el.id;
+                let value = el.value;
+                indata[category] = value;
+            
+         let displayValue = readableLabels[category] && readableLabels[category][value] 
+                 ? readableLabels[category][value]  // ✅ Convert to readable label if available
+                 : value; 
+             
+                if (shapValues[category] && shapValues[category][value] !== undefined) {
+                    shapImpact.push({
+                       feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
+                        impact: shapValues[category][value]
+                    });
+                }
+        }); // ✅ Correct
+
+        shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
-            .sort((a, b) => b.impact - a.impact) // ✅ Sort high to low
             .slice(0, 2);
 
         // Fix: Sort negative impacts in descending order to show the most negative first
@@ -705,36 +664,34 @@
             .filter(d => d.impact < 0)
             .sort((a, b) => a.impact - b.impact) // Corrected sorting
             .slice(0, 2);
-
+            
             updateImpactDisplay(positiveImpact, negativeImpact);
         }
-        
         function updateImpactDisplay(positiveImpact, negativeImpact) {
-            let impactTableBody = document.getElementById("impactTableBody");
-            impactTableBody.innerHTML = "";
+            let increasingList = document.getElementById("increasingFactors");
+            let decreasingList = document.getElementById("decreasingFactors");
 
-            let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
+            increasingList.innerHTML = "";
+            decreasingList.innerHTML = "";
 
-            for (let i = 0; i < maxRows; i++) {
-                let row = document.createElement("tr");
-                let increaseCell = document.createElement("td");
-                let decreaseCell = document.createElement("td");
+            if (positiveImpact.length === 0) {
+                increasingList.innerHTML = "<li>No patient characteristics significantly increase enrollment probability.</li>";
+            } else {
+                positiveImpact.forEach(d => {
+                    let listItem = document.createElement("li");
+                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
+                    increasingList.appendChild(listItem);
+                });
+            }
 
-                if (positiveImpact[i]) {
-                    increaseCell.innerHTML = `<span class="increase"><strong>${positiveImpact[i].feature}</strong>: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
-                } else {
-                    increaseCell.innerHTML = `<span class="increase">No strong positive factors</span>`;
-                }
-
-                if (negativeImpact[i]) {
-                    decreaseCell.innerHTML = `<span class="decrease"><strong>${negativeImpact[i].feature}</strong>: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
-                } else {
-                    decreaseCell.innerHTML = `<span class="decrease">No strong negative factors</span>`;
-                }
-
-                row.appendChild(increaseCell);
-                row.appendChild(decreaseCell);
-                impactTableBody.appendChild(row);
+            if (negativeImpact.length === 0) {
+                decreasingList.innerHTML = "<li>No patient characteristics significantly decrease enrollment probability.</li>";
+            } else {
+                negativeImpact.forEach(d => {
+                    let listItem = document.createElement("li");
+                    listItem.innerHTML = `<strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%`;
+                    decreasingList.appendChild(listItem);
+                });
             }
         }
     </script>
