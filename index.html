@@ -454,28 +454,41 @@
             "Employment": { "1": 0.0131, "2": -0.0283, "3": 0.0354 }
         };
 
-        // Convert variable names to readable format
-        function formatFeatureName(feature, value) {
-            const featureMap = {
-                "AgeDiagnosis": "Age at Initial Diagnosis",
-                "Sex": "Sex",
-                "Race": "Race",
-                "Ethnicity": "Ethnicity",
-                "Minority": "Minority Status",
-                "PreferredLanguage": "Preferred Language",
-                "Insurance": "Insurance Status",
-                "Employment": "Employment Status",
-                "IncomeZip": "Median Neighborhood Income by Zip Code",
-                "DistanceHospital": "Distance to Hospital (miles)",
-                "WHOGrade": "WHO Tumor Grade",
-                "TumorLobe": "Tumor Location",
-                "Seizure": "Pre-Operative Seizure",
-                "KPSPostOp": "Post-Operative KPS",
-                "Chemotherapy": "Chemotherapy Received"
-            };
-
-            return featureMap[feature] ? featureMap[feature] : feature;
-        }
+        // Define readable labels for easier interpretation
+        const readableLabels = {
+            "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
+            "Sex": { "1": "Male", "2": "Female" },
+            "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
+            "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
+            "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
+            "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
+            "TumorLobe": { 
+                "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
+                "Brainstem": "Brainstem, Insular, Basal Ganglia, or Thalamus",
+                "Multifocal": "Multifocal", "Occipital": "Occipital",
+                "Cerebellum": "Cerebellum", "Unknown": "Unknown"
+            },
+            "Seizure": { "Yes": "Yes", "No": "No", "NA": "Unknown" },
+            "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
+            "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
+        };   
+        
+        document.querySelectorAll("select, input").forEach(el => {
+                let category = el.id;
+                let value = el.value;
+                indata[category] = value;
+            
+         let displayValue = readableLabels[category] && readableLabels[category][value] 
+                 ? readableLabels[category][value]  // ✅ Convert to readable label if available
+                 : value; 
+             
+                if (shapValues[category] && shapValues[category][value] !== undefined) {
+                    shapImpact.push({
+                       feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
+                        impact: shapValues[category][value]
+                    });
+                }
+        }); // ✅ Correct
     
         function calculateProbability() {
         let indata = {};
@@ -682,19 +695,19 @@
         });
         console.log("📊 Final SHAP Impacts:", shapImpact);
         
+        shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
+
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
-            .sort((a, b) => b.impact - a.impact) // Sort positive impacts descending
-            .slice(0, 2); // Take top 2
+            .slice(0, 2);
 
+        // Fix: Sort negative impacts in descending order to show the most negative first
         let negativeImpact = shapImpact
             .filter(d => d.impact < 0)
-            .sort((a, b) => a.impact - b.impact) // Sort negative impacts ascending
-            .slice(0, 2); // Take top 2
-        console.log("✅ Top Increasing Factors:", positiveImpact);
-        console.log("✅ Top Decreasing Factors:", negativeImpact);
-            
-        updateImpactDisplay(positiveImpact, negativeImpact);
+            .sort((a, b) => a.impact - b.impact) // Corrected sorting
+            .slice(0, 2);
+
+            updateImpactDisplay(positiveImpact, negativeImpact);
         }
         
         function updateImpactDisplay(positiveImpact, negativeImpact) {
@@ -708,32 +721,14 @@
                 let increaseCell = document.createElement("td");
                 let decreaseCell = document.createElement("td");
 
-                if (positiveImpact.length === 0) {
-                    positiveImpact.push({ feature: "None", impact: 0 });
-                }
-
-                if (negativeImpact.length === 0) {
-                    negativeImpact.push({ feature: "None", impact: 0 });
-                }
-
-                if (negativeImpact.length === 0) {
-                    let row = document.createElement("tr");
-                    let decreaseCell = document.createElement("td");
-                    decreaseCell.innerHTML = `<span class="decrease">No significant factors</span>`;
-                    row.appendChild(decreaseCell);
-                    impactTableBody.appendChild(row);
-                }
-
                 if (positiveImpact[i]) {
-                    let formattedFeature = formatFeatureName(positiveImpact[i].feature);
-                    increaseCell.innerHTML = `<span class="increase"><strong>${formattedFeature}</strong>: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
+                    increaseCell.innerHTML = `<span class="increase"><strong>${d.feature}</strong>: +${(d.impact * 100).toFixed(2)}%</span>`;
                 } else {
                     increaseCell.innerHTML = `<span class="increase">No strong positive factors</span>`;
                 }
 
                 if (negativeImpact[i]) {
-                    let formattedFeature = formatFeatureName(negativeImpact[i].feature);
-                    decreaseCell.innerHTML = `<span class="decrease"><strong>${formattedFeature}</strong>: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
+                    decreaseCell.innerHTML = `<span class="decrease"><strong>${d.feature}</strong>: ${(d.impact * 100).toFixed(2)}%</span>`;
                 } else {
                     decreaseCell.innerHTML = `<span class="decrease">No strong negative factors</span>`;
                 }
