@@ -667,7 +667,7 @@
 
         // Iterate through each SHAP variable and retrieve its impact
         Object.keys(shapValues).forEach(variable => {
-            let mappedVar = variableMap[variable]; // ✅ Define mappedVar correctly
+            let mappedVar = variableMap[variable] || variable; // ✅ Fix: Default to variable if no mapping exists
             let value = indata[mappedVar];
 
             if (value === undefined) {
@@ -675,7 +675,7 @@
                 return; // Skip if no value found
             }
 
-            let impactValue = shapValues[variable] || {}; // ✅ Ensure impactValue is defined
+            let impactValue = shapValues[variable]; // ✅ Directly reference shapValues
 
             if (typeof impactValue === "function") {
                 impactValue = impactValue(value); // Call function for Age
