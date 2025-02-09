@@ -19,6 +19,7 @@
             display: flex;
             gap: 20px;
             max-width: 100%;
+            gap: 20px;
             padding: 20px;
         }
 
@@ -84,20 +85,19 @@
 
         /* Right Section Boxes */
         .impact-box, .recommendation-box {
+            width: 100%; /* Ensures full width */
             padding: 15px;
             border-radius: 10px;
             background-color: white;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
-
-        .impact-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-        }
         .positive-impact { border: 3px solid #052049; color: #052049; }
         .negative-impact { border: 3px solid #C04C00; color: #C04C00; }
-        .recommendation-box { display: none; }
+        
+        /* Ensures equal height distribution for results to match the calculator height */
+        .results > div {
+            flex-grow: 1;
+        }
 
     </style>
 </head>
@@ -258,7 +258,6 @@
 
             <!-- Right Column: Oncologic Variables & Probability Calculation -->
             <div class="results">
-                <div class="impact-container">
                 <div class="impact-box positive-impact">
                     <h4>Patient Characteristics That Most Increase Enrollment Probability</h4>
                     <ul id="increasingFactors"></ul>
