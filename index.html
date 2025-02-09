@@ -638,6 +638,22 @@
                     impact: shapValues["AgeDiagnosis"](ages) 
                 });
         }
+        
+        shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
+
+        let positiveImpact = shapImpact
+            .filter(d => d.impact > 0)
+            .slice(0, 2);
+
+        // Fix: Sort negative impacts in descending order to show the most negative first
+        let negativeImpact = shapImpact
+            .filter(d => d.impact < 0)
+            .sort((a, b) => a.impact - b.impact) // Corrected sorting
+            .slice(0, 2);
+            
+            updateImpactDisplay(positiveImpact, negativeImpact);
+        }
+
         // Convert variable names to readable format
         function formatFeatureName(feature, value) {
             const featureMap = {
@@ -659,21 +675,6 @@
             };
 
             return featureMap[feature] ? `${featureMap[feature]}: ${value}` : `${feature}=${value}`;
-        }
-
-        shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
-
-        let positiveImpact = shapImpact
-            .filter(d => d.impact > 0)
-            .slice(0, 2);
-
-        // Fix: Sort negative impacts in descending order to show the most negative first
-        let negativeImpact = shapImpact
-            .filter(d => d.impact < 0)
-            .sort((a, b) => a.impact - b.impact) // Corrected sorting
-            .slice(0, 2);
-            
-            updateImpactDisplay(positiveImpact, negativeImpact);
         }
         
         function updateImpactDisplay(positiveImpact, negativeImpact) {
