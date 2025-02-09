@@ -37,19 +37,23 @@
 
         /* Form Inputs */
         .form-group {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 10px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             margin: 10px 0;
         }
 
+        .form-group label {
+            width: 50%;
+        }
+
         input, select {
             padding: 8px;
-            width: 100%;
+            width: 50%;
             border: 1px solid #ccc;
             border-radius: 5px;
             background: #fafafa;
+            box-sizing: border-box; /* Ensures same width */
         }
 
         /* Calculate Probability Button - UCSF Light Blue */
@@ -70,6 +74,22 @@
             background-color: #0056a4; /* Slightly Darker UCSF Blue */
         }
 
+        /* Enrollment Probability Box */
+        .result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: 2px solid #dcdcdc;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         /* Toggle Buttons */
         .toggle-buttons {
             display: flex;
@@ -80,17 +100,43 @@
         .toggle-button {
             width: 32%;
             padding: 12px;
-            background-color: #0076cf;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.9em;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .toggle-button:hover {
-            background-color: #0056a4;
+        .toggle-button span {
+            font-size: 1.2em;
+        }
+
+        .toggle-button-blue {
+            background-color: #052049;
+        }
+
+        .toggle-button-blue:hover {
+            background-color: #02152b;
+        }
+
+        .toggle-button-orange {
+            background-color: #C04C00;
+        }
+
+        .toggle-button-orange:hover {
+            background-color: #8a3700;
+        }
+
+        .toggle-button-teal {
+            background-color: #007272;
+        }
+
+        .toggle-button-teal:hover {
+            background-color: #005555;
         }
 
         /* Hidden Sections */
@@ -282,22 +328,29 @@
         <h3 id="result"></h3>
         <h4 id="shapImpact"></h4>
 
+        <!-- Display Probability -->
+        <div id="resultBox" class="result-box">
+            <h3 id="result"></h3>
+        </div>
+        
         <!-- Toggle Buttons -->
         <div class="toggle-buttons">
-            <button class="toggle-button" onclick="toggleSection('impactSection')">Patient Characteristics Most Influencing Estimated Enrollment Probability</button>
-            <button class="toggle-button" onclick="toggleSection('patientRecommendations')">Patient-Specific Recommendations</button>
-            <button class="toggle-button" onclick="toggleSection('generalRecommendations')">General Recommendations</button>
+            <button class="toggle-button toggle-button-blue" onclick="toggleSection('impactSection')">
+                Patient Characteristics Influencing Enrollment <span>▼</span>
+            </button>
+            <button class="toggle-button toggle-button-orange" onclick="toggleSection('patientRecommendations')">
+                Patient-Specific Recommendations <span>▼</span>
+            </button>
+            <button class="toggle-button toggle-button-teal" onclick="toggleSection('generalRecommendations')">
+                General Recommendations <span>▼</span>
+            </button>
         </div>
 
         <!-- Impact Section -->
         <div id="impactSection" class="toggle-content">
             <div class="impact-title">Patient Characteristics That Most Increase Enrollment Probability</div>
-            <div class="impact-list">
-                <div><strong>Increasing Factors:</strong></div>
-                <ul id="increasingFactors"></ul>
-                <div><strong>Decreasing Factors:</strong></div>
-                <ul id="decreasingFactors"></ul>
-            </div>
+                <ul id="increasingFactors" class="impact-list"></ul>
+                <ul id="decreasingFactors" class="impact-list"></ul>
         </div>
 
         <!-- Patient-Specific Recommendations -->
@@ -324,11 +377,7 @@
     <script>
         function toggleSection(sectionId) {
             var section = document.getElementById(sectionId);
-            if (section.style.display === "none" || section.style.display === "") {
-                section.style.display = "block";
-            } else {
-                section.style.display = "none";
-            }
+            section.style.display = section.style.display === "block" ? "none" : "block";
         }
     </script>
     
@@ -611,6 +660,9 @@
             .slice(0, 2);
             
             updateImpactDisplay(positiveImpact, negativeImpact);
+
+        document.getElementById("resultBox").style.display = "block";
+            document.getElementById("result").innerText = "Estimated Enrollment Probability: 75%";
         }
     
         function updateImpactDisplay(positiveImpact, negativeImpact) {
