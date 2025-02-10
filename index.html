@@ -876,11 +876,21 @@
             generalRecommendations.forEach(item => {
                 let row = document.createElement("tr");
                 let patternCell = document.createElement("td");
-                let recommendationCell = document.createElement("td");
 
-                patternCell.innerHTML = `<span class="characteristics"><strong>${item.pattern}</strong></span>`;
-                recommendationCell.innerHTML = `<span class="recommendations">${item.recommendation}</span>`;
-
+                
+                // Check if the recommendation is an array (multiple bullet points)
+                if (Array.isArray(item.recommendation)) {
+                    let recommendationList = "<ul>";  // Start the unordered list
+                    item.recommendation.forEach(rec => {
+                        recommendationList += `<li>${rec}</li>`; // Add each recommendation as a list item
+                    });
+                    recommendationList += "</ul>"; // Close the unordered list
+                    recommendationCell.innerHTML = `<span class="recommendations">${recommendationList}</span>`;
+                } else {
+                    // If it's a single string, display it normally
+                    recommendationCell.innerHTML = `<span class="recommendations">${item.recommendation}</span>`;
+                }
+                
                 row.appendChild(patternCell);
                 row.appendChild(recommendationCell);
                 generalRecommendationTableBody.appendChild(row);
