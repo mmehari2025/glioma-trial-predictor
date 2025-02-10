@@ -531,12 +531,11 @@
             // 1️⃣ Minority Patients
             if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "1") {
                 patientRecommendations.push({
-                    message: "Historically, minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting generalizability of scientific findings.",
+                    message: "Historically, minority patients have been underrepresented in clinical trials, limiting generalizability of scientific findings.",
                     recommendations: [
                         "Address underlying socioeconomic, healthcare access, and cultural barriers.",
-                        "Consider the role that potential mistrust of the medical system may play in impeding accrual.",
                         "Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients.",
-                        "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of trial enrollment."
+                        "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of enrollment."
                     ]
                 });
             }
@@ -546,7 +545,7 @@
                 patientRecommendations.push({
                     message: "Patients with limited or moderate English proficiency are underrepresented in clinical trials.",
                     recommendations: [
-                        "It is crucial to use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced and complex treatments and important and challenging decisions."
+                        "It is crucial to use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced treatments and challenging decisions."
                     ]
                 });
             }
@@ -554,10 +553,10 @@
             // 3️⃣ Financial Barriers
             if (["2", "3", "5"].includes(insurance) || employment === "2" || income < 54000) {
                 patientRecommendations.push({
-                    message: "Publicly insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment(e.g., travel costs, lost wages, out-of-pocket costs for additional treatments/follow-up care).",
+                    message: "Under/uninsured, lower-income, and unemployed patients may not enroll due to hidden costs of enrollment (e.g., travel costs, lost wages, out-of-pocket costs).",
                     recommendations: [
                         "Collaborate with social work colleagues to ease financial burdens.",
-                        "Advocate that sponsors of clinical trials anticipate and cover unexpected costs of participation.",
+                        "Advocate that sponsors of clinical trials anticipate and help cover unexpected costs of participation.",
                         "Create funding mechanisms for clinical trials that focus exclusively on cancer health disparities."
                     ]
                 });
@@ -586,9 +585,9 @@
             // 6️⃣ Younger Patients
             if (agept <= 50) {
                 patientRecommendations.push({
-                    message: "Younger patients may consider how participation would impact the family members they care for.",
+                    message: "Younger patients may worry how participation would impact the family members they care for.",
                     recommendations: [
-                        "Adopt a multidisciplinary approach to provide additional social/family support to facilitate participation."
+                        "Adopt a multidisciplinary approach to providing social/family support to facilitate participation."
                     ]
                 });
             }
@@ -876,6 +875,7 @@
             generalRecommendations.forEach(item => {
                 let row = document.createElement("tr");
                 let patternCell = document.createElement("td");
+                let recommendationCell = document.createElement("td"); // ✅ Fixed: Define recommendationCell before using it
 
                 
                 // Check if the recommendation is an array (multiple bullet points)
