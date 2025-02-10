@@ -531,10 +531,12 @@
             // 1️⃣ Minority Patients
             if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "1") {
                 patientRecommendations.push({
-                    message: "Minority patients are underrepresented in clinical trials.",
+                    message: "Historically, minority patients have been consistently underrepresented in clinical trials for a variety of factors, limiting generalizability of scientific findings.",
                     recommendations: [
-                        "Address socioeconomic and healthcare access barriers.",
-                        "Build trust with patients from diverse backgrounds."
+                        "Address underlying socioeconomic, healthcare access, and cultural barriers.",
+                        "Consider the role that potential mistrust of the medical system may play in impeding accrual.",
+                        "Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients.",
+                        "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of trial enrollment."
                     ]
                 });
             }
@@ -542,9 +544,9 @@
             // 2️⃣ Non-English Language
             if (language === "2") {
                 patientRecommendations.push({
-                    message: "Non-English speakers face additional barriers.",
+                    message: "Patients with limited or moderate English proficiency are underrepresented in clinical trials.",
                     recommendations: [
-                        "Always use medical interpreters for trial discussions."
+                        "It is crucial to use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced and complex treatments and important and challenging decisions."
                     ]
                 });
             }
@@ -552,9 +554,11 @@
             // 3️⃣ Financial Barriers
             if (["2", "3", "5"].includes(insurance) || employment === "2" || income < 54000) {
                 patientRecommendations.push({
-                    message: "Financial concerns impact trial participation.",
+                    message: "Publicly insured, under/uninsured, lower-income, and unemployed patients may face financial burdens that deter them from trial participation due to hidden costs of enrollment(e.g., travel costs, lost wages, out-of-pocket costs for additional treatments/follow-up care).",
                     recommendations: [
-                        "Partner with social workers to explore financial support."
+                        "Collaborate with social work colleagues to ease financial burdens.",
+                        "Advocate that sponsors of clinical trials anticipate and cover unexpected costs of participation.",
+                        "Create funding mechanisms for clinical trials that focus exclusively on cancer health disparities."
                     ]
                 });
             }
@@ -562,9 +566,9 @@
             // 4️⃣ Distance from Hospital
             if (distance >= 30) {
                 patientRecommendations.push({
-                    message: "Patients living farther from the hospital may struggle to enroll.",
+                    message: "Patients living farther from the hospital, such as rural patients, may struggle to enroll due to transportation time and costs.",
                     recommendations: [
-                        "Offer travel vouchers or remote visit options."
+                        "Offer remote/home-based visits, consolidated appointments, travel vouchers, and temporary local housing options whenever possible."
                     ]
                 });
             }
@@ -582,19 +586,20 @@
             // 6️⃣ Younger Patients
             if (agept <= 50) {
                 patientRecommendations.push({
-                    message: "Younger patients often have family-related concerns.",
+                    message: "Younger patients may consider how participation would impact the family members they care for.",
                     recommendations: [
-                        "Provide social and family support resources."
+                        "Adopt a multidisciplinary approach to provide additional social/family support to facilitate participation."
                     ]
                 });
             }
 
             // 7️⃣ Older Patients
-            if (agept > 50) {
+            if (agept > 65) {
                 patientRecommendations.push({
-                    message: "Older patients may face age-related trial exclusions.",
+                    message: "A large percentage of clinical trials have age-based exclusion criteria.",
                     recommendations: [
-                        "Advocate for reducing strict age-based exclusion criteria."
+                        "Discuss goals of care with all patients regardless of age."
+                        "Advocate for functional status-based and goals of care-based eligibility criteria, rather than strict age-based cutoffs."
                     ]
                 });
             }
