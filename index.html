@@ -712,17 +712,6 @@
                         impact: shapValues[category][value]
                     });
                 }
-
-                // ✅ Explicitly process Race SHAP Impact
-                if (race && shapValues["Race"] && shapValues["Race"][race] !== undefined) {
-                    shapImpact.push({
-                    feature: `Race=${race}`,
-                    impact: shapValues["Race"][race]
-                });
-                    console.log(`✅ Race SHAP Impact Added: Race=${race}, Impact=${shapValues["Race"][race]}`);
-                } else {
-                    console.warn(`⚠️ Race SHAP Impact Missing! Race Value: ${race}`);
-                }
             console.log("📊 Full List of Computed SHAP Impact Factors:", shapImpact);
         }); // ✅ Correct
 
