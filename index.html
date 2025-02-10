@@ -466,7 +466,7 @@
         };
         
         const shapValues = {
-            "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2": { "Asian": -0.1223, "Black/African American": -0.2135, "White": 0.0205, "Pacific": -0.1144, "Other": -0.1959 },
+            "Race": { "Asian": -0.1223, "Black": -0.2135, "White": 0.0205, "Pacific": -0.1144, "Other": -0.1959 },
             "Ethnicity": { "1": -0.0844, "2": 0.0045 },
             "Sex": { "1": -0.0053, "2": 0.0071 },
             "Insurance": { "1": 0.0283, "2": -0.0866, "3": -0.0858, "5": -0.0775 },
@@ -714,16 +714,15 @@
                 }
 
                 // ✅ Explicitly process Race SHAP Impact
-            const raceShapKey = "Updated Race White, Black/African American, Hispanic/Latino, Asian/Pacific Islander, American Indian/Alaska Native 3 2";
-                if (shapValues[raceShapKey] && shapValues[raceShapKey][race] !== undefined) {
+                if (race && shapValues["Race"] && shapValues["Race"][race] !== undefined) {
                     shapImpact.push({
-                        feature: `Race=${race}`,
-                        impact: shapValues[raceShapKey][race]
+                    feature: `Race=${race}`,
+                    impact: shapValues["Race"][race]
                 });
-                console.log(`✅ Race SHAP Impact Added: Race=${race}, Impact=${shapValues[raceShapKey][race]}`);
-            } else {
-                console.warn(`⚠️ Race SHAP Impact Missing! Key: ${raceShapKey}, Value: ${race}`);
-            }
+                    console.log(`✅ Race SHAP Impact Added: Race=${race}, Impact=${shapValues["Race"][race]}`);
+                } else {
+                    console.warn(`⚠️ Race SHAP Impact Missing! Race Value: ${race}`);
+                }
             console.log("📊 Full List of Computed SHAP Impact Factors:", shapImpact);
         }); // ✅ Correct
 
