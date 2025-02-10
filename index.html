@@ -691,6 +691,16 @@
             "KPSPostOp": { "100": "100", "90": "90", "80": "80", "<80": "Less than 80", "NA": "Unknown" },
             "Chemotherapy": { "1": "Yes", "2": "No", "Unknown": "Unknown" }
         };   
+
+        const formattedLabels = {
+            "Race": {
+                "Pacific": "Native Hawaiian/Pacific Islander",
+                "Black": "Black/African American"
+            },
+            "TumorLobe": {
+                "Brainstem": "Brainstem/Insular/BasalGanglia/Thalamus"
+            }
+        };
         
         document.querySelectorAll("select, input").forEach(el => {
                 let category = el.id;
@@ -701,9 +711,15 @@
                  ? readableLabels[category][value]  // ✅ Convert to readable label if available
                  : value; 
 
+        // ✅ Apply formatting if a readable display label exists
+        if (formattedLabels[category] && formattedLabels[category][value]) {
+            displayValue = formattedLabels[category][value];
+        }
+            
         let impactValue = shapValues[category] && shapValues[category][value] !== undefined 
             ? shapValues[category][value] 
             : "N/A"; 
+            
         console.log(`📝 Processing ${category}: User Input = ${displayValue}, Coded Impact = ${impactValue}`);
             
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
@@ -747,20 +763,47 @@
             impactTableBody.innerHTML = ""; // Clear existing content
 
             let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
-            
+
+            const formattedLabels = {
+                "Race": {
+                    "Pacific": "Native Hawaiian/Pacific Islander",
+                    "Black": "Black/African American"
+                },
+                "TumorLobe": {
+                    "Brainstem": "Brainstem/Insular/BasalGanglia/Thalamus"
+                }
+            };
+
             for (let i = 0; i < maxRows; i++) {
                 let row = document.createElement("tr");
                 let increaseCell = document.createElement("td");
                 let decreaseCell = document.createElement("td");
 
+                // ✅ Apply readable labels for positive impact factors
+                let featureDisplayPositive = positiveImpact[i] ? positiveImpact[i].feature : "No strong positive factors";
+                Object.keys(formattedLabels).forEach(category => {
+                    Object.keys(formattedLabels[category]).forEach(originalValue => {
+                        featureDisplayPositive = featureDisplayPositive.replace(`=${originalValue}`, `=${formattedLabels[category][originalValue]}`);
+                    });
+                });
+
+                // ✅ Apply readable labels for negative impact factors
+                let featureDisplayNegative = negativeImpact[i] ? negativeImpact[i].feature : "No strong negative factors";
+                Object.keys(formattedLabels).forEach(category => {
+                    Object.keys(formattedLabels[category]).forEach(originalValue => {
+                        featureDisplayNegative = featureDisplayNegative.replace(`=${originalValue}`, `=${formattedLabels[category][originalValue]}`);
+                    });
+                });
+                
+                
                 if (positiveImpact[i]) {
-                    increaseCell.innerHTML = `<span class="increase"><strong>${positiveImpact[i].feature}</strong>: +${(positiveImpact[i].impact * 100).toFixed(2)}%</span>`;
+                    increaseCell.innerHTML = `<span class="increase"><strong>${featureDisplayPositive}</strong>: +${(positiveImpact[i]?.impact * 100).toFixed(2) ?? 'N/A'}%</span>`;
                 } else {
                     increaseCell.innerHTML = `<span class="increase">No strong positive factors</span>`;
                 }
 
                 if (negativeImpact[i]) {
-                    decreaseCell.innerHTML = `<span class="decrease"><strong>${negativeImpact[i].feature}</strong>: ${(negativeImpact[i].impact * 100).toFixed(2)}%</span>`;
+                    decreaseCell.innerHTML = `<span class="decrease"><strong>${featureDisplayNegative}</strong>: ${(negativeImpact[i]?.impact * 100).toFixed(2) ?? 'N/A'}%</span>`;
                 } else {
                     decreaseCell.innerHTML = `<span class="decrease">No strong negative factors</span>`;
                 }
