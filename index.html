@@ -511,6 +511,7 @@
         // ✅ FIX: Correctly retrieve input values
             let agept = parseFloat(document.getElementById("AgeDiagnosis").value);
             let race = document.getElementById("Race")?.value;
+            console.log(`🎯 Retrieved Race Value: ${race}`);
             let ethnicity = document.getElementById("Ethnicity")?.value;
             let minority = document.getElementById("Minority")?.value;
             let language = document.getElementById("PreferredLanguage")?.value;
@@ -699,6 +700,11 @@
          let displayValue = readableLabels[category] && readableLabels[category][value] 
                  ? readableLabels[category][value]  // ✅ Convert to readable label if available
                  : value; 
+
+        let impactValue = shapValues[category] && shapValues[category][value] !== undefined 
+            ? shapValues[category][value] 
+            : "N/A"; 
+        console.log(`📝 Processing ${category}: User Input = ${displayValue}, Coded Impact = ${impactValue}`);
             
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
@@ -706,10 +712,28 @@
                         impact: shapValues[category][value]
                     });
                 }
+
+                // ✅ Explicitly process Race SHAP Impact
+                if (shapValues["Race"] && shapValues["Race"][race] !== undefined) {
+                    shapImpact.push({
+                        feature: `Race=${race}`,
+                        impact: shapValues["Race"][race]
+                });
+                console.log(`✅ Race SHAP Impact Added: Race=${race}, Impact=${shapValues["Race"][race]}`);
+            } else {
+                console.warn("⚠️ Race SHAP impact missing or undefined!");
+            }
             console.log("📊 Full List of Computed SHAP Impact Factors:", shapImpact);
         }); // ✅ Correct
 
         shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
+        console.log("📊 Full Sorted SHAP Impact Factors:", shapImpact);
+
+        // ✅ Ensure `Race` appears in sorted impact list
+        let raceImpact = shapImpact.find(factor => factor.feature.startsWith("Race="));
+        if (!raceImpact) {
+            console.warn("⚠️ Race is missing from the sorted impact list!");
+        }
 
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
