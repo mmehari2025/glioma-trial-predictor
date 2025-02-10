@@ -877,7 +877,9 @@
                 let patternCell = document.createElement("td");
                 let recommendationCell = document.createElement("td"); // ✅ Fixed: Define recommendationCell before using it
 
-                
+                // ✅ Ensure the Screening Discussion Patterns appear in the left column
+                patternCell.innerHTML = `<span class="characteristics"><strong>${item.pattern}</strong></span>`;
+
                 // Check if the recommendation is an array (multiple bullet points)
                 if (Array.isArray(item.recommendation)) {
                     let recommendationList = "<ul>";  // Start the unordered list
