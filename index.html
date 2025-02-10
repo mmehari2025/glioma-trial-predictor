@@ -429,12 +429,16 @@
 
         <!-- General Recommendations -->
         <div id="generalRecommendations" class="toggle-content">
-            <div class="impact-title">General Recommendations</div>
-            <ul>
-                <li>Adopt a "just ask" policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest.</li>
-                <li>Find multiple opportunities to discuss trial enrollment.</li>
-                <li>Identify barriers and work collaboratively to overcome them.</li>
-            </ul>
+            <div class="impact-title">General Recommendations for Trial Screening</div>
+            <table class="recommendation-table">
+                <thead>
+                    <tr>
+                        <th style="color: #052049;">Screening Discussion Patterns</th>
+                        <th style="color: #C04C00;">Recommendations</th>
+                    </tr>
+                </thead>
+                <tbody id="generalRecommendationTableBody"></tbody>
+            </table>
         </div>
         
     </div>
@@ -838,6 +842,44 @@
                     recommendationTableBody.appendChild(row);
                 });
             }
+
+
+        function updateGeneralRecommendations() {
+            let generalRecommendationTableBody = document.getElementById("generalRecommendationTableBody");
+            generalRecommendationTableBody.innerHTML = ""; // Clear existing content
+
+            const generalRecommendations = [
+                {
+                    pattern: "In a recent study of adult glioma patients, only 43-49% were screened for a clinical trial.",
+                    recommendation: "Adopt a 'just ask' policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest."
+                },
+                {
+                    pattern: "In a recent study, the odds of trial enrollment increased in a dose-dependent fashion with the numbers of trials discussed during screening.",
+                    recommendation: "Discuss all available trials with patients to maximize enrollment opportunities."
+                },
+                {
+                    pattern: "Individual patients face unique challenges to and motivations for trial enrollment.",
+                    recommendation: "Use a patient-centered and multidisciplinary approach to understand and address enrollment barriers."
+                }
+            ];
+
+            generalRecommendations.forEach(item => {
+                let row = document.createElement("tr");
+                let patternCell = document.createElement("td");
+                let recommendationCell = document.createElement("td");
+
+                patternCell.innerHTML = `<span class="characteristics"><strong>${item.pattern}</strong></span>`;
+                recommendationCell.innerHTML = `<span class="recommendations">${item.recommendation}</span>`;
+
+                row.appendChild(patternCell);
+                row.appendChild(recommendationCell);
+                generalRecommendationTableBody.appendChild(row);
+            });
+        }
+
+        window.onload = function() {
+            updateGeneralRecommendations();
+        };
 
         
     </script>
