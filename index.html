@@ -783,7 +783,7 @@
                 let featureDisplayPositive = positiveImpact[i] ? positiveImpact[i].feature : "No strong positive factors";
                 Object.keys(formattedLabels).forEach(category => {
                     Object.keys(formattedLabels[category]).forEach(originalValue => {
-                        featureDisplayPositive = featureDisplayPositive.replace(`=${originalValue}`, `=${formattedLabels[category][originalValue]}`);
+                        featureDisplayPositive = featureDisplayPositive.replace(new RegExp(`=${originalValue}$`), `=${formattedLabels[category][originalValue]}`);
                     });
                 });
 
@@ -791,7 +791,7 @@
                 let featureDisplayNegative = negativeImpact[i] ? negativeImpact[i].feature : "No strong negative factors";
                 Object.keys(formattedLabels).forEach(category => {
                     Object.keys(formattedLabels[category]).forEach(originalValue => {
-                        featureDisplayNegative = featureDisplayNegative.replace(`=${originalValue}`, `=${formattedLabels[category][originalValue]}`);
+                        featureDisplayNegative = featureDisplayNegative.replace(new RegExp(`=${originalValue}$`), `=${formattedLabels[category][originalValue]}`);
                     });
                 });
                 
