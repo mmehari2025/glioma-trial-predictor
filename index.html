@@ -1,239 +1,330 @@
 
+
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glioma Trial Enrollment Predictor</title>
-    <style>
-        /* General Styling */
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            text-align: center;
-            background-color: #f5f5f5;
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Glioma Trial Enrollment Predictor</title>
+     <title>GPREDICT: Prediction of Glioma Patients' Enrollment In Therapeutic Clinical Trials</title>
+     <style>
+         /* General Styling */
+         body {
+             font-family: Arial, sans-serif;
+             max-width: 800px;
+             margin: auto;
+             padding: 20px;
+             text-align: center;
+             background-color: #f5f5f5;
+         }
+ 
+         .container {
+             background: white;
+             padding: 20px;
+             border-radius: 10px;
+             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+             text-align: left;
+         }
+ 
+         /* Title Styling */
+         .title {
+             font-size: 2em;
+             font-weight: bold;
+             color: #052049;
+             margin-bottom: 10px;
+         }
+ 
+         /* Description Styling */
+         .description {
+             font-size: 1em;
+             color: #333;
+             margin-bottom: 20px;
+             text-align: center;
+             max-width: 90%;
+             margin-left: auto;
+             margin-right: auto;
+             line-height: 1.5;
+         }
+ 
+         /* Section Titles - UCSF Dark Blue */
+         .section-title {
+             font-size: 1.2em;
+             font-weight: bold;
+             color: #052049; /* UCSF Dark Blue */
+             margin-top: 20px;
+             padding-bottom: 5px;
+             border-bottom: 2px solid #052049; /* Ensure border color matches */
+             text-align: left;
+         }
+ 
+         /* Form Inputs */
+         .form-group {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin: 10px 0;
+         }
+ 
+         .form-group label {
+             width: 50%;
+         }
+ 
+         input, select {
+             padding: 8px;
+             width: 50%;
+             border: 1px solid #ccc;
+             border-radius: 5px;
+             background: #fafafa;
+             box-sizing: border-box; /* Ensures same width */
+         }
+ 
+         /* Calculate Probability Button - UCSF Light Blue */
+         button {
+             padding: 12px;
+             width: 100%;
+             background-color: #0076cf; /* UCSF Light Blue */
+             color: white;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
+             margin-top: 20px;
+             font-size: 1em;
+             font-weight: bold;
+         }
+ 
+         button:hover {
+             background-color: #0056a4; /* Slightly Darker UCSF Blue */
+         }
+ 
+         /* Enrollment Probability Box */
+         .result-box {
+             display: none;
+             margin-top: 20px;
+             padding: 15px;
+             background: #f0f0f0;
+             border-radius: 10px;
+             text-align: center;
+             font-size: 1.2em;
+             font-weight: bold;
+             border: 2px solid #052049;
+             width: 80%;
+             margin-left: auto;
+             margin-right: auto;
+         }
+ 
+         #resultText {
+             font-size: 1.2em; /* Same as heading */
+         }
+ 
+         /* Toggle Buttons */
+         .toggle-buttons {
+             display: block; /* Change flex to block to avoid layout conflicts */
+             width: 100%; /* Ensure full width */
+             margin-top: 20px;
+         }
+ 
+         /* General Recommendations Button (100% width) */
+         .toggle-button-teal {
+             width: 100%; /* Ensure it spans full width */
+             padding: 12px;
+             background-color: #007272;
+             color: white;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
+             font-size: 1em;
+             font-weight: bold;
+             margin: 0 auto;
+         }
+ 
+         .toggle-button-teal:hover {
+             background-color: #005555;
+         }
+ 
+        /* Patient-Specific Buttons */
+        .toggle-buttons.side-by-side {
+            display: flex; /* Display buttons side by side */
+            justify-content: space-between; /* Space out the buttons */
         }
-
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-
-        /* Section Titles - UCSF Dark Blue */
-        .section-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #052049; /* UCSF Dark Blue */
-            margin-top: 20px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #052049; /* Ensure border color matches */
-            text-align: left;
-        }
-
-        /* Form Inputs */
-        .form-group {
+ 
+         .toggle-button {
+             width: 48%; /* Each button takes up 48% of the container's width */
+             padding: 12px;
+             color: white;
+             border: none;
+             border-radius: 5px;
+             cursor: pointer;
+             font-size: 0.9em;
+             font-weight: bold;
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+         }
+ 
+         .toggle-button span {
+             font-size: 1.2em;
+         }
+ 
+         .toggle-button-blue {
+             background-color: #052049;
+         }
+ 
+         .toggle-button-blue:hover {
+             background-color: #02152b;
+         }
+ 
+         .toggle-button-orange {
+             background-color: #C04C00;
+         }
+ 
+         .toggle-button-orange:hover {
+             background-color: #8a3700;
+         }
+ 
+         .toggle-button-teal {
+             background-color: #007272;
+         }
+ 
+         .toggle-button-teal:hover {
+             background-color: #005555;
+         }
+ 
+         /* Hidden Sections */
+         .toggle-content {
+             display: none;
+             width: 100%;
+             margin-top: 10px;
+             padding: 15px;
+             background: white;
+             border-radius: 10px;
+             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+             border: 2px solid #dcdcdc;
+         }
+         /* Centering Container */
+        .centered-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            margin: 10px 0;
+            flex-direction: column;
         }
-
-        .form-group label {
-            width: 50%;
-        }
-
-        input, select {
-            padding: 8px;
-            width: 50%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: #fafafa;
-            box-sizing: border-box; /* Ensures same width */
-        }
-
-        /* Calculate Probability Button - UCSF Light Blue */
-        button {
-            padding: 12px;
-            width: 100%;
-            background-color: #0076cf; /* UCSF Light Blue */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 1em;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background-color: #0056a4; /* Slightly Darker UCSF Blue */
-        }
-
-        /* Enrollment Probability Box */
-        .result-box {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            border: 2px solid #052049;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #resultText {
-            font-size: 1.2em; /* Same as heading */
-        }
-
-        /* Toggle Buttons */
-        .toggle-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .toggle-button {
-            width: 32%;
-            padding: 12px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .toggle-button span {
-            font-size: 1.2em;
-        }
-
-        .toggle-button-blue {
-            background-color: #052049;
-        }
-
-        .toggle-button-blue:hover {
-            background-color: #02152b;
-        }
-
-        .toggle-button-orange {
-            background-color: #C04C00;
-        }
-
-        .toggle-button-orange:hover {
-            background-color: #8a3700;
-        }
-
-        .toggle-button-teal {
-            background-color: #007272;
-        }
-
-        .toggle-button-teal:hover {
-            background-color: #005555;
-        }
-
-        /* Hidden Sections */
-        .toggle-content {
-            display: none;
-            width: 100%;
-            margin-top: 10px;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            border: 2px solid #dcdcdc;
-        }
-
-        /* Headings */
-        h3 {
-            color: #333;
-            margin-top: 15px;
-        }
-
-        /* Impact Titles */
-        .impact-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        /* Impact Table */
-        .impact-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .impact-table th, .impact-table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        .impact-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
-
-        /* Increasing Factors Column - UCSF Blue */
-        .increase {
-            color: #052049;
-            font-weight: bold;
-        }
-
-        /* Decreasing Factors Column - UCSF Orange */
-        .decrease {
-            color: #C04C00;
-            font-weight: bold;
-        }
-
-        .recommendation-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .recommendation-table th, .recommendation-table td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        .recommendation-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
-
-        /* Patient Characteristics Column - UCSF Blue */
-        .characteristics {
-            color: #052049;
-            font-weight: bold;
-        }
-
-        /* Recommendations Column - UCSF Orange */
-        .recommendations {
-            color: #C04C00;
-        }
-
         
-    </style>
-</head>
+/* Ensure all toggle content sections have the same width */
+.toggle-content {
+    width: 100%;
+    max-width: 48%;  /* Ensure it matches the width of side-by-side sections */
+    margin: 0 auto;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #dcdcdc;
+    box-sizing: border-box;
+}
+         }
+         /* Headings */
+         h3 {
+             color: #333;
+             margin-top: 15px;
+         }
+ 
+         /* Impact Titles */
+         .impact-title {
+             font-size: 1.2em;
+             font-weight: bold;
+             margin-bottom: 10px;
+         }
+ 
+         /* Impact Table */
+         .impact-table {
+             width: 100%;
+             border-collapse: collapse;
+             margin-top: 10px;
+         }
+ 
+         .impact-table th, .impact-table td {
+             padding: 10px;
+             text-align: left;
+             border: 1px solid #ddd;
+         }
+ 
+         .impact-table th {
+             background-color: #f5f5f5;
+             font-weight: bold;
+         }
+ 
+         /* Increasing Factors Column - UCSF Blue */
+         .increase {
+             color: #052049;
+             font-weight: bold;
+         }
+ 
+         /* Decreasing Factors Column - UCSF Orange */
+         .decrease {
+             color: #C04C00;
+             font-weight: bold;
+         }
+ 
+         .recommendation-table {
+             width: 100%;
+             border-collapse: collapse;
+             margin-top: 10px;
+         }
+ 
+         .recommendation-table th, .recommendation-table td {
+             padding: 10px;
+             text-align: left;
+             border: 1px solid #ddd;
+         }
+ 
+         .recommendation-table th {
+             background-color: #f5f5f5;
+             font-weight: bold;
+         }
+ 
+         /* Patient Characteristics Column - UCSF Blue */
+         .characteristics {
+             color: #052049;
+             font-weight: bold;
+         }
+ 
+         /* Recommendations Column - UCSF Orange */
+         .recommendations {
+             color: #C04C00;
+         }
+ .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 220px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the text */
+            left: 50%;
+            margin-left: -110px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
 
-<body>
-    <h2>Glioma Clinical Trial Enrollment Predictor</h2>
-    <div class="container">
-        <form id="predictionForm">
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+ 
+     </style>
+ </head>
+ 
+ <body>
+     
+     <h1 class="title">GPREDICT: Prediction of Glioma Patients' Enrollment In Therapeutic Clinical Trials</h1>
+     <p class="description">GPREDICT allows clinicians and researchers to estimate individual adult glioma patients' probability of enrolling in a therapeutic clinical trial, identify which patient characteristics most influence enrollment probability for a given patient, and generate general and patient-specific recommendations for increasing the probability of accrual.</p>
+    
+     <div class="container">
+         <form id="predictionForm">
+             <!-- General Recommendations Button Now Above the Form -->
             
             <!-- DEMOGRAPHIC VARIABLES -->
             <div class="section-title">Demographic Variables</div>
@@ -313,7 +404,12 @@
             </div>
 
             <div class="form-group">
-                <label for="IncomeZip">Neighborhood Median Household Income by Patient Zip Code ($):</label>
+                <label for="IncomeZip">Neighborhood Median Household Income by Patient Zip Code ($): 
+                    <span class="tooltip">
+                        <a href="https://data.census.gov/table?q=median+household+income&tid=ACSST1Y2021.S1901" target="_blank">*</a>
+                        <span class="tooltiptext">Median income was derived for neighborhood Zipcode. Click the link to determine patient's neighborhood household income by zipcode.</span>
+                    </span>
+                </label>
                 <input type="number" id="IncomeZip" required>
             </div>
 
@@ -347,7 +443,7 @@
             </div>
 
             <div class="form-group">
-                <label for="Seizure">Seizure Pre-op:</label>
+                <label for="Seizure">Seizure at Diagnosis:</label>
                 <select id="Seizure" required>
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
@@ -356,7 +452,7 @@
             </div>
 
             <div class="form-group">
-                <label for="KPSPostOp">KPS Post-op:</label>
+                <label for="KPSPostOp">KPS after Surgery:</label>
                 <select id="KPSPostOp" required>
                     <option value="100">100</option>
                     <option value="90">90</option>
@@ -367,7 +463,7 @@
             </div>
 
             <div class="form-group">
-                <label for="Chemotherapy">Received Chemotherapy?</label>
+                <label for="Chemotherapy">History of Chemotherapy Use?</label>
                 <select id="Chemotherapy" required>
                     <option value="1">Yes</option>
                     <option value="2">No</option>
@@ -386,16 +482,32 @@
             <p id="resultText"></p> <!-- ✅ Fixed: Probability is displayed inside the gray box -->
         </div>
         
+        <!-- General Recommendations -->
+      <div class="centered-container">
+    <button class="toggle-button toggle-button-teal" onclick="toggleSection('generalRecommendations')">
+        General Recommendations for Trial Screening <span>▼</span>
+    </button>
+    <div id="generalRecommendations" class="toggle-content">
+        <div class="impact-title">General Recommendations for Trial Screening</div>
+        <table class="recommendation-table">
+            <thead>
+                <tr>
+                    <th style="color: #052049;">Screening Discussion Patterns</th>
+                    <th style="color: #C04C00;">Recommendations</th>
+                </tr>
+            </thead>
+            <tbody id="generalRecommendationTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
         <!-- Toggle Buttons -->
-        <div class="toggle-buttons">
+        <div class="toggle-buttons side-by-side"> <!-- Add side-by-side class -->
             <button class="toggle-button toggle-button-blue" onclick="toggleSection('impactSection')">
                 Patient-Specific Characteristics Influencing Enrollment <span>▼</span>
             </button>
             <button class="toggle-button toggle-button-orange" onclick="toggleSection('patientRecommendations')">
                 Patient-Specific Recommendations <span>▼</span>
-            </button>
-            <button class="toggle-button toggle-button-teal" onclick="toggleSection('generalRecommendations')">
-                General Recommendations for Trial Screening <span>▼</span>
             </button>
         </div>
 
