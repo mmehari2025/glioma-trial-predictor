@@ -2,7 +2,6 @@
 
 
 
-
 <!DOCTYPE html>
  <html lang="en">
  <head>
@@ -348,9 +347,9 @@
                 <select id="Race" required>
                     <option value="White">White</option>
                     <option value="Black">Black/African American</option>
-                    <option value="Hispanic">Hispanic/Latino</option>
+                    <option value="NativeAmerican">American Indian/Alaska Native</option>
                     <option value="Asian">Asian</option>
-                    <option value="Pacific">Pacific Islander</option>
+                    <option value="Pacific">Native Hawaiian or Pacific Islander</option>
                     <option value="Other">Other</option>
                     <option value="Unknown">Unknown</option>
                 </select>
@@ -361,15 +360,6 @@
                 <select id="Ethnicity" required>
                     <option value="1">Hispanic/Latino</option>
                     <option value="2">Non-Hispanic/Latino</option>
-                    <option value="Unknown">Unknown</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="Minority">Minority Status:</label>
-                <select id="Minority" required>
-                    <option value="1">Minority</option>
-                    <option value="2">Non-minority</option>
                     <option value="Unknown">Unknown</option>
                 </select>
             </div>
@@ -574,7 +564,6 @@
             "Employment": "Employed(Y=1, N=2, Retired=3) 2",
             "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
             "KPSPostOp": "KPS.post.op 3",
-            "Minority": "Minority (Yes=1, No=2) 2",
             "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
             "Insurance": "Reordered insurance at diagnosis 2 2",
             "Seizure": "Seizure.preop 2",
@@ -585,34 +574,34 @@
         };
         
         const shapValues = {
-            "Race": { "Asian": -0.1223, "Black": -0.2135, "White": 0.0205, "Pacific": -0.1144, "Other": -0.1959 },
-            "Ethnicity": { "1": -0.0844, "2": 0.0045 },
-            "Sex": { "1": -0.0053, "2": 0.0071 },
-            "Insurance": { "1": 0.0283, "2": -0.0866, "3": -0.0858, "5": -0.0775 },
-            "Chemotherapy": { "1": 0.0552, "2": -0.1431 },
-            "WHOGrade": { "2-3": -0.0523, "4": 0.03 },
+            "Race": { "Asian": -0.0433, "Black": -0.101, "White": 0.0101, "Pacific": -0.0736, "Other": -0.0709, "NativeAmerican": -0.0628 },
+            "Ethnicity": { "1": -0.0542, "2": 0.00420 },
+            "Sex": { "1": -0.00185, "2": 0.00269 },
+            "Insurance": { "1": 0.00875, "2": -0.0313, "3": -0.0620, "5": 0.000860 },
+            "Chemotherapy": { "1": 0.0582, "2": -0.1404 },
+            "WHOGrade": { "2-3": -0.0544, "4": 0.0326 },
             "AgeDiagnosis": (ages) => {
-                if (ages < 20) return 0.0328;
-                if (ages < 30) return 0.0108;
-                if (ages < 40) return 0.0058;
-                if (ages < 50) return 0.0018;
-                if (ages < 60) return 0.0012;
-                if (ages < 70) return -0.002;
-                if (ages < 80) return -0.0196;
-                return -0.0624;
+                if (ages < 20) return 0.0868;
+                if (ages < 30) return 0.0299;
+                if (ages < 40) return 0.00843;
+                if (ages < 50) return 0.00225;
+                if (ages < 60) return 0.00206;
+                if (ages < 70) return -0.00581;
+                if (ages < 80) return -0.0310;
+                return -0.0774;
             },
-            "KPSPostOp": { "100": 0.0888, "90": 0.0719, "80": 0.0307, "<80": -0.1135 },
+            "KPSPostOp": { "100": 0.1543, "90": 0.0700, "80": 0.0500, "<80": -0.129 },
             "TumorLobe": { 
-                "Frontal": -0.0178, 
-                "Temporal": -0.0412, 
-                "Parietal": 0.033, 
-                "Brainstem": 0.0737, 
-                "Cerebellum": 0.0641, 
-                "Multifocal": 0.0768, 
-                "Occipital": 0.1362 
+                "Frontal": -0.0228, 
+                "Temporal": -0.0153, 
+                "Parietal": 0.0240, 
+                "Brainstem": 0.0504, 
+                "Cerebellum": -0.0757, 
+                "Multifocal": 0.1065, 
+                "Occipital": 0.1495 
             },
-            "Seizure": { "Yes": 0.0398, "No": -0.0611 },
-            "Employment": { "1": 0.0131, "2": -0.0283, "3": 0.0354 }
+            "Seizure": { "Yes": 0.0344, "No": -0.0573 },
+            "Employment": { "1": 0.0229, "2": -0.0288, "3": 0.0192 }
         };
     
         function calculateProbability() {
@@ -627,12 +616,15 @@
                 return; // Stop execution
             }
 
+         if (typeof score == "function") {
+                console.log("🚀 Score is recognized as a function!");
+            }
+
         // ✅ FIX: Correctly retrieve input values
             let agept = parseFloat(document.getElementById("AgeDiagnosis").value);
             let race = document.getElementById("Race")?.value;
             console.log(`🎯 Retrieved Race Value: ${race}`);
             let ethnicity = document.getElementById("Ethnicity")?.value;
-            let minority = document.getElementById("Minority")?.value;
             let language = document.getElementById("PreferredLanguage")?.value;
             let insurance = document.getElementById("Insurance")?.value;
             let employment = document.getElementById("Employment")?.value;
@@ -641,10 +633,10 @@
             let kps = document.getElementById("KPSPostOp")?.value;
 
             // ✅ FIX: Debugging checks
-            console.log("🚀 Input values:", { agept, race, ethnicity, minority, language, insurance, employment, income, distance, kps });
+            console.log("🚀 Input values:", { agept, race, ethnicity, language, insurance, employment, income, distance, kps });
 
             // 1️⃣ Minority Patients
-            if (["Asian", "Black", "Other", "Pacific"].includes(race) || ethnicity === "1" || minority === "1") {
+            if (["Asian", "Black", "Other", "NativeAmerican", "Pacific"].includes(race) || ethnicity === "1") {
                 patientRecommendations.push({
                     message: "Historically, minority patients have been underrepresented in clinical trials, limiting generalizability of scientific findings.",
                     recommendations: [
@@ -721,12 +713,11 @@
         // Correct categorical mappings
         const categoricalMappings = {
             "WHOGrade": { "2-3": 0, "4": 1 }, // WHO Grade mapping
-            "Race": { "White": 5, "Black": 1, "Hispanic": 3, "Asian": 0, "Pacific": 2, "Other": 3, "Unknown": 4 }, // Race mapping
+            "Race": { "White": 6, "Black": 2, "NativeAmerican": 0, "Asian": 1, "Pacific": 3, "Other": 4, "Unknown": 5 }, // Race mapping
             "Chemotherapy": { "1": 2, "2": 0, "Unknown": 1 }, // TMZ Chemotherapy mapping
             "Seizure": { "Yes": 2, "No": 1, "NA": 0 }, // Seizure mapping
             "Insurance": { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4 }, // Insurance mapping
             "TumorLobe": { "Brainstem": 0, "Cerebellum": 1, "Frontal": 2, "Multifocal": 3, "Occipital": 4, "Parietal": 5, "Temporal": 6, "Unknown": 7 }, // Tumor Lobe mapping
-            "Minority": { "1": 0, "2": 1, "Unknown": 2 }, // Minority mapping
             "KPSPostOp": { "100": 3, "90": 2, "80": 1, "<80": 0, "NA": 4 }, // KPS Post-op mapping
             "Ethnicity": { "1": 0, "2": 1, "Unknown": 2 }, // Ethnicity mapping
             "Employment": { "1": 0, "2": 1, "3": 2, "Unknown": 3 }, // Employment mapping
@@ -739,7 +730,6 @@
             "Employment": "Employed(Y=1, N=2, Retired=3) 2",
             "Ethnicity": "Ethnicity Hispanic/Latino (Yes=1, No=2) 2",
             "KPSPostOp": "KPS.post.op 3",
-            "Minority": "Minority (Yes=1, No=2) 2",
             "TumorLobe": "New Tumor Lobe (updated chart review) 2 2 2",
             "Insurance": "Reordered insurance at diagnosis 2 2",
             "Seizure": "Seizure.preop 2",
@@ -764,10 +754,16 @@
             }
         }
 
-        console.log("🚀 Input Data Sent to Model:", JSON.stringify(indata, null, 2));
+        console.log("🚀 Input Data Sent to Model first time:", JSON.stringify(indata, null, 2));
 
         if (typeof score === "function") {
             let outdata = {};
+         console.log("🚀 Input Data Sent to Model right before score:", JSON.stringify(indata, null, 2));
+         Object.keys(indata).forEach(key => {
+          if (indata[key] === undefined || indata[key] === "") {
+           console.warn(`⚠️ Missing input for: ${key}`);
+          }
+});
             score(indata, outdata);
             console.log("📊 Output Data from Model:", outdata);
 
@@ -802,7 +798,6 @@
             "Sex": { "1": "Male", "2": "Female" },
             "Insurance": { "1": "Private", "2": "Medi-cal/Medicaid", "3": "Medicare", "4": "Unknown", "5": "Self-pay" },
             "Employment": { "1": "Employed", "2": "Unemployed", "3": "Retired", "Unknown": "Unknown" },
-            "Minority": { "1": "Minority", "2": "Non-minority", "Unknown": "Unknown" },
             "WHOGrade": { "2-3": "Grade 2-3", "4": "Grade 4" },
             "TumorLobe": { 
                 "Frontal": "Frontal", "Parietal": "Parietal", "Temporal": "Temporal", 
@@ -818,10 +813,11 @@
         const formattedLabels = {
             "Race": {
                 "Pacific": "Native Hawaiian/Pacific Islander",
+                "NativeAmerican": "American Indian/Alaska Native",
                 "Black": "Black/African American"
             },
             "TumorLobe": {
-                "Brainstem": "Brainstem/Insular/BasalGanglia/Thalamus"
+                "Brainstem": "Brainstem/Insular/Basal Ganglia/Thalamus"
             }
         };
         
@@ -829,22 +825,22 @@
                 let category = el.id;
                 let value = el.value;
                 indata[category] = value;
-            
-         let displayValue = readableLabels[category] && readableLabels[category][value] 
+           
+         let displayValue = readableLabels[category] && readableLabels[category][value]
                  ? readableLabels[category][value]  // ✅ Convert to readable label if available
-                 : value; 
+                 : value;
 
         // ✅ Apply formatting if a readable display label exists
         if (formattedLabels[category] && formattedLabels[category][value]) {
             displayValue = formattedLabels[category][value];
         }
-            
-        let impactValue = shapValues[category] && shapValues[category][value] !== undefined 
-            ? shapValues[category][value] 
-            : "N/A"; 
-            
+           
+        let impactValue = shapValues[category] && shapValues[category][value] !== undefined
+            ? shapValues[category][value]
+            : "N/A";
+           
         console.log(`📝 Processing ${category}: User Input = ${displayValue}, Coded Impact = ${impactValue}`);
-            
+           
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
                        feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
@@ -876,10 +872,10 @@
 
             console.log("✅ Final Sorted Positive Impact Factors:", positiveImpact);
             console.log("❌ Final Sorted Negative Impact Factors:", negativeImpact);
-            
+           
             updateImpactDisplay(positiveImpact, negativeImpact);
             updateRecommendationDisplay(patientRecommendations);
-            
+           
         }
         function updateImpactDisplay(positiveImpact, negativeImpact) {
             let impactTableBody = document.getElementById("impactTableBody");
@@ -890,6 +886,7 @@
             const formattedLabels = {
                 "Race": {
                     "Pacific": "Native Hawaiian/Pacific Islander",
+                 "NativeAmerican": "American Indian/Alaska Native",
                     "Black": "Black/African American"
                 },
                 "TumorLobe": {
@@ -917,8 +914,8 @@
                         featureDisplayNegative = featureDisplayNegative.replace(new RegExp(`=${originalValue}$`), `=${formattedLabels[category][originalValue]}`);
                     });
                 });
-                
-                
+               
+               
                 if (positiveImpact[i]) {
                     increaseCell.innerHTML = `<span class="increase"><strong>${featureDisplayPositive}</strong>: +${(positiveImpact[i]?.impact * 100).toFixed(2) ?? 'N/A'}%</span>`;
                 } else {
