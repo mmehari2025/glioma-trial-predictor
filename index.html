@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
  <html lang="en">
  <head>
@@ -79,6 +75,20 @@
              background: #fafafa;
              box-sizing: border-box; /* Ensures same width */
          }
+
+      /* 🔴 Highlight Age Input Field if Invalid */
+input.error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+/* 🔴 Error Message for Missing Age */
+#error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 10px;
+    display: none; /* Initially hidden */
+}
  
          /* Calculate Probability Button - UCSF Light Blue */
          button {
@@ -101,7 +111,9 @@
          /* Enrollment Probability Box */
          .result-box {
              display: none;
-             margin-top: 20px;
+          width: 90%; /* Set width to 90% of its container */
+    max-width: 90%; /* Ensures it does not exceed this width */
+    margin: 20px auto; /* Center horizontally */
              padding: 15px;
              background: #f0f0f0;
              border-radius: 10px;
@@ -109,118 +121,75 @@
              font-size: 1.2em;
              font-weight: bold;
              border: 2px solid #052049;
-             width: 80%;
-             margin-left: auto;
-             margin-right: auto;
          }
  
          #resultText {
              font-size: 1.2em; /* Same as heading */
          }
  
-         /* Toggle Buttons */
-         .toggle-buttons {
-             display: block; /* Change flex to block to avoid layout conflicts */
-             width: 100%; /* Ensure full width */
-             margin-top: 20px;
-         }
- 
-         /* General Recommendations Button (100% width) */
-         .toggle-button-teal {
-             width: 100%; /* Ensure it spans full width */
-             padding: 12px;
-             background-color: #007272;
-             color: white;
-             border: none;
-             border-radius: 5px;
-             cursor: pointer;
-             font-size: 1em;
-             font-weight: bold;
-             margin: 0 auto;
-         }
- 
-         .toggle-button-teal:hover {
-             background-color: #005555;
-         }
- 
-        /* Patient-Specific Buttons */
-        .toggle-buttons.side-by-side {
-            display: flex; /* Display buttons side by side */
-            justify-content: space-between; /* Space out the buttons */
-        }
- 
-         .toggle-button {
-             width: 48%; /* Each button takes up 48% of the container's width */
-             padding: 12px;
-             color: white;
-             border: none;
-             border-radius: 5px;
-             cursor: pointer;
-             font-size: 0.9em;
-             font-weight: bold;
-             display: flex;
-             align-items: center;
-             justify-content: space-between;
-         }
- 
-         .toggle-button span {
-             font-size: 1.2em;
-         }
- 
-         .toggle-button-blue {
-             background-color: #052049;
-         }
- 
-         .toggle-button-blue:hover {
-             background-color: #02152b;
-         }
- 
-         .toggle-button-orange {
-             background-color: #C04C00;
-         }
- 
-         .toggle-button-orange:hover {
-             background-color: #8a3700;
-         }
- 
-         .toggle-button-teal {
-             background-color: #007272;
-         }
- 
-         .toggle-button-teal:hover {
-             background-color: #005555;
-         }
- 
-         /* Hidden Sections */
-         .toggle-content {
-             display: none;
-             width: 100%;
-             margin-top: 10px;
-             padding: 15px;
-             background: white;
-             border-radius: 10px;
-             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-             border: 2px solid #dcdcdc;
-         }
-         /* Centering Container */
-        .centered-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        
-/* Ensure all toggle content sections have the same width */
-.toggle-content {
+         /* Toggle Buttons - Stack vertically */
+.toggle-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center the buttons */
     width: 100%;
-    max-width: 80%;  /* Ensure it matches the width of side-by-side sections */
-    margin: 0 auto;
+    margin-top: 20px;
+}
+
+/* Ensure all toggle buttons match the width of "Calculate Probability" button */
+.toggle-button,
+.toggle-button-teal {
+    width: 100%; /* Full width */
+    max-width: 100%; /* Matches result box */
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 10px auto; /* Space between buttons */
+    display: block;
+}
+
+/* General Recommendations Button */
+.toggle-button-teal {
+    background-color: #007272;
+}
+
+.toggle-button-teal:hover {
+    background-color: #005555;
+}
+
+/* Patient-Specific Buttons */
+.toggle-button-blue {
+    background-color: #052049;
+}
+
+.toggle-button-blue:hover {
+    background-color: #02152b;
+}
+
+.toggle-button-orange {
+    background-color: #C04C00;
+}
+
+.toggle-button-orange:hover {
+    background-color: #8a3700;
+}
+ 
+         /* Ensure all toggle content sections (tables) match the result box width */
+.toggle-content {
+    width: 95%; /* Set width to 90% of its container */
+    max-width: 95%; /* Ensures it does not exceed this width */
+    margin: 20px auto; /* Center horizontally */
     padding: 15px;
     background: white;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border: 2px solid #dcdcdc;
     box-sizing: border-box;
+    display: none; /* Hide by default */
 }
          }
          /* Headings */
@@ -314,6 +283,32 @@
             visibility: visible;
             opacity: 1;
         }
+
+      /* Citations Button - UCSF Lighter Blue */
+.toggle-button-ucsf-light-blue {
+    background-color: #66A3D2; /* Softer Lighter UCSF Blue */
+}
+
+.toggle-button-ucsf-light-blue:hover {
+    background-color: #4D90C5; /* Slightly Darker for Hover Effect */
+}
+
+/* Ensure citations list matches other content width */
+#citationsSection {
+    width: 95%; /* Same width as impact tables */
+    max-width: 95%;
+    text-align: left; /* Align text for readability */
+}
+
+#citationsList {
+    padding-left: 20px; /* Indent numbering */
+}
+
+#citationsList li {
+    margin-bottom: 10px; /* Space between citations */
+    font-size: 0.95em;
+    line-height: 1.5;
+}
  
      </style>
  </head>
@@ -396,14 +391,14 @@
             </div>
 
             <div class="form-group">
-                <label for="IncomeZip">Neighborhood Median Household Income by Patient Zip Code ($): 
-                    <span class="tooltip">
-                        <a href="https://data.census.gov/table?q=median+household+income&tid=ACSST1Y2021.S1901" target="_blank">*</a>
-                        <span class="tooltiptext">Median income was derived for neighborhood Zipcode. Click the link to determine patient's neighborhood household income by zipcode.</span>
-                    </span>
-                </label>
-                <input type="number" id="IncomeZip" required>
-            </div>
+    <label for="IncomeZip" style="color: #052049;">
+        Neighborhood Median Household Income by Patient Zip Code ($) 
+        <a href="https://mmehari2025.github.io/incomezipdatasearch/" target="_blank" 
+           style="color: #052049; text-decoration: none;">
+            [income data linked <span style="text-decoration: underline; color: #3399FF;">here</span>]</a>: *
+    </label>
+    <input type="number" id="IncomeZip" required>
+</div>
 
             <div class="form-group">
                 <label for="DistanceHospital">Driving Distance from Patient's Home to Hospital (miles): *</label>
@@ -462,8 +457,12 @@
                     <option value="Unknown">Unknown</option>
                 </select>
             </div>
+          <!-- Add this note at the bottom of the page -->
+<p>* These variables are not incorporated as predictors into the boosted neural network for probability calculations but may help guide recommendations to increase accrual.</p>
+    </div>
 
             <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+<p id="error-message">Please input the patient's age at diagnosis in the highlighted field to calculate the estimated enrollment probability.</p>
         </form>
 
         <h4 id="shapImpact"></h4>
@@ -475,7 +474,7 @@
         </div>
         
         <!-- General Recommendations -->
-      <div class="centered-container">
+<div class="centered-container">
     <button class="toggle-button toggle-button-teal" onclick="toggleSection('generalRecommendations')">
         General Recommendations for Trial Screening <span>▼</span>
     </button>
@@ -493,69 +492,94 @@
     </div>
 </div>
 
-        <!-- Toggle Buttons -->
-        <div class="toggle-buttons side-by-side"> <!-- Add side-by-side class -->
-            <button class="toggle-button toggle-button-blue" onclick="toggleSection('impactSection')">
-                Patient-Specific Characteristics Influencing Enrollment <span>▼</span>
-            </button>
-            <button class="toggle-button toggle-button-orange" onclick="toggleSection('patientRecommendations')">
-                Patient-Specific Recommendations <span>▼</span>
-            </button>
-        </div>
+       <!-- Toggle Buttons (Now Stacked Vertically) -->
+<div class="toggle-buttons">
+    <button class="toggle-button toggle-button-blue" onclick="toggleSection('impactSection')">
+        Patient-Specific Characteristics Influencing Enrollment <span>▼</span>
+    </button>
 
-        <!-- Impact Section -->
-        <div id="impactSection" class="toggle-content">
-            <div class="impact-title">Patient-Specific Characteristics That Most Influence Enrollment Probability</div>
-                <table class="impact-table">
-                    <thead>
-                        <tr>
-                            <th style="color: #052049;">Factors Increasing Enrollment Probability</th>
-                            <th style="color: #C04C00;">Factors Decreasing Enrollment Probability</th>
-                        </tr>
-                    </thead>
-                    <tbody id="impactTableBody"></tbody>
-                </table>
-        </div>
-
-        <!-- Patient-Specific Recommendations -->
-       <div id="patientRecommendations" class="toggle-content">
-            <div class="impact-title">Patient-Specific Recommendations</div>
-            <table class="recommendation-table">
-                <thead>
-                    <tr>
-                        <th style="color: #052049;">Patient Characteristics and Context</th>
-                        <th style="color: #C04C00;">Recommendations</th>
-                    </tr>
-                </thead>
-                <tbody id="patientRecommendationTableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- General Recommendations -->
-        <div id="generalRecommendations" class="toggle-content">
-            <div class="impact-title">General Recommendations for Trial Screening</div>
-            <table class="recommendation-table">
-                <thead>
-                    <tr>
-                        <th style="color: #052049;">Screening Discussion Patterns</th>
-                        <th style="color: #C04C00;">Recommendations</th>
-                    </tr>
-                </thead>
-                <tbody id="generalRecommendationTableBody"></tbody>
-            </table>
-        </div>
-        <!-- Add this note at the bottom of the page -->
-<p>* These variables don't affect the calculated probability but help guide recommendations.</p>
+    <!-- Impact Section (Directly Below Button) -->
+    <div id="impactSection" class="toggle-content">
+        <div class="impact-title">Patient-Specific Characteristics That Most Influence Enrollment Probability</div>
+        <table class="impact-table">
+            <thead>
+                <tr>
+                    <th style="background-color: #f5f5f5; color: #052049; text-align: left;">
+                        Factors Increasing Enrollment Probability
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="positiveImpactTableBody"></tbody>
+            <thead>
+                <tr>
+                    <th style="background-color: #f5f5f5; color: #C04C00; text-align: left;">
+                        Factors Decreasing Enrollment Probability
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="negativeImpactTableBody"></tbody>
+        </table>
     </div>
+
+    <button class="toggle-button toggle-button-orange" onclick="toggleSection('patientRecommendations')">
+        Patient-Specific Recommendations <span>▼</span>
+    </button>
+
+    <!-- Patient-Specific Recommendations Section (Now Correctly Below Its Button) -->
+    <div id="patientRecommendations" class="toggle-content">
+        <div class="impact-title">Patient-Specific Recommendations</div>
+        <table class="recommendation-table">
+            <thead>
+                <tr>
+                    <th style="color: #052049;">Patient Characteristics and Context</th>
+                    <th style="color: #C04C00;">Recommendations</th>
+                </tr>
+            </thead>
+            <tbody id="patientRecommendationTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Citations Toggle Button -->
+<button class="toggle-button toggle-button-ucsf-light-blue" onclick="toggleSection('citationsSection')">
+    References & Citations <span>▼</span>
+</button>
+
+<!-- Citations Section -->
+<div id="citationsSection" class="toggle-content">
+    <div class="impact-title">References & Citations</div>
+    <ol id="citationsList">
+        <li>Morshed RA, Reihl SJ, Molinaro AM, Kakaizada S, Young JS, Schulte JD, Butowski N, Taylor J, Bush NA, Aghi MK, Berger MS, Chang S, Clarke J, Hervey-Jumper SL. The influence of race and socioeconomic status on therapeutic clinical trial screening and enrollment. <i>J Neurooncol</i>. 2020 May;148(1):131-139. doi: 10.1007/s11060-020-03503-x. PMID: 32350780.</li>
+        <li>Oyer RA, Hurley P, Boehmer L, Bruinooge SS, Levit K, Barrett N, Benson A, Bernick LA, Byatt L, Charlot M, Crews J, DeLeon K, Fashoyin-Aje L, Garrett-Mayer E, Gralow JR, Green S, Guerra CE, Hamroun L, Hardy CM, Hempstead B, Jeames S, Mann M, Matin K, McCaskill-Stevens W, Merrill J, Nowakowski GS, Patel MI, Pressman A, Ramirez AG, Segura J, Segarra-Vasquez B, Hanley Williams J, Williams JE Jr, Winkfield KM, Yang ES, Zwicker V, Pierce LJ. Increasing Racial and Ethnic Diversity in Cancer Clinical Trials: An American Society of Clinical Oncology and Association of Community Cancer Centers Joint Research Statement. <i>J Clin Oncol</i>. 2022 Jul 1;40(19):2163-2171. doi: 10.1200/JCO.22.00754. PMID: 35588469.</li>
+        <li>Unger JM, Hershman DL, Till C, Minasian LM, Osarogiagbon RU, Fleury ME, Vaidya R. "When Offered to Participate": A Systematic Review and Meta-Analysis of Patient Agreement to Participate in Cancer Clinical Trials. <i>J Natl Cancer Inst</i>. 2021 Mar 1;113(3):244-257. doi: 10.1093/jnci/djaa155. PMID: 33022716; PMCID: PMC7936064.</li>
+        <li>Murthy VH, Krumholz HM, Gross CP. Participation in cancer clinical trials: race-, sex-, and age-based disparities. <i>JAMA</i>. 2004 Jun 9;291(22):2720-6. doi: 10.1001/jama.291.22.2720. PMID: 15187053.</li>
+        <li>Reihl SJ, Patil N, Morshed RA, Mehari M, Aabedi A, Chukwueke UN, Porter AB, Fontil V, Cioffi G, Waite K, Kruchko C, Ostrom Q, Barnholtz-Sloan J, Hervey-Jumper SL. A population study of clinical trial accrual for women and minorities in neuro-oncology following the NIH Revitalization Act. <i>Neuro Oncol</i>. 2022 Aug 1;24(8):1341-1349. doi: 10.1093/neuonc/noac011. PMID: 34999844; PMCID: PMC9340618.</li>
+     <li>Acuña-Villaorduña A, Baranda JC, Boehmer J, Fashoyin-Aje L, Gore SD. Equitable Access to Clinical Trials: How Do We Achieve It? <i>Am Soc Clin Oncol Educ Book</i>. 2023 May;43:e389838. doi: 10.1200/EDBK_389838. PMID: 37146264.</li>
+        <li>Kim ES, Bruinooge SS, Roberts S, Ison G, Lin NU, Gore L, Uldrick TS, Lichtman SM, Roach N, Beaver JA, Sridhara R, Hesketh PJ, Denicoff AM, Garrett-Mayer E, Rubin E, Multani P, Prowell TM, Schenkel C, Kozak M, Allen J, Sigal E, Schilsky RL. Broadening Eligibility Criteria to Make Clinical Trials More Representative: American Society of Clinical Oncology and Friends of Cancer Research Joint Research Statement. <i>J Clin Oncol</i>. 2017 Nov 20;35(33):3737-3744. doi: 10.1200/JCO.2017.73.7916. Epub 2017 Oct 2. PMID: 28968170; PMCID: PMC5692724.</li>
+     <li>Muthukumar AV, Morrell W, Bierer BE. Evaluating the frequency of English language requirements in clinical trial eligibility criteria: A systematic analysis using ClinicalTrials.gov. <i>PLoS Med</i>. 2021 Sep 14;18(9):e1003758. doi: 10.1371/journal.pmed.1003758. PMID: 34520467; PMCID: PMC8439488.</li>
+        <li>Medina SP, Zhang S, Nieves E, Dornsife DL, Johnson R, Spicer D, Borno HT. Experiences of a Multiethnic Cohort of Patients Enrolled in a Financial Reimbursement Program for Cancer Clinical Trials. <i>JCO Oncol Pract</i>. 2023 May;19(5):e801-e810. doi: 10.1200/OP.22.00429. Epub 2023 Feb 17. PMID: 36800640.</li>
+     <li>Borno HT, Zhang L, Siegel A, Chang E, Ryan CJ. At What Cost to Clinical Trial Enrollment? A Retrospective Study of Patient Travel Burden in Cancer Clinical Trials. <i>Oncologist</i>. 2018 Oct;23(10):1242-1249. doi: 10.1634/theoncologist.2017-0628. PMID: 29700209; PMCID: PMC6263122.</li>
+     <li>Caston NE, Williams CP, Wan C, Ye S, Pywell C, Ingram SA, Azuero A, Sussell J, Patel S, Arend R, Rocque GB. Associations between geography, decision-making style, and interest in cancer clinical trial participation. <i>Cancer</i>. 2022 Nov 15;128(22):3977-3984. doi: 10.1002/cncr.34455. Epub 2022 Sep 16. PMID: 36111955.</li>
+     <li>Agaronnik ND, Peters MLB, Iezzoni LI. Exclusion of people from oncology clinical trials based on functional status. <i>Clin Trials</i>. 2025 Jan 2:17407745241304114. doi: 10.1177/17407745241304114. Epub ahead of print. PMID: 39744922.</li>
+     <li>Abi Jaoude J, Kouzy R, Mainwaring W, Lin TA, Miller AB, Jethanandani A, Espinoza AF, Pasalic D, Verma V, VanderWalde NA, Smith BD, Smith GL, Fuller CD, Das P, Minsky BD, Rödel C, Fokas E, Jagsi R, Thomas CR, Subbiah IM, Taniguchi CM, Ludmir EB. Performance Status Restriction in Phase III Cancer Clinical Trials. <i>J Natl Compr Canc Netw</i>. 2020 Oct 1;18(10):1322-1326. doi: 10.6004/jnccn.2020.7578. PMID: 33022640; PMCID: PMC9671537.</li>
+     <li>Hutchins LF, Unger JM, Crowley JJ, Coltman CA Jr, Albain KS. Underrepresentation of patients 65 years of age or older in cancer-treatment trials. <i>N Engl J Med</i>. 1999 Dec 30;341(27):2061-7. doi: 10.1056/NEJM199912303412706. PMID: 10615079.</li>
+        <li>Hurria A, Dale W, Mooney M, Rowland JH, Ballman KV, Cohen HJ, Muss HB, Schilsky RL, Ferrell B, Extermann M, Schmader KE, Mohile SG; Cancer and Aging Research Group. Designing therapeutic clinical trials for older and frail adults with cancer: U13 conference recommendations. <i>J Clin Oncol</i>. 2014 Aug 20;32(24):2587-94. doi: 10.1200/JCO.2013.55.0418. PMID: 25071116; PMCID: PMC4129504.</li>
+        <li>Scher KS, Hurria A. Under-representation of older adults in cancer registration trials: known problem, little progress. <i>J Clin Oncol</i>. 2012 Jun 10;30(17):2036-8. doi: 10.1200/JCO.2012.41.6727. PMID: 22547597.</li>
+    </ol>
+</div>
 
     <script src="jmp_score.js"></script> <!-- 📌 Ensures the model is correctly linked -->
     <script src="model.js"></script>
 
     <script>
         function toggleSection(sectionId) {
-            var section = document.getElementById(sectionId);
-            section.style.display = section.style.display === "block" ? "none" : "block";
-        }
+    var section = document.getElementById(sectionId);
+    if (section.style.display === "none" || section.style.display === "") {
+        section.style.display = "block"; // Show section
+    } else {
+        section.style.display = "none"; // Hide section
+    }
+}
     </script>
     
     <script>
@@ -605,7 +629,21 @@
         };
     
         function calculateProbability() {
-        let indata = {};
+        let ageInput = document.getElementById("AgeDiagnosis");
+    let ageValue = ageInput.value.trim();
+    let errorMessage = document.getElementById("error-message");
+
+    // 🔴 If Age is empty or invalid, show error
+    if (ageValue === "" || isNaN(ageValue) || parseFloat(ageValue) <= 0) {
+        ageInput.classList.add("error"); // Highlight in red
+        errorMessage.style.display = "block"; // Show error message
+        return; // Stop execution
+    } else {
+        ageInput.classList.remove("error"); // Remove red highlight
+        errorMessage.style.display = "none"; // Hide error message
+    }
+         
+         let indata = {};
         let shapImpact = [];
         let patientRecommendations = []; // ✅ FIXED: Ensure empty array before updating
 
@@ -621,7 +659,7 @@
             }
 
         // ✅ FIX: Correctly retrieve input values
-            let agept = parseFloat(document.getElementById("AgeDiagnosis").value);
+            let agept = parseFloat(ageValue);
             let race = document.getElementById("Race")?.value;
             console.log(`🎯 Retrieved Race Value: ${race}`);
             let ethnicity = document.getElementById("Ethnicity")?.value;
@@ -638,11 +676,11 @@
             // 1️⃣ Minority Patients
             if (["Asian", "Black", "Other", "NativeAmerican", "Pacific"].includes(race) || ethnicity === "1") {
                 patientRecommendations.push({
-                    message: "Historically, minority patients have been underrepresented in clinical trials, limiting generalizability of scientific findings.",
+                    message: "Historically, minority patients have been underrepresented in clinical trials, limiting the generalizability of scientific findings.<sup>4-6</sup>",
                     recommendations: [
-                        "Address underlying socioeconomic, healthcare access, and cultural barriers.",
-                        "Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients.",
-                        "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is one of the strongest predictors of enrollment."
+                        "Address underlying socioeconomic, healthcare access, and cultural barriers.<sup>2-3</sup>",
+                        "Re-evaluate non-essential inclusion/exclusion criteria that may disproportionately exclude minority patients.<sup>3,7</sup>",
+                        "Work to build trust with patients of all backgrounds over time, as a patient's trust in their physician is key to facilitating enrollment.<sup>2</sup>"
                     ]
                 });
             }
@@ -650,9 +688,9 @@
             // 2️⃣ Non-English Language
             if (language === "2") {
                 patientRecommendations.push({
-                    message: "Patients with limited or moderate English proficiency are underrepresented in clinical trials.",
+                    message: "Patients with limited or moderate English proficiency are underrepresented in clinical trials.<sup>8</sup>",
                     recommendations: [
-                        "It is crucial to use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced treatments and challenging decisions."
+                        "It is crucial to translate all study materials and use medical interpreters or certified bilingual providers for all clinical trial screening discussions, which focus on nuanced treatments and challenging decisions.<sup>8</sup>"
                     ]
                 });
             }
@@ -660,11 +698,11 @@
             // 3️⃣ Financial Barriers
             if (["2", "3", "5"].includes(insurance) || employment === "2" || income < 54000) {
                 patientRecommendations.push({
-                    message: "Under/uninsured, lower-income, and unemployed patients may not enroll due to hidden costs of enrollment (e.g., travel costs, lost wages, out-of-pocket costs).",
+                    message: "Under/uninsured, lower-income, and unemployed patients may not enroll due to hidden costs of enrollment (e.g., travel costs, lost wages, out-of-pocket costs).<sup>2</sup>",
                     recommendations: [
                         "Collaborate with social work colleagues to ease financial burdens.",
-                        "Advocate that sponsors of clinical trials anticipate and help cover unexpected costs of participation.",
-                        "Create funding mechanisms for clinical trials that focus exclusively on cancer health disparities."
+                        "Advocate for sponsors of clinical trials to establish financial reimbursement programs to anticipate and help cover unexpected costs of participation.<sup>2,9</sup>",
+                        "Create targeted funding mechanisms for clinical trials that focus exclusively on cancer health disparities.<sup>2-3</sup>"
                     ]
                 });
             }
@@ -672,9 +710,9 @@
             // 4️⃣ Distance from Hospital
             if (distance >= 30) {
                 patientRecommendations.push({
-                    message: "Patients living farther from the hospital, such as rural patients, may struggle to enroll due to transportation time and costs.",
+                    message: "Patients living farther from the hospital, such as rural patients, may struggle to enroll due to transportation time and costs.<sup>10-11</sup>",
                     recommendations: [
-                        "Offer remote/home-based visits, consolidated appointments, travel vouchers, and temporary local housing options whenever possible."
+                        "Offer remote/home-based visits, consolidated appointments, travel vouchers, and temporary local housing options whenever possible.<sup>6,9-10</sup>"
                     ]
                 });
             }
@@ -682,19 +720,9 @@
             // 5️⃣ Functional Status (KPS Score)
             if (kps === "<80") {
                 patientRecommendations.push({
-                    message: "Patients with lower functional status may face eligibility challenges.",
+                    message: "Patients with lower functional status may face eligibility challenges.<sup>12-13</sup>",
                     recommendations: [
                         "Evaluate functional status periodically to reassess trial eligibility."
-                    ]
-                });
-            }
-
-            // 6️⃣ Younger Patients
-            if (agept <= 50) {
-                patientRecommendations.push({
-                    message: "Younger patients may worry how participation would impact the family members they care for.",
-                    recommendations: [
-                        "Adopt a multidisciplinary approach to providing social/family support to facilitate participation."
                     ]
                 });
             }
@@ -702,10 +730,10 @@
             // 7️⃣ Older Patients
             if (agept > 65) {
                 patientRecommendations.push({
-                    message: "A large percentage of clinical trials have age-based exclusion criteria.",
+                    message: "A large percentage of clinical trials have age-based exclusion criteria.<sup>14-15</sup>",
                     recommendations: [
                         "Discuss goals of care with all patients regardless of age.",
-                        "Advocate for functional status-based and goals of care-based eligibility criteria, rather than strict age-based cutoffs."
+                        "Advocate for functional status-based and goals of care-based eligibility criteria, rather than strict age-based cutoffs.<sup>16</sup>"
                     ]
                 });
             }
@@ -783,15 +811,27 @@
             console.error("⚠️ score function is not defined. Make sure model.js is properly loaded.");
         }
 
-        let ageInput = document.getElementById("AgeDiagnosis").value;
-        let ages = parseFloat(ageInput);
-            
+        
+        let ages = parseFloat(ageValue);
+            function getAgeCategory(ages) {
+    if (ages < 20) return "Being less than 20 years old at diagnosis";
+    if (ages < 30) return "Being 20-29 years old at diagnosis";
+    if (ages < 40) return "Being 30-39 years old at diagnosis";
+    if (ages < 50) return "Being 40-49 years old at diagnosis";
+    if (ages < 60) return "Being 50-59 years old at diagnosis";
+    if (ages < 70) return "Being 60-69 years old at diagnosis";
+    if (ages < 80) return "Being 70-79 years old at diagnosis";
+    return "Being 80 years old or older at diagnosis";
+}
         if (!isNaN(ages)) {
-                shapImpact.push({
-                    feature: `AgeDiagnosis=${ages}`,  // ✅ Now includes exact age value
-                    impact: shapValues["AgeDiagnosis"](ages) 
-                });
-        }
+    let ageCategory = getAgeCategory(ages);
+    let ageImpact = shapValues["AgeDiagnosis"](ages);  // Get SHAP impact value
+
+    shapImpact.push({
+        feature: ageCategory,  // ✅ Now uses readable age label
+        impact: ageImpact
+    });
+}
         // Define readable labels for easier interpretation
         const readableLabels = {
             "Ethnicity": { "1": "Hispanic/Latino", "2": "Non-Hispanic/Latino", "Unknown": "Unknown" },
@@ -843,7 +883,7 @@
            
                 if (shapValues[category] && shapValues[category][value] !== undefined) {
                     shapImpact.push({
-                       feature: `${category}=${displayValue}`, // ✅ Displays as "Ethnicity=Hispanic/Latino"
+                       feature: formatImpactFeature(category, value), // ✅ Converts into readable text
                         impact: shapValues[category][value]
                     });
                 }
@@ -852,12 +892,6 @@
 
         shapImpact.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
         console.log("📊 Full Sorted SHAP Impact Factors:", shapImpact);
-
-        // ✅ Ensure `Race` appears in sorted impact list
-        let raceImpact = shapImpact.find(factor => factor.feature.startsWith("Race="));
-        if (!raceImpact) {
-            console.warn("⚠️ Race is missing from the sorted impact list!");
-        }
 
         let positiveImpact = shapImpact
             .filter(d => d.impact > 0)
@@ -877,62 +911,122 @@
             updateRecommendationDisplay(patientRecommendations);
            
         }
-        function updateImpactDisplay(positiveImpact, negativeImpact) {
-            let impactTableBody = document.getElementById("impactTableBody");
-            impactTableBody.innerHTML = ""; // Clear existing content
 
-            let maxRows = Math.max(positiveImpact.length, negativeImpact.length);
-
-            const formattedLabels = {
-                "Race": {
-                    "Pacific": "Native Hawaiian/Pacific Islander",
-                 "NativeAmerican": "American Indian/Alaska Native",
-                    "Black": "Black/African American"
-                },
-                "TumorLobe": {
-                    "Brainstem": "Brainstem/Insular/BasalGanglia/Thalamus"
-                }
-            };
-
-            for (let i = 0; i < maxRows; i++) {
-                let row = document.createElement("tr");
-                let increaseCell = document.createElement("td");
-                let decreaseCell = document.createElement("td");
-
-                // ✅ Apply readable labels for positive impact factors
-                let featureDisplayPositive = positiveImpact[i] ? positiveImpact[i].feature : "No strong positive factors";
-                Object.keys(formattedLabels).forEach(category => {
-                    Object.keys(formattedLabels[category]).forEach(originalValue => {
-                        featureDisplayPositive = featureDisplayPositive.replace(new RegExp(`=${originalValue}$`), `=${formattedLabels[category][originalValue]}`);
-                    });
-                });
-
-                // ✅ Apply readable labels for negative impact factors
-                let featureDisplayNegative = negativeImpact[i] ? negativeImpact[i].feature : "No strong negative factors";
-                Object.keys(formattedLabels).forEach(category => {
-                    Object.keys(formattedLabels[category]).forEach(originalValue => {
-                        featureDisplayNegative = featureDisplayNegative.replace(new RegExp(`=${originalValue}$`), `=${formattedLabels[category][originalValue]}`);
-                    });
-                });
-               
-               
-                if (positiveImpact[i]) {
-                    increaseCell.innerHTML = `<span class="increase"><strong>${featureDisplayPositive}</strong>: +${(positiveImpact[i]?.impact * 100).toFixed(2) ?? 'N/A'}%</span>`;
-                } else {
-                    increaseCell.innerHTML = `<span class="increase">No strong positive factors</span>`;
-                }
-
-                if (negativeImpact[i]) {
-                    decreaseCell.innerHTML = `<span class="decrease"><strong>${featureDisplayNegative}</strong>: ${(negativeImpact[i]?.impact * 100).toFixed(2) ?? 'N/A'}%</span>`;
-                } else {
-                    decreaseCell.innerHTML = `<span class="decrease">No strong negative factors</span>`;
-                }
-
-                row.appendChild(increaseCell);
-                row.appendChild(decreaseCell);
-                impactTableBody.appendChild(row);
-            }
+     // Mapping function to convert variable-value pairs into readable text
+function formatImpactFeature(variable, value) {
+    const mappings = {
+        "KPSPostOp": {
+            "100": "Post-operative KPS of 100",
+            "90": "Post-operative KPS of 90",
+            "80": "Post-operative KPS of 80",
+            "<80": "Post-operative KPS of less than 80"
+        },
+     "TumorLobe": {
+            "Frontal": "Frontal lobe tumor", 
+            "Parietal": "Parietal lobe tumor",
+            "Temporal": "Temporal lobe tumor", 
+             "Brainstem": "Tumor located in the brainstem, insula, basal ganglia, or thalamus",
+                "Multifocal": "Multifocal tumor location", 
+      "Occipital": "Occipital lobe tumor",
+                "Cerebellum": "Cerebellar tumor"
+        },
+        "Race": {
+            "White": "White race",
+            "Black": "Black/African American race",
+            "Asian": "Asian race",
+            "NativeAmerican": "American Indian/Alaska Native race",
+            "Pacific": "Native Hawaiian/Pacific Islander race"
+        },
+        "Ethnicity": {
+            "1": "Hispanic/Latino ethnicity",
+            "2": "Non-Hispanic/Latino ethnicity"
+        },
+        "Sex": {
+            "1": "Male sex",
+            "2": "Female sex"
+        },
+        "WHOGrade": {
+            "4": "WHO Grade 4 tumor",
+            "2-3": "WHO Grade 2-3 tumor"
+        },
+        "Chemotherapy": {
+            "1": "History of chemotherapy treatment",
+            "2": "No history of chemotherapy treatment"
+        },
+        "Insurance": {
+            "1": "Private insurance",
+            "2": "Medicaid/Medi-cal insurance",
+            "3": "Medicare insurance",
+            "5": "No insurance/self-pay"
+        },
+        "Employment": {
+            "1": "Being employed",
+            "2": "Being unemployed",
+            "3": "Being retired"
+        },
+        "Seizure": {
+            "Yes": "Seizures at diagnosis",
+            "No": "No seizures at diagnosis"
         }
+    };
+
+    // Return formatted string or fallback to the original value
+    return mappings[variable]?.[value] || `${variable}=${value}`;
+}
+
+     
+        function updateImpactDisplay(positiveImpact, negativeImpact) {
+    let positiveImpactTableBody = document.getElementById("positiveImpactTableBody");
+    let negativeImpactTableBody = document.getElementById("negativeImpactTableBody");
+
+    // Clear table contents before updating
+    positiveImpactTableBody.innerHTML = "";
+    negativeImpactTableBody.innerHTML = "";
+
+    // Insert positive impact factors
+    if (positiveImpact.length > 0) {
+        positiveImpact.forEach(item => {
+            let row = document.createElement("tr");
+            let cell = document.createElement("td");
+
+            // 🛠 FIX: Ensure `formatImpactFeature` handles single-word features without adding "="
+            let featureParts = item.feature.split("=");
+            let formattedFeature = formatImpactFeature(featureParts[0], featureParts[1] ? featureParts[1] : "").replace(/=$/, '');
+
+            cell.innerHTML = `• <strong>${formattedFeature}</strong>: average increase of <strong>${(item.impact * 100).toFixed(2)}%</strong> in estimated enrollment probability`;
+            row.appendChild(cell);
+            positiveImpactTableBody.appendChild(row);
+        });
+    } else {
+        let row = document.createElement("tr");
+        let cell = document.createElement("td");
+        cell.innerText = "No strong positive factors";
+        row.appendChild(cell);
+        positiveImpactTableBody.appendChild(row);
+    }
+
+    // Insert negative impact factors
+    if (negativeImpact.length > 0) {
+        negativeImpact.forEach(item => {
+            let row = document.createElement("tr");
+            let cell = document.createElement("td");
+
+            // 🛠 FIX: Ensure `formatImpactFeature` handles single-word features without adding "="
+            let featureParts = item.feature.split("=");
+            let formattedFeature = formatImpactFeature(featureParts[0], featureParts[1] ? featureParts[1] : "").replace(/=$/, '');
+
+            cell.innerHTML = `• <span style="color: #C04C00;"><strong>${formattedFeature}</strong></span>: average decrease of <span style="color: #C04C00; font-weight: bold;">${Math.abs(item.impact * 100).toFixed(2)}%</span> in estimated enrollment probability`;
+            row.appendChild(cell);
+            negativeImpactTableBody.appendChild(row);
+        });
+    } else {
+        let row = document.createElement("tr");
+        let cell = document.createElement("td");
+        cell.innerText = "No strong negative factors";
+        row.appendChild(cell);
+        negativeImpactTableBody.appendChild(row);
+    }
+}
 
         function updateRecommendationDisplay(patientRecommendations) {
                 let recommendationTableBody = document.getElementById("patientRecommendationTableBody");
@@ -966,8 +1060,8 @@
 
             const generalRecommendations = [
                 {
-                    pattern: "In a recent study of adult glioma patients, only 43-49% were screened for a clinical trial.",
-                    recommendation: "Adopt a 'just ask' policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest."
+                    pattern: "In a recent study of adult glioma patients, only 43-49% were screened for a clinical trial.<sup>1</sup>",
+                    recommendation: "Adopt a 'just ask' policy for clinical trial discussions, asking all patients who might be eligible about their enrollment interest.<sup>2-3</sup>"
                 },
                 {
                     pattern: "In a recent study, the odds of trial enrollment increased in a dose-dependent fashion with the numbers of trials discussed during screening.",
@@ -979,8 +1073,8 @@
                     
                 },
                 {
-                    pattern: "Individual patients face unique challenges to and motivations for trial enrollment.",
-                    recommendation: "Use a patient-centered and multidisciplinary approach to understand and address enrollment barriers."
+                    pattern: "Individual patients face unique challenges to and motivations for trial enrollment.<sup>2-3</sup>",
+                    recommendation: "Use a patient-centered and multidisciplinary approach to understand and address enrollment barriers.<sup>2-3</sup>"
                 }
             ];
 
